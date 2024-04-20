@@ -1,4 +1,7 @@
 .DS_Store
 instance/
 __pycache/
+
+
 .env
+env/
