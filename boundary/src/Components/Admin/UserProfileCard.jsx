@@ -2,7 +2,7 @@ import { Card, Button } from "flowbite-react";
 import { BsFillPersonFill } from "react-icons/bs";
 import { IconContext } from "react-icons";
 
-export default function UserProfileCard({userType, name, email, phone_num} ) {
+export default function UserProfileCard({userType, name, email, phone_num, setUserProfileState} ) {
     return (
         <div className="flex my-10">
             <Card variant="outline" direction={{base: "column", sm: "row"}} className="w-full" >
@@ -25,7 +25,7 @@ export default function UserProfileCard({userType, name, email, phone_num} ) {
 
                     <div className="flex basis-2/6 items-center justify-center">
                         {/* view acc, suspend acc */}
-                        <Button className="mx-2 bg-custom_purple1 w-1/2">View</Button>
+                        <Button className="mx-2 bg-custom_purple1 w-1/2" onClick={() => setUserProfileState(true)}>View</Button>
                         <Button className="mx-2 bg-custom_purple1 w-1/2">Suspend</Button>
                     </div>
                 </div>

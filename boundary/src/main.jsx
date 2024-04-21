@@ -21,8 +21,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <Route path='/app' element={<App/>}/>
     <Route path='/login' element={<LoginPage/>}/>
     <Route path='/register' element={<RegisterPage/>}/>
-    <Route path='viewAccounts' element={<UserAccountManagementPage/>}/>
-    <Route path='viewProfiles' element={<ProfileManagementPage/>}/>
+    <Route path='/viewAccounts' element={<UserAccountManagementPage/>}/>
+    <Route path='/viewProfiles' element={<ProfileManagementPage/>}/>
     <Route path='/test' element={<TestPage/>}/>
     <Route path='/modalTest' element={<ModalTestPage/>}/>
   </Routes>
