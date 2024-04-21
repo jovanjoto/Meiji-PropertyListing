@@ -13,6 +13,8 @@ import { Input } from '@chakra-ui/react'
 export default function displayList({}) {
     return (
         <>
+               <Input/>
+
             <Input placeholder="Search (Username)"/>
         </>
     )
