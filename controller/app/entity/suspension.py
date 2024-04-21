@@ -1,10 +1,12 @@
 # Libraries
 from flask import current_app
 from datetime import date # type: ignore
+from typing_extensions import Self # type: ignore
 
 # Local dependencies
 from .sqlalchemy import db
 from .user import User
+from .userprofile import UserProfile
 
 # Suspension Schema
 class Suspension(db.Model):
@@ -20,7 +22,7 @@ class Suspension(db.Model):
 								  foreign_keys="suspension.user")
 	
 	@classmethod
-	def createSuspension(clf, email:str, reason:str, start:date=None, end:date=None) -> bool:
+	def createSuspension(cls, email:str, reason:str, start:date|None=None, end:date|None=None) -> bool:
 		"""
 		Creates a new Suspension by passing arguments:
 			- email:str, 
@@ -30,22 +32,21 @@ class Suspension(db.Model):
 		returns bool.
 		"""
 
-		# This should be moved to controller
   		# User does not exist
-		# if not User.queryUserAccount(email=email):
-		# 	return False
-		# # Default value management
-		# if not start:
-		# 	start = date.today()
-		# # Invalid Dates
-		# if end and end < start:
-		# 	return False
+		if not User.queryUserAccount(email=email):
+			return False
+		# Default value management
+		if not start:
+			start = date.today()
+		# Invalid Dates
+		if end and end < start:
+			return False
 		
 		# Check if suspension already exist
-		if clf.query.filter_by(email=email, start=start).one_or_none():
+		if cls.query.filter_by(email=email, start=start).one_or_none():
 			return False
 		# Initialize new suspension
-		new_suspension = clf(user=email, start=start, end=end, reason=reason)
+		new_suspension = cls(user=email, start=start, end=end, reason=reason)
 
 		# Commit to DB
 		with current_app.app_context():
@@ -54,7 +55,7 @@ class Suspension(db.Model):
 		return True
 	
 	@classmethod
-	def createBulkSuspension(clf, profile:str, reason:str, start:date=None, end:date=None) -> bool:
+	def createBulkSuspension(cls, profile:str, reason:str, start:date|None=None, end:date|None=None) -> bool:
 		"""
 		Creates suspensions for all users with a specified profile by passing arguments:
 			- profile:str, 
@@ -63,24 +64,23 @@ class Suspension(db.Model):
 			- end:date=None
 		returns bool.
 		"""
-		# MOVE TO CONTROLLER UserProfile does not exist
-		# if not UserProfile.queryUP(profile):
-		# 	return False
+		if not UserProfile.queryUP(profile):
+			return False
   
 		# Get all users within the profile
 		users = User.query.filter_by(profile=profile).all()
 		for u in users:
-			clf.createSuspension(u.email, reason, start, end)
+			cls.createSuspension(u.email, reason, start, end)
 		return True
 	
 	@classmethod
-	def getOngoingSuspension(clf, user:User) -> object|None:
+	def getOngoingSuspension(cls, user:User) -> Self|None:
 		"""
 		Get an ongoing suspension of a user by passing arguments:
 			- user:User 
 		returns bool.
 		"""
-		all_ongoing_suspensions = clf.query.filter(clf.user == user.email, clf.start <= date.today(), clf.end is None or clf.end >= date.today()).all()
+		all_ongoing_suspensions = cls.query.filter(cls.user == user.email, cls.start <= date.today(), cls.end is None or cls.end >= date.today()).all() # type: ignore
 		if len(all_ongoing_suspensions) == 0:
 			return None
 
