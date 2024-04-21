@@ -1,7 +1,7 @@
 import { Button, TextInput } from "flowbite-react";
 import { BiDownArrow } from "react-icons/bi";
 
-export default function SearchAndFilter({type}) {
+export default function SearchAndFilter({type, setCreateAccountModelState}) {
     return (
         <>
             <div className='flex justify-between my-10'>
@@ -13,7 +13,7 @@ export default function SearchAndFilter({type}) {
                             <BiDownArrow className='ml-5'/>
                         </Button>
 
-                    <Button className='bg-custom_purple1 flex items-center'>Create New {type}</Button>
+                    <Button className='bg-custom_purple1 flex items-center' onClick={() => setCreateAccountModelState(true)}>Create New {type}</Button>
                     </div>
                         
             </div>
