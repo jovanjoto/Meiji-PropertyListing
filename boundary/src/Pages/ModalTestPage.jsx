@@ -1,5 +1,5 @@
-import UserProfileModal from "../PagesComponents/UserProfileModal";
-import UserAccountModal from '../PagesComponents/UserAccountModal';
+import UserProfileModal from "../Components/Admin/UserProfileModal";
+import UserAccountModal from '../Components/Admin/UserAccountModal';
 import { Button } from 'flowbite-react'
 import { useState } from 'react';
 
