@@ -1,7 +1,11 @@
+import React, { useContext, useState } from "react";
+
+function LoginCard() {
 
 
-export default function LoginCard({}){
-  return (
-    <h1>login card</h1>
-  );
+    return (
+      <h1>login card</h1>
+    )
 }
+
+export default LoginCard;
