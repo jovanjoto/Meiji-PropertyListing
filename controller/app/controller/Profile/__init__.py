@@ -1,3 +1,4 @@
-from flask import Blueprint 
+from .controller import UserProfileController
+from .routes import router
 
-profile_bp = Blueprint('profile', __name__)
+__all__ = ["UserProfileController", "router"]

@@ -1,5 +1,6 @@
 # Libraries
 from flask import current_app
+from typing_extensions import Self
 
 # Local dependencies
 from .sqlalchemy import db
@@ -20,24 +21,24 @@ class UserProfile(db.Model):
 	profileToUserRel = db.relationship("User", back_populates="userToProfileRel", cascade='all, delete, save-update')
 
 	@classmethod
-	def queryUP(clf, UPName:str) -> object | None:
+	def queryUP(cls, UPName:str) -> Self | None:
 		"""
 		Queries a UserProfile by passing arguments:
 			- UPName:str, 
 		returns UserProfile instance or None.
 		"""
-		return clf.query.filter_by(name=UPName).one_or_none()
+		return cls.query.filter_by(name=UPName).one_or_none()
 	
 	@classmethod
-	def queryAllProfile(clf) -> list[object]:
+	def queryAllProfile(cls) -> list[Self]:
 		"""
 		Queries all UserProfiles:
 		returns an list of UserProfile instance.
 		"""
-		return clf.query.all()
+		return cls.query.all()
 	
 	@classmethod
-	def createNewUserProfile(clf, details:dict[str,str|bool]) -> bool:
+	def createNewUserProfile(cls, details:dict[str,str|bool]) -> bool:
 		"""
 		Creates a new User by passing arguments:
 			- details: dict[str,str|bool], which contains pairs:
@@ -49,11 +50,11 @@ class UserProfile(db.Model):
 		returns bool.
 		"""
 		# Profile already exist
-		if clf.queryUP(details.get("name")):
+		if cls.queryUP(details.get("name")):
 			return False
 
 		# Initialize new profile
-		new_profile = clf(**details)
+		new_profile = cls(**details)
 		# Commit to DB
 		with current_app.app_context():
 			db.session.add(new_profile)
@@ -61,7 +62,7 @@ class UserProfile(db.Model):
 		return True
 	
 	@classmethod
-	def updateProfile(clf, new_details:dict[str,str|None]) -> bool:
+	def updateProfile(cls, new_details:dict[str,str|bool]) -> bool:
 		"""
 		Updates an existing UserProfile by passing arguments:
 			- new_details: dict[str,str|bool], which contains pairs:
@@ -73,7 +74,7 @@ class UserProfile(db.Model):
 		returns bool.
 		"""
 		with current_app.app_context():
-			profile = clf.queryUP(new_details.get("name"))
+			profile = cls.queryUP(new_details.get("name"))
 			# Profile does not exist
 			if not profile:
 				return False
