@@ -7,13 +7,14 @@ from .sqlalchemy import db
 
 # UserProfile Schema
 class UserProfile(db.Model):
-	__tablename__ = "user"
+	__tablename__ = "userprofile"
 	# attributes
 	name = db.Column(db.String(250), nullable=False, primary_key=True)
 	description = db.Column(db.String(250), nullable=False)
 	has_listing_permission = db.Column(db.Boolean(), default=False)
 	has_buying_permission = db.Column(db.Boolean(), default=False)
 	has_selling_permission = db.Column(db.Boolean(), default=False)
+	has_admin_permission = db.Column(db.Boolean(), default=False)
 
 	# referenced by User
 	profileToUserRel = db.relationship("User", back_populates="userToProfileRel", cascade='all, delete, save-update')
@@ -48,9 +49,9 @@ class UserProfile(db.Model):
 		returns bool.
 		"""
 		# Profile already exist
-		if UserProfile.queryUP(details.get("name")):
+		if clf.queryUP(details.get("name")):
 			return False
-		
+
 		# Initialize new profile
 		new_profile = clf(**details)
 		# Commit to DB
