@@ -5,17 +5,26 @@ import './App.css'
 import { Button, ButtonGroup } from '@chakra-ui/react'
 import { CircularProgress } from '@chakra-ui/react'
 
+
+import LogInPage from "./Pages/LoginPage";
+
+import displayList from "."
+
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+} from "react-router-dom";
+
 function App() {
   const [count, setCount] = useState(0)
 
   return (
-    <>
-      <h1>
-        Hello World
-      </h1>
-      <Button/>
-      <CircularProgress/>
-    </>
+    <Router>
+      <Routes>
+        <Router path="/login" element={<LogInPage />} />
+      </Routes>
+    </Router>
   )
 }
 
