@@ -8,7 +8,7 @@ from .userprofile import UserProfile
 
 # User Schema
 class User(db.Model):
-	__tablename__ = "user"
+	__tablename__ = "User"
 	# attributes
 	email = db.Column(db.String(250), nullable=False, primary_key=True)
 	phone = db.Column(db.String(250), nullable=False, unique=True)
@@ -17,12 +17,12 @@ class User(db.Model):
 	last_name = db.Column(db.String(250), nullable=False)
 
 	# profile foreign key: UserProfile.name
-	profile = db.Column(db.String(250), db.ForeignKey('userprofile.name'), nullable=False)
-	userToProfileRel = db.relationship("userprofile", back_populates="profileToUserRel", cascade='all, delete, save-update',
-								  foreign_keys="user.profile")
+	profile = db.Column(db.String(250), db.ForeignKey('UserProfile.name'), nullable=False)
+	userToProfileRel = db.relationship("UserProfile", back_populates="profileToUserRel", cascade='all, delete, save-update',
+								  foreign_keys="User.profile")
 
 	# referenced by Suspension
-	userToSuspensionRel = db.relationship("suspension", back_populates="suspensionToUserRel", cascade='all, delete, save-update')
+	userToSuspensionRel = db.relationship("Suspension", back_populates="suspensionToUserRel", cascade='all, delete, save-update')
 	
 	@classmethod
 	def queryUserAccount(cls, email:str) -> Self | None:

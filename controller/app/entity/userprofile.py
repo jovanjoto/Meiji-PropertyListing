@@ -5,10 +5,9 @@ from typing_extensions import Self # type: ignore
 # Local dependencies
 from .sqlalchemy import db
 
-
 # UserProfile Schema
 class UserProfile(db.Model):
-	__tablename__ = "userprofile"
+	__tablename__ = "UserProfile"
 	# attributes
 	name = db.Column(db.String(250), nullable=False, primary_key=True)
 	description = db.Column(db.String(250), nullable=False)
