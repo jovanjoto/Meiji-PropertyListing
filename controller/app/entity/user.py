@@ -3,7 +3,6 @@ from flask import current_app
 
 # Local dependencies
 from .sqlalchemy import db
-from .userprofile import UserProfile
 
 
 # User Schema
@@ -17,12 +16,12 @@ class User(db.Model):
 	last_name = db.Column(db.String(250), nullable=False)
 
 	# profile foreign key: UserProfile.name
-	profile = db.Column(db.String(250), db.ForeignKey('UserProfile.name'), nullable=False)
-	userToProfileRel = db.relationship("UserProfile", back_populates="profileToUserRel", cascade='all, delete, save-update',
-								  foreign_keys="User.profile")
+	profile = db.Column(db.String(250), db.ForeignKey('userprofile.name'), nullable=False)
+	userToProfileRel = db.relationship("userprofile", back_populates="profileToUserRel", cascade='all, delete, save-update',
+								  foreign_keys="user.profile")
 
 	# referenced by Suspension
-	userToSuspensionRel = db.relationship("Suspension", back_populates="suspensionToUserRel", cascade='all, delete, save-update')
+	userToSuspensionRel = db.relationship("suspension", back_populates="suspensionToUserRel", cascade='all, delete, save-update')
 	
 	@classmethod
 	def queryUserAccount(clf, email:str) -> object | None:
@@ -54,9 +53,6 @@ class User(db.Model):
 				- profile:str
 		returns bool.
 		"""
-		# Profile does not exist
-		if not UserProfile.queryUP(details.get("profile")):
-			return False
 		# User already exist
 		if clf.queryUserAccount(details.get("email")):
 			return False
@@ -82,10 +78,6 @@ class User(db.Model):
 				- profile:str
 		returns bool.
 		"""
-		# New Profile does not exist
-		if not UserProfile.queryUP(details.get("profile")):
-			return False
-		
 		with current_app.app_context():
 			user = clf.queryUserAccount(details.get("email"))
 			# User does not exist

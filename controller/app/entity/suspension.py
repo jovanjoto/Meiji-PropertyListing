@@ -5,20 +5,19 @@ from datetime import date # type: ignore
 # Local dependencies
 from .sqlalchemy import db
 from .user import User
-from .userprofile import UserProfile
 
 # Suspension Schema
 class Suspension(db.Model):
-	__tablename__ = "user"
+	__tablename__ = "suspension"
 	# attributes
 	start = db.Column(db.Date(), nullable=False, primary_key=True)
 	end = db.Column(db.Date())
 	description = db.Column(db.String(250), nullable=False)
 
 	# Part of composite key (qualifier)
-	user = db.Column(db.String(250), db.ForeignKey('User.email'), nullable=False, primary_key=True)
-	suspensionToUserRel = db.relationship("User", back_populates="userToSuspensionRel", cascade='all, delete, save-update',
-								  foreign_keys="Suspension.user")
+	user = db.Column(db.String(250), db.ForeignKey('user.email'), nullable=False, primary_key=True)
+	suspensionToUserRel = db.relationship("user", back_populates="userToSuspensionRel", cascade='all, delete, save-update',
+								  foreign_keys="suspension.user")
 	
 	@classmethod
 	def createSuspension(clf, email:str, reason:str, start:date=None, end:date=None) -> bool:
@@ -30,16 +29,21 @@ class Suspension(db.Model):
 			- end:date=None
 		returns bool.
 		"""
-		# User does not exist
-		if not User.queryUserAccount(email=email):
-			return False
-		# Default value management
-		if not start:
-			start = date.today()
-		# Invalid Dates
-		if end and end < start:
-			return False
+
+		# This should be moved to controller
+  		# User does not exist
+		# if not User.queryUserAccount(email=email):
+		# 	return False
+		# # Default value management
+		# if not start:
+		# 	start = date.today()
+		# # Invalid Dates
+		# if end and end < start:
+		# 	return False
 		
+		# Check if suspension already exist
+		if clf.query.filter_by(email=email, start=start).one_or_none():
+			return False
 		# Initialize new suspension
 		new_suspension = clf(user=email, start=start, end=end, reason=reason)
 
@@ -59,9 +63,10 @@ class Suspension(db.Model):
 			- end:date=None
 		returns bool.
 		"""
-		# UserProfile does not exist
-		if not UserProfile.queryUP(profile):
-			return False
+		# MOVE TO CONTROLLER UserProfile does not exist
+		# if not UserProfile.queryUP(profile):
+		# 	return False
+  
 		# Get all users within the profile
 		users = User.query.filter_by(profile=profile).all()
 		for u in users:
