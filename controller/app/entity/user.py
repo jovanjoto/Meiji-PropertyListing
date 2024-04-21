@@ -102,7 +102,7 @@ class User(db.Model):
 				return False
 			# Trying to update an admin's information
 			profile = UserProfile.queryUP(user.profile)
-			if profile.has_admin_permission:
+			if profile and profile.has_admin_permission:
 				return False
 			
 			# Update information

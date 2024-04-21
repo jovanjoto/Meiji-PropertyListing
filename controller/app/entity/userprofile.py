@@ -1,6 +1,6 @@
 # Libraries
 from flask import current_app
-from typing_extensions import Self
+from typing_extensions import Self # type: ignore
 
 # Local dependencies
 from .sqlalchemy import db
@@ -50,7 +50,7 @@ class UserProfile(db.Model):
 		returns bool.
 		"""
 		# Profile already exist
-		if cls.queryUP(details.get("name")):
+		if cls.queryUP(details["name"]): # type: ignore
 			return False
 
 		# Initialize new profile
@@ -74,7 +74,7 @@ class UserProfile(db.Model):
 		returns bool.
 		"""
 		with current_app.app_context():
-			profile = cls.queryUP(new_details.get("name"))
+			profile = cls.queryUP(new_details["name"]) # type: ignore
 			# Profile does not exist
 			if not profile:
 				return False
