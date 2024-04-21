@@ -29,13 +29,9 @@ class UserProfileController():
         successBool = UserProfile.updateProfile(newDetails)
         return successBool
     
-    def searchAllProfile(self) -> dict[str, list[dict[str, str | bool]]] | None:
-        profileList = UserProfile.queryAllProfile()
-        if not profileList:
-            return None
-        
-        profileListJson = []
-        for profile in profileList:
+    def searchAllProfile(self) -> dict[str, list[dict[str, str | bool]]]:
+        profileListJson:list[dict[str, str | bool]] = []
+        for profile in UserProfile.queryAllProfile():
             userProfileJson = {
                 "name": profile.name,
                 "description": profile.description,
@@ -45,5 +41,5 @@ class UserProfileController():
             }
             profileListJson.append(userProfileJson)
 
-        return {"data": profileListJson}
+        return {"profiles": profileListJson}
     

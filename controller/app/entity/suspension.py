@@ -17,9 +17,9 @@ class Suspension(db.Model):
 	description = db.Column(db.String(250), nullable=False)
 
 	# Part of composite key (qualifier)
-	user = db.Column(db.String(250), db.ForeignKey('user.email'), nullable=False, primary_key=True)
-	suspensionToUserRel = db.relationship("user", back_populates="userToSuspensionRel", cascade='all, delete, save-update',
-								  foreign_keys="suspension.user")
+	user = db.Column(db.String(250), db.ForeignKey('User.email'), nullable=False, primary_key=True)
+	suspensionToUserRel = db.relationship("User", back_populates="userToSuspensionRel", cascade='all, delete, save-update',
+								  foreign_keys="Suspension.user")
 	
 	@classmethod
 	def createSuspension(cls, email:str, reason:str, start:date|None=None, end:date|None=None) -> bool:
