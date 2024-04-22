@@ -22,14 +22,14 @@ db.init_app(flask_app)
 with flask_app.app_context():
 	db.create_all()
 	# Create admin profile
-	if not UserProfile.query.get("Admin"):
+	if not UserProfile.queryUP("Admin"):
 		UserProfile.createNewUserProfile({
 			"name":"Admin", 
 			"description":"Admin profile", 
 			"has_admin_permission":True
 		})
 	# Create admin acc
-	if not User.query.get("admin@admin.com"):
+	if not User.queryUserAccount("admin@admin.com"):
 		user = User(email="admin@admin.com",
 			phone="87434921", 
 			password=bcrypt.generate_password_hash("admin"), 
