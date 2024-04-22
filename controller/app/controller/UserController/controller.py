@@ -2,6 +2,7 @@
 
 # Local dependencies
 from app.entity import User, Suspension
+from app.controller.AuthController import AuthController
 
 class UserController():
 	def __init__(self) -> None:
@@ -19,6 +20,8 @@ class UserController():
 				- profile:str
 		returns bool.
 		"""
+		auth = AuthController()
+		details["password"] = auth.hash_password(details["password"])
 		# Call entity method
 		return User.createNewUserAccount(details=details)
 
@@ -34,6 +37,8 @@ class UserController():
 				- profile:str
 		returns bool.
 		"""
+		auth = AuthController()
+		new_details["password"] = auth.hash_password(new_details["password"])
 		# Call entity method
 		return User.updateAccount(details=new_details)
 
