@@ -13,6 +13,7 @@ import TestPage from './Pages/TestPage.jsx'
 import ModalTestPage from './Pages/ModalTestPage.jsx'
 import UserAccountManagementPage from './Pages/UserAccountManagementPage.jsx'
 import ProfileManagementPage from './Pages/ProfileManagementPage.jsx'
+import NavBar from './Components/NavBar.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   
@@ -24,7 +25,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <Route path='/viewAccounts' element={<UserAccountManagementPage/>}/>
     <Route path='/viewProfiles' element={<ProfileManagementPage/>}/>
     <Route path='/test' element={<TestPage/>}/>
-    <Route path='/modalTest' element={<ModalTestPage/>}/>
+    <Route path='/modalTest' element={<ModalTestPage />} />
+    <Route path='/navBarTest' element={<NavBar/>} />
   </Routes>
   </BrowserRouter>
   

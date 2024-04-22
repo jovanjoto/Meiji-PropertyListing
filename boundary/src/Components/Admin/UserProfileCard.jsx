@@ -17,16 +17,16 @@ export default function UserProfileCard({userType, name, email, phone_num, setUs
                         </div>
                     </div> 
                 
-                    <div className="flex flex-col basis-4/6 items-start mx-5">
+                    <div className="flex flex-col basis-8/12 items-start mx-5">
                         {/* Name email phone */}
                         <p className="text-2xl">{userType}</p>
                         
                     </div>
 
-                    <div className="flex basis-2/6 items-center justify-center">
+                    <div className="flex flex-col basis-6/12 items-center justify-center md:flex-row">
                         {/* view acc, suspend acc */}
-                        <Button className="mx-2 bg-custom_purple1 w-1/2" onClick={() => setUserProfileState(true)}>View</Button>
-                        <Button className="mx-2 bg-custom_purple1 w-1/2">Suspend</Button>
+                        <Button className="mx-2 bg-custom_purple1 w-1/2 mr-2 items-center my-1" onClick={() => setUserProfileState(true)}>View</Button>
+                        <Button className="mx-2 bg-custom_purple1 w-1/2 mr-2 items-center my-1">Suspend</Button>
                     </div>
                 </div>
             </Card>

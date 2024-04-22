@@ -14,7 +14,7 @@ export default {
         'custom_purple2': '#8B5FBF',
         'custom_purple3' : '#C989EB',
         'custom_purple4' : '#F7AEF8',
-        'custom_purple5' : '#FDC5F5' 
+        'custom_purple5': '#FDC5F5',
       }
     },
   },

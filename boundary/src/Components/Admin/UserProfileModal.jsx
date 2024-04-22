@@ -38,8 +38,8 @@ function UserProfileModal({ state, setState }) {
                 <Label htmlfor="permissions" value="Permissions"/>
                 <Card className="w-64">
                   {permissions.map((permission, index) => (
-                    <div className="flex flex-row justify-between">
-                      <Label htmlFor={permission} value={permission}/>
+                    <div key={index} className="flex flex-row justify-between">
+                      <Label htmlFor={permission} key={index} value={permission}/>
                       <Checkbox key={index} disabled={!isEditable} className="text-custom_purple_1"/>
                     </div>
                   ))}

@@ -4,16 +4,17 @@ import { BiDownArrow } from "react-icons/bi";
 export default function SearchAndFilter({type, setCreateAccountModelState}) {
     return (
         <>
-            <div className='flex justify-between my-10'>
-                    <div className='basis-9/12'>
-                        <TextInput id="Search" placeholder="Search (Username)" className='mr-5'/>
+            <div className='flex flex-col my-10 md:flex-row justify-between'>
+                    <div className='basis-7/12 my-2'>
+                        <TextInput id="Search" placeholder="Search (Username)"/>
                     </div>
-                    <div className='flex basis-3/12'>
-                        <Button className='bg-custom_purple1 flex items-center mr-5'>Filter
-                            <BiDownArrow className='ml-5'/>
+                    <div className='basis-1/6 my-2'>
+                        <Button className='bg-custom_purple1 flex items-center w-full'>Filter
+                            <BiDownArrow className='ml-1'/>
                         </Button>
-
-                    <Button className='bg-custom_purple1 flex items-center' onClick={() => setCreateAccountModelState(true)}>Create New {type}</Button>
+                    </div>
+                    <div className='basis-1/6 my-2 items-center'>
+                        <Button className='bg-custom_purple1 flex items-center w-full' onClick={() => setCreateAccountModelState(true)}>Create {type}</Button>
                     </div>
                         
             </div>

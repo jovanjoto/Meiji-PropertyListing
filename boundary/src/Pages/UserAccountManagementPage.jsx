@@ -1,11 +1,10 @@
 import { useState } from "react";
-import { Button, TextInput } from "flowbite-react";
-import { BiDownArrow } from "react-icons/bi";
 
 import UserAccountCard from "../Components/Admin/UserAccountCard";
 import SearchAndFilter from "../Components/Admin/SearchAndFilter";
 import UserAccountModal from '../Components/Admin/UserAccountModal';
 import CreateNewUserAccountModal from "../Components/Admin/CreateNewUserAccountModal";
+import NavBar from "../Components/NavBar";
 
 export default function UserAccountManagementPage({}) {
   const [isLoading, setIsLoading] = useState(false);
@@ -14,7 +13,9 @@ export default function UserAccountManagementPage({}) {
   const [createNewUserAccountModalState, setCreateNewUserAccountModalState] = useState(false);
   const displayList = () => {
     return (
-      <>
+        <>
+        <NavBar />
+        
         <UserAccountModal state={userAccountModalState} setState={setUserAccountModalState}/>
         <CreateNewUserAccountModal state={createNewUserAccountModalState} setState={setCreateNewUserAccountModalState}/>
         <SearchAndFilter type="Account" setCreateAccountModelState={setCreateNewUserAccountModalState}/>
@@ -42,5 +43,5 @@ export default function UserAccountManagementPage({}) {
     );
   };
 
-  return <>{isLoading ? displayLoading() : displayList()}</>;
+  return <> {isLoading ? displayLoading() : displayList()}</>;
 }
