@@ -45,4 +45,4 @@ class AuthController():
 		return True
 	
 	def hash_password(self, password:str) -> str:
-		return str(bcrypt.generate_password_hash(password))
+		return bcrypt.generate_password_hash(password)
