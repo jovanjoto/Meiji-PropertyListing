@@ -1,4 +1,4 @@
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "./AuthContext";
 import axios from "axios";
@@ -13,10 +13,9 @@ export default function PrivateRoute({
 	children,
 }) {
 	const { token, logout } = useContext(AuthContext);
-
+	const navigate = useNavigate();
 	const [auth, setAuth] = useState(false);
 	const [isTokenValidated, setIsTokenValidated] = useState(false);
-
 	const logical_implication = (a, b) => !a || b;
 
 	useEffect(() => {
@@ -26,6 +25,10 @@ export default function PrivateRoute({
 					headers: { Authorization: `Bearer ${token}` },
 				})
 				.then((res) => {
+					if (res.data.suspended) {
+						console.log("test");
+						navigate("/suspended");
+					}
 					if (res.data.success) {
 						setAuth(true);
 					} else {
@@ -51,13 +54,12 @@ export default function PrivateRoute({
 	}
 	if (auth) {
 		const user = jwtDecode(token);
-		if (logical_implication(admin, user.has_admin_permission)) {
-			return children;
-		} else if (logical_implication(buying, user.has_buying_permission)) {
-			return children;
-		} else if (logical_implication(listing, user.has_listing_permission)) {
-			return children;
-		} else if (logical_implication(selling, user.has_selling_permission)) {
+		if (
+			logical_implication(admin, user.has_admin_permission) &&
+			logical_implication(buying, user.has_buying_permission) &&
+			logical_implication(listing, user.has_listing_permission) &&
+			logical_implication(selling, user.has_selling_permission)
+		) {
 			return children;
 		} else if (user.has_admin_permission) {
 			return <Navigate to="/admin" />;

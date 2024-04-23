@@ -51,5 +51,8 @@ def login():
 @router.route("/verify_token", methods=["GET"])
 @jwt_required()
 def verify_token():
-    verify_jwt_in_request()
-    return {'success' : True}
+	verify_jwt_in_request()
+	claims = get_jwt()
+	controller = AuthController()
+	suspended = controller.check_if_user_suspended(claims["email"])
+	return {'success' : True, 'suspended': suspended}
