@@ -1,7 +1,7 @@
 # Libraries
 
 # Local dependencies
-from app.entity import User, Suspension
+from app.entity import User, Suspension, UserProfile
 from app.controller.AuthController import AuthController
 
 class UserController():
@@ -68,6 +68,9 @@ class UserController():
 		"""
 		list_of_accs:list[dict[str, str | bool | None]] = []
 		for user in User.queryAllAccount():
+			profile = UserProfile.queryUP(user.profile)
+			if profile and profile.has_admin_permission:
+				continue
 			suspension = Suspension.getOngoingSuspension(user)
 			if not suspension:
 				list_of_accs.append({
