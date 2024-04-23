@@ -3,6 +3,7 @@ import { BsFillPersonFill } from "react-icons/bs";
 import { IconContext } from "react-icons";
 import UserAccountModal from "./UserAccountModal";
 import { useState } from "react";
+import SuspendAccountModal from "./SuspendAccountModal";
 
 export default function UserAccountCard({
 	profile,
@@ -14,9 +15,18 @@ export default function UserAccountCard({
 	suspensionDate,
 }) {
 	const [showViewModal, setShowViewModal] = useState(false);
+	const [showSuspendModal, setShowSuspendModal] = useState(false);
+
 	return (
 		<>
 			<UserAccountModal state={showViewModal} setState={setShowViewModal} />
+			<SuspendAccountModal
+				state={showSuspendModal}
+				setState={setShowSuspendModal}
+				email={email}
+				lastName={lastName}
+				firstName={firstName}
+			/>
 
 			<Card
 				variant="outline"
@@ -47,12 +57,23 @@ export default function UserAccountCard({
 						>
 							View
 						</Button>
-						<Button
-							color="purple"
-							className="bg-custom_purple1 w-1/2 py-2"
-						>
-							Suspend
-						</Button>
+						{isSuspended === true ? (
+							<Button
+								disabled
+								color="purple"
+								className="mx-2 bg-custom_purple1 w-1/2 ml-2 h-14 items-center my-1 text-white"
+							>
+								Suspended until {suspensionDate}
+							</Button>
+						) : (
+							<Button
+								color="purple"
+								onClick={() => setShowSuspendModal(true)}
+								className="mx-2 bg-custom_purple1 w-1/2 ml-2 h-14 items-center my-1"
+							>
+								Suspend
+							</Button>
+						)}
 					</div>
 				</div>
 			</Card>

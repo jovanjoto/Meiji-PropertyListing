@@ -46,7 +46,6 @@ export default function NavBar({}) {
 				{Object.entries(navigation_links).map(([perm, routes]) => {
 					if (permission[perm]) {
 						return Object.entries(routes).map(([key, value]) => {
-							console.log(key, value);
 							if (value === pathname) {
 								return (
 									<Navbar.Link
