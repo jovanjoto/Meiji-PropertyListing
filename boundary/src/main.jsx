@@ -14,6 +14,7 @@ import ProfileManagementPage from "./Pages/ProfileManagementPage.jsx";
 import AuthProvider from "./Components/Authentication/AuthContext.jsx";
 import UnauthenticatedRoute from "./Components/Authentication/UnauthenticatedRoute.jsx";
 import PrivateRoute from "./Components/Authentication/PrivateRoute.jsx";
+import NavBar from "./Components/NavBar";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
 	<AuthProvider>
@@ -33,6 +34,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 					path="/admin/viewAccounts"
 					element={
 						<PrivateRoute admin>
+							<NavBar />
 							<UserAccountManagementPage />
 						</PrivateRoute>
 					}
@@ -41,6 +43,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 					path="/admin/viewProfiles"
 					element={
 						<PrivateRoute admin>
+							<NavBar />
 							<ProfileManagementPage />
 						</PrivateRoute>
 					}
