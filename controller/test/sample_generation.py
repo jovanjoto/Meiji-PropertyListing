@@ -2,7 +2,7 @@ from app import flask_app
 
 from app.entity.userprofile import UserProfile
 from app.entity.user import User
-from app.controller.ProfileController import UserProfileController
+from app.controller.UserProfileController import UserProfileController
 from app.controller.UserController import UserController
 from app.entity import db
 

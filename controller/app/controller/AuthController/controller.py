@@ -43,6 +43,3 @@ class AuthController():
 		if not suspension:
 			return False
 		return True
-	
-	def hash_password(self, password:str) -> bytes:
-		return bcrypt.generate_password_hash(password)
