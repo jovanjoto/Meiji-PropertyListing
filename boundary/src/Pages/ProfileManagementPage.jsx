@@ -13,6 +13,8 @@ import axios from "axios";
 import { AuthContext } from "../Components/Authentication/AuthContext";
 import { BsArrowDownShort } from "react-icons/bs";
 
+import CreateNewUserProfileModal from "../Components/Admin/CreateNewUserProfileModal";
+
 export default function ProfileManagementPage({}) {
 	const { token } = useContext(AuthContext);
 	const [isLoading, setIsLoading] = useState(true);
@@ -23,6 +25,11 @@ export default function ProfileManagementPage({}) {
 		has_buying_permission: false,
 		has_selling_permission: false,
 	});
+	const [profilePageOpen, setProfilePageOpen] = useState(false);
+
+	const displayCreateProfilePage = () => {
+		setProfilePageOpen(true);
+	}
 
 	useEffect(() => {
 		setIsLoading(true);
@@ -116,6 +123,7 @@ export default function ProfileManagementPage({}) {
 
 	return (
 		<div className="flex flex-col justify-center mx-10 my-4">
+			<CreateNewUserProfileModal state={profilePageOpen} setState={setProfilePageOpen} />
 			<div className="flex w-full justify-between flex-wrap items-center gap-5">
 				<TextInput
 					id="Search"
@@ -193,7 +201,7 @@ export default function ProfileManagementPage({}) {
 						size="lg"
 						className="bg-custom_purple1 flex flex-row justify-center align-middle items-center"
 						color="purple"
-					>
+					onClick={displayCreateProfilePage}>
 						Create new profile
 					</Button>
 				</div>

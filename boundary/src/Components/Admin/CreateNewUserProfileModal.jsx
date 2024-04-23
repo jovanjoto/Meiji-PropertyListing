@@ -8,13 +8,62 @@ import {
   TextInput,
 } from "flowbite-react";
 import { FaTimes, FaUser } from "react-icons/fa";
-import { useState, useRef } from "react";
+import { useState, useContext } from "react";
+import axios from "axios";
+import { AuthContext } from "../Authentication/AuthContext";
+import MessageModal from "./MessageModal";
 
 function CreateNewUserProfileModal({ state, setState }) {
-  const permissions = ["Buying", "Listing", "Selling"];
+  const { token, logout } = useContext(AuthContext);
+  const [profileName, setProfileName] = useState("");
+  const [description, setDescription] = useState("");
+  const [permission, setPermission] = useState({
+    Buying: false,
+    Listing: false,
+    Selling: false,
+  });
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [messageModalOpen, setMessageModalOpen] = useState(false);
+  const createProfile = async () => {
+    await axios
+      .put(
+        "/api/profile/create_user_profile",
+        {
+          name: profileName,
+          description: description,
+          has_buying_permission: permission.Buying,
+          has_listing_permission: permission.Listing,
+          has_selling_permission: permission.Selling,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((res) => {
+        if (res.data.success) {
+          setIsSuccess(true);
+        } else {
+          setIsSuccess(false);
+        }
+        setMessageModalOpen(true);
+      })
+      .catch((err) => {
+        logout();
+      });
+  };
+
+  const onCloseModal = (x) => {
+    window.location.reload()
+  }
 
   return (
     <>
+      <MessageModal state={messageModalOpen} setState={onCloseModal}>
+        {isSuccess && <>Success</>}
+        {!isSuccess && <>Error</>}
+      </MessageModal>
       <Modal
         className=""
         show={state}
@@ -32,16 +81,31 @@ function CreateNewUserProfileModal({ state, setState }) {
               <section className="grid gap-y-4">
                 <div>
                   <Label>Profile Name</Label>
-                  <TextInput id="profileName" className="" />
+                  <TextInput
+                    value={profileName}
+                    id="profileName"
+                    className=""
+                    onChange={(e) => setProfileName(e.target.value)}
+                  />
                 </div>
                 <div className="flex flex-col w-52">
                   <Label htmlFor="permissions" value="Permissions" />
                   <Card className="">
-                    {permissions.map((permission, index) => (
-                      <div className="flex flex-row justify-between">
-                        <Label htmlFor={permission} value={permission} />
+                    {Object.keys(permission).map((key, index) => (
+                      <div
+                        key={index}
+                        className="flex flex-row justify-between"
+                      >
+                        <Label htmlFor={key} value={key} />
                         <Checkbox
                           key={index}
+                          checked={permission[key]}
+                          onChange={() =>
+                            setPermission((prevState) => ({
+                              ...prevState,
+                              [key]: !prevState[key],
+                            }))
+                          }
                           className="text-custom_purple_1 mb-2"
                         />
                       </div>
@@ -51,7 +115,12 @@ function CreateNewUserProfileModal({ state, setState }) {
               </section>
               <section className="w-54">
                 <Label>Description </Label>
-                <Textarea id="description" className="h-60 resize-none" />
+                <Textarea
+                  value={description}
+                  id="description"
+                  className="h-60 resize-none"
+                  onChange={(e) => setDescription(e.target.value)}
+                />
               </section>
             </div>
           </div>
@@ -65,7 +134,7 @@ function CreateNewUserProfileModal({ state, setState }) {
             </Button>
             <Button
               className="bg-custom_purple1 w-1/4 mt-5"
-              onClick={() => setState(false)}
+              onClick={createProfile}
             >
               Confirm
             </Button>
