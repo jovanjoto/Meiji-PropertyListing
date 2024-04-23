@@ -12,17 +12,18 @@ export default function ProfileManagementPage({ }) {
     const displayList = () => {
         return (
             <>  
-                <NavBar/>
-                <UserProfileModal state={userProfileState} setState={setUserProfileState}/>
-                <SearchAndFilter
-                type="Profile"
-                />
+                <NavBar />
+                <div className="mx-8">
+                    <UserProfileModal state={userProfileState} setState={setUserProfileState}/>
+                    <SearchAndFilter
+                    type="Profile"
+                    />
 
-                <UserProfileCard
-                userType="Real Estate Agent"
-                setUserProfileState={setUserProfileState}
-                />
-
+                    <UserProfileCard
+                    userType="Real Estate Agent"
+                    setUserProfileState={setUserProfileState}
+                    />
+                </div>
             </>
         );
     }

@@ -38,7 +38,7 @@ export default function NavBar({ }) {
     }
 
     return (
-        <Navbar fluid rounded className=" max-w-full bg-gray-100">
+        <Navbar fluid rounded className=" max-w-full bg-gray-100 py-4">
 
             
             {(permission in permissions) && (displayNavBar())}
@@ -49,7 +49,7 @@ export default function NavBar({ }) {
                 label={
                     // <Avatar img="https://flowbite.com/docs/images/people/profile-picture-5.jpg" rounded />
                     <IconContext.Provider value={{ size: "2em" }}>
-                        <BsFillPersonFill className="hover:text-gray-500 align-middle" />
+                        <BsFillPersonFill className="hover:text-gray-500 align-middle mr-5" />
                     </IconContext.Provider>
                 }
             >
