@@ -125,7 +125,7 @@ def test_search_user_account():
         all_user = user_controller.searchAllAccount()
         assert len(all_user["accounts"]) > 0
         assert all_user["accounts"] == [
-            {"email": "bob@uow.edu.au", "phone": "123456", "first_name": "Bob", "last_name": "Ross", "profile": "Buyer", "suspended": False},
+            {"email": "bob@uow.edu.au", "phone": "123456", "first_name": "Bob", "last_name": "ross", "profile": "Buyer", "suspended": False},
             {"email": "john@uow.edu.au", "phone": "654321", "first_name": "John", "last_name": "mama", "profile": "Buyer", "suspended": False}
         ]
     _delete_precondition_data()
