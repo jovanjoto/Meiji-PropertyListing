@@ -26,7 +26,7 @@ function LoginCard() {
 			login(response.data.access_token);
 			const user = jwtDecode(response.data.access_token);
 			if (user.has_admin_permission) {
-				return navigate("/admin");
+				return navigate("/admin/viewaccounts");
 			} else if (user.has_listing_permission) {
 				return navigate("/agent");
 			} else if (user.has_selling_permission) {
