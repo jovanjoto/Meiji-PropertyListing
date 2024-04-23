@@ -4,4 +4,3 @@ flask-bcrypt==1.0.*
 flask-jwt-extended==4.6.0
 python-dotenv==1.0.1
 pytest
-

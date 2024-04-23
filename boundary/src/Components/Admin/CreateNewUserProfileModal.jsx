@@ -7,12 +7,10 @@ import {
   Checkbox,
   TextInput,
 } from "flowbite-react";
-import { FaTimes } from "react-icons/fa";
+import { FaTimes, FaUser } from "react-icons/fa";
 import { useState, useRef } from "react";
 
 function CreateNewUserProfileModal({ state, setState }) {
-
-
   const permissions = ["Buying", "Listing", "Selling"];
 
   return (
@@ -24,24 +22,17 @@ function CreateNewUserProfileModal({ state, setState }) {
         size="2xl"
       >
         <FaTimes
-          className="absolute top-0 left-0 m-2 rounded-md w-5 h-5" // Added absolute positioning
+          className="absolute top-0 left-0 m-2 rounded-md w-5 h-5 cursor-pointer" // Added absolute positioning
           onClick={() => setState(false)}
         />
         <Card className=" ">
           <div className="flex flex-col items-center">
-            <img
-              className="rounded-full  w-20 my-2"
-              src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
-            />
+            <FaUser className="rounded-full h-20 w-20 mb-5" />
             <div className="grid grid-cols-2 gap-x-14">
               <section className="grid gap-y-4">
                 <div>
                   <Label>Profile Name</Label>
-                  <TextInput
-                    id="profileName"
-                    className=""
-         
-                  />
+                  <TextInput id="profileName" className="" />
                 </div>
                 <div className="flex flex-col w-52">
                   <Label htmlFor="permissions" value="Permissions" />
@@ -60,17 +51,20 @@ function CreateNewUserProfileModal({ state, setState }) {
               </section>
               <section className="w-54">
                 <Label>Description </Label>
-                <Textarea
-                  id="description"
-                  className="h-60 resize-none"
-               
-                />
+                <Textarea id="description" className="h-60 resize-none" />
               </section>
             </div>
           </div>
-          <section className="flex justify-center">
+          <section className="flex justify-center gap-5">
             <Button
-              className="bg-custom_purple1 w-64 mt-5"
+              color="failure"
+              className="w-1/4 mt-5"
+              onClick={() => setState(false)}
+            >
+              Cancel
+            </Button>
+            <Button
+              className="bg-custom_purple1 w-1/4 mt-5"
               onClick={() => setState(false)}
             >
               Confirm
