@@ -8,7 +8,7 @@ import {
   TextInput,
   Radio,
 } from "flowbite-react";
-import { FaPencilAlt, FaTimes } from "react-icons/fa";
+import { FaPencilAlt, FaTimes, FaUser } from "react-icons/fa";
 import { useState, useRef } from "react";
 
 function CreateNewUserAccountModal({ state, setState }) {
@@ -51,16 +51,13 @@ function CreateNewUserAccountModal({ state, setState }) {
         size="sm"
       >
         <FaTimes
-          className="absolute top-0 left-0 m-2 rounded-md w-5 h-5" // Added absolute positioning
+          className="absolute top-0 left-0 m-2 rounded-md w-5 h-5 cursor-pointer" // Added absolute positioning
           onClick={() => setState(false)}
         />
 
         <Card className=" ">
           <div className="flex flex-col items-center">
-            <img
-              className="rounded-full  w-20 my-2"
-              src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
-            />
+          <FaUser className="w-20 h-20 rounded-full mt-5"/>
             <div className="mt-4 w-64 flex flex-col gap-y-2">
               <section className="flex flex-col">
                 <Label htmlFor="name" value="Name" />
@@ -95,15 +92,9 @@ function CreateNewUserAccountModal({ state, setState }) {
                   readOnly={!isEditable}
                 />
               </section>
-              <section className="flex justify-center pt-5">
-                <Button
-                  className="bg-custom_purple1 w-64"
-                  onClick={() => setState(false)}
-                >
-                  Confirm
-                </Button>
-              </section>
-              <section className="flex flex-col overflow-auto h-20 w-auto gap-y-3 justify-center mt-5">
+              <Label htmlFor="role" value="Role"/>
+              <section className="flex flex-col overflow-auto h-20 gap-y-1 justify-center border ">
+        
                 {profiles.map((profile, index) => (
                   <div key={index} className="flex items-center justify-between">
                     <Label htmlFor={profile} value={profile} /> {/* Bugs here */}
@@ -116,6 +107,15 @@ function CreateNewUserAccountModal({ state, setState }) {
                     
                   </div>
                 ))}
+              </section>
+              <section className="flex justify-center pt-5 gap-5">
+              <Button color="failure" className=" w-1/2" onClick={() =>  setState(false)}>Cancel</Button>
+                <Button
+                  className="bg-custom_purple1 w-1/2"
+                  onClick={() => setState(false)}
+                >
+                  Confirm
+                </Button>
               </section>
             </div>
           </div>
