@@ -32,7 +32,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 				<Route
 					path="/admin/viewAccounts"
 					element={
-						<PrivateRoute>
+						<PrivateRoute admin>
 							<UserAccountManagementPage />
 						</PrivateRoute>
 					}
@@ -40,7 +40,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 				<Route
 					path="/admin/viewProfiles"
 					element={
-						<PrivateRoute>
+						<PrivateRoute admin>
 							<ProfileManagementPage />
 						</PrivateRoute>
 					}

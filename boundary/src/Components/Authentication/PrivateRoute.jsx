@@ -18,7 +18,6 @@ export default function PrivateRoute({
 	const [isTokenValidated, setIsTokenValidated] = useState(false);
 
 	const logical_implication = (a, b) => !a || b;
-
 	useEffect(() => {
 		if (token) {
 			axios
@@ -51,13 +50,12 @@ export default function PrivateRoute({
 	}
 	if (auth) {
 		const user = jwtDecode(token);
-		if (logical_implication(admin, user.has_admin_permission)) {
-			return children;
-		} else if (logical_implication(buying, user.has_buying_permission)) {
-			return children;
-		} else if (logical_implication(listing, user.has_listing_permission)) {
-			return children;
-		} else if (logical_implication(selling, user.has_selling_permission)) {
+		if (
+			logical_implication(admin, user.has_admin_permission) &&
+			logical_implication(buying, user.has_buying_permission) &&
+			logical_implication(listing, user.has_listing_permission) &&
+			logical_implication(selling, user.has_selling_permission)
+		) {
 			return children;
 		} else if (user.has_admin_permission) {
 			return <Navigate to="/admin" />;
