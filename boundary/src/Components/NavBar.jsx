@@ -13,8 +13,8 @@ export default function NavBar({ }) {
     // an object of permissions
     const permissions = {
         "admin": {
-            "User Account": "/viewAccounts",
-            "User Profile": "/viewProfiles"
+            "User Account": "/admin/viewAccounts",
+            "User Profile": "/admin/viewProfiles"
         },
         //add buyer and seller later
     };
