@@ -16,39 +16,40 @@ import UnauthenticatedRoute from "./Components/Authentication/UnauthenticatedRou
 import PrivateRoute from "./Components/Authentication/PrivateRoute.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
- <AuthProvider>
-  <BrowserRouter>
-   <Routes>
-    {/* Unauthenticated Routes */}
-    <Route
-     path="/login"
-     element={
-      <UnauthenticatedRoute>
-       <LoginPage />
-      </UnauthenticatedRoute>
-     }
-    />
-    {/* Admin Routes */}
-    <Route
-     path="/admin/viewAccounts"
-     element={
-      <PrivateRoute>
-       <UserAccountManagementPage />
-      </PrivateRoute>
-     }
-    />
-    <Route
-     path="/admin/viewProfiles"
-     element={
-      <PrivateRoute>
-       <ProfileManagementPage />
-      </PrivateRoute>
-     }
-        />
-  {/* Others */}
-  <Route path="/test" element={<TestPage />} />
-    <Route path="/modalTest" element={<ModalTestPage />} />
-   </Routes>
-  </BrowserRouter>
- </AuthProvider>
+	<AuthProvider>
+		<BrowserRouter>
+			<Routes>
+				{/* Unauthenticated Routes */}
+				<Route
+					path="/login"
+					element={
+						<UnauthenticatedRoute>
+							<LoginPage />
+						</UnauthenticatedRoute>
+					}
+				/>
+				{/* Admin Routes */}
+				<Route
+					path="/admin/viewAccounts"
+					element={
+						<PrivateRoute>
+							<UserAccountManagementPage />
+						</PrivateRoute>
+					}
+				/>
+				<Route
+					path="/admin/viewProfiles"
+					element={
+						<PrivateRoute>
+							<ProfileManagementPage />
+						</PrivateRoute>
+					}
+				/>
+
+				{/* Others */}
+				<Route path="/test" element={<TestPage />} />
+				<Route path="/modalTest" element={<ModalTestPage />} />
+			</Routes>
+		</BrowserRouter>
+	</AuthProvider>
 );

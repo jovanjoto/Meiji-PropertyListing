@@ -1,13 +1,18 @@
 # Libraries
 from flask import Blueprint, request
+from flask_jwt_extended import jwt_required
 
 # Local dependencies
 from .controller import SuspensionController
+from app.controller.AuthController import permissions_required
 
 # Initialize blueprint
 router = Blueprint('suspension', __name__)
 
-router.route("/suspend_user_account", methods=["PUT"])
+# Individual create
+@router.route("/suspend_user_account", methods=["PUT"])
+@permissions_required("has_admin_permission")
+@jwt_required()
 def suspend_account():
 	json = request.get_json()
 	controller = SuspensionController()
@@ -16,7 +21,10 @@ def suspend_account():
 								   duration=int(json["duration"]))
 	return {"success": result}
 
-router.route("/suspend_user_profile", methods=["PUT"])
+# Bulk create
+@router.route("/suspend_user_profile", methods=["PUT"])
+@permissions_required("has_admin_permission")
+@jwt_required()
 def suspend_user_profile():
 	json = request.get_json()
 	controller = SuspensionController()

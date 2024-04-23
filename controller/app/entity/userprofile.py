@@ -51,6 +51,10 @@ class UserProfile(db.Model):
 		# Profile already exist
 		if cls.queryUP(details["name"]): # type: ignore
 			return False
+		
+		# Block creating admin user
+		if details.get("has_admin_permission"):
+			return False
 
 		# Initialize new profile
 		new_profile = cls(**details)
