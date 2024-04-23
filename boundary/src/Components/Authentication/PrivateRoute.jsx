@@ -1,4 +1,4 @@
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "./AuthContext";
 import axios from "axios";
@@ -13,11 +13,11 @@ export default function PrivateRoute({
 	children,
 }) {
 	const { token, logout } = useContext(AuthContext);
-
+	const navigate = useNavigate();
 	const [auth, setAuth] = useState(false);
 	const [isTokenValidated, setIsTokenValidated] = useState(false);
-
 	const logical_implication = (a, b) => !a || b;
+
 	useEffect(() => {
 		if (token) {
 			axios
@@ -25,6 +25,10 @@ export default function PrivateRoute({
 					headers: { Authorization: `Bearer ${token}` },
 				})
 				.then((res) => {
+					if (res.data.suspended) {
+						console.log("test");
+						navigate("/suspended");
+					}
 					if (res.data.success) {
 						setAuth(true);
 					} else {

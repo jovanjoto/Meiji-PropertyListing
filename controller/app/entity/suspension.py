@@ -43,10 +43,10 @@ class Suspension(db.Model):
 			return False
 		
 		# Check if suspension already exist
-		if cls.query.filter_by(email=email, start=start).one_or_none():
+		if cls.query.filter_by(user=email, start=start).one_or_none():
 			return False
 		# Initialize new suspension
-		new_suspension = cls(user=email, start=start, end=end, reason=reason)
+		new_suspension = cls(user=email, start=start, end=end, description=reason)
 
 		# Commit to DB
 		with current_app.app_context():
