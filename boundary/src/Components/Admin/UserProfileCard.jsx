@@ -6,7 +6,7 @@ import UserProfileModal from "./UserProfileModal";
 import { useState } from "react";
 
 export default function UserProfileCard({ profileJson }) {
-	const [showCreateModal, setShowCreateModal] = useState(false);
+	const [showViewModal, setShowViewModal] = useState(false);
 
 	const list_of_permissions = [];
 	if (profileJson.has_listing_permission) {
@@ -37,8 +37,8 @@ export default function UserProfileCard({ profileJson }) {
 	return (
 		<>
 			<UserProfileModal
-				state={showCreateModal}
-				setState={setShowCreateModal}
+				state={showViewModal}
+				setState={setShowViewModal}
 			/>
 
 			<Card
@@ -62,7 +62,7 @@ export default function UserProfileCard({ profileJson }) {
 						<Button
 							color="purple"
 							className="bg-custom_purple1 w-1/2 py-2"
-							onClick={() => setShowCreateModal(true)}
+							onClick={() => setShowViewModal(true)}
 						>
 							View
 						</Button>

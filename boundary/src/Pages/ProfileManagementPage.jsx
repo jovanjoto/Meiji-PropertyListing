@@ -1,9 +1,17 @@
 import { useContext, useEffect, useState } from "react";
-import { Button, Checkbox, Dropdown, Label, Spinner, TextInput } from "flowbite-react";
+import {
+	Button,
+	Checkbox,
+	Dropdown,
+	Label,
+	Spinner,
+	TextInput,
+} from "flowbite-react";
 import { FaSearch } from "react-icons/fa";
 import UserProfileCard from "../Components/Admin/UserProfileCard";
 import axios from "axios";
 import { AuthContext } from "../Components/Authentication/AuthContext";
+import { BsArrowDownShort } from "react-icons/bs";
 
 export default function ProfileManagementPage({}) {
 	const { token } = useContext(AuthContext);
@@ -36,38 +44,6 @@ export default function ProfileManagementPage({}) {
 				.then(() => setIsLoading(false));
 		}
 	}, []);
-
-	// // List of profiles
-	// const profilesList = [
-	// 	{
-	// 		name: "Real Estate Agent",
-	// 		description: "is an agent",
-	// 		has_listing_permission: true,
-	// 		has_buying_permission: false,
-	// 		has_selling_permission: false,
-	// 	},
-	// 	{
-	// 		name: "Admin",
-	// 		description: "is an admin",
-	// 		has_listing_permission: true,
-	// 		has_buying_permission: true,
-	// 		has_selling_permission: false,
-	// 	},
-	// 	{
-	// 		name: "Buyer",
-	// 		description: "is a buyer",
-	// 		has_listing_permission: false,
-	// 		has_buying_permission: true,
-	// 		has_selling_permission: false,
-	// 	},
-	// 	{
-	// 		name: "Seller",
-	// 		description: "is an seller",
-	// 		has_listing_permission: false,
-	// 		has_buying_permission: false,
-	// 		has_selling_permission: true,
-	// 	},
-	// ];
 
 	// For search and filtering
 	const logical_implication = (a, b) => !a || b;
@@ -103,9 +79,11 @@ export default function ProfileManagementPage({}) {
 	};
 
 	const searchFilter = () => {
-		return profilesList.map((profileJson) => {
+		let filtered_list = [];
+
+		profilesList.forEach((profileJson) => {
 			if (checkSearchFilter(profileJson)) {
-				return (
+				filtered_list.push(
 					<UserProfileCard
 						key={profileJson.name}
 						profileJson={profileJson}
@@ -113,90 +91,117 @@ export default function ProfileManagementPage({}) {
 				);
 			}
 		});
+		return filtered_list;
 	};
 
-	const displayList = () => {
-		return (
-			<div className="flex flex-col justify-center mx-10 my-4">
-				<div className="flex w-full justify-between flex-wrap items-center gap-5">
-					<TextInput
-						id="Search"
-						placeholder="Search profile"
-						className="mr w-96"
-						icon={FaSearch}
-						sizing="lg"
-						onChange={(event) => setSearch(event.target.value)}
-					/>
-
-					<div
-						className="flex flex-row items-center justify-center gap-5 my-2"
-						id="selectBoxes"
-					>
-						<Dropdown color={"purple"} label="Filter" size={"lg"}>
-							<div className="flex gap-2 m-2 items-center">
-								<Checkbox
-									id="listing"
-									checked={filter.has_listing_permission}
-									onChange={() =>
-										handleFilter(
-											"has_listing_permission",
-											!filter.has_listing_permission
-										)
-									}
-								/>
-								<Label htmlFor="listing" className="flex">
-									Listing
-								</Label>
-							</div>
-							<div className="flex gap-2 m-2 items-center">
-								<Checkbox
-									id="Buying"
-									checked={filter.has_buying_permission}
-									onChange={() =>
-										handleFilter(
-											"has_buying_permission",
-											!filter.has_buying_permission
-										)
-									}
-								/>
-								<Label htmlFor="Buying" className="flex">
-									Buying
-								</Label>
-							</div>
-							<div className="flex gap-2 m-2 items-center">
-								<Checkbox
-									id="Selling"
-									checked={filter.has_selling_permission}
-									onChange={() =>
-										handleFilter(
-											"has_selling_permission",
-											!filter.has_selling_permission
-										)
-									}
-								/>
-								<Label htmlFor="Selling" className="flex">
-									Selling
-								</Label>
-							</div>
-						</Dropdown>
-						<Button color={"purple"} size={"lg"}>
-							Create new profile
-						</Button>
-					</div>
-				</div>
-				<div className="flex flex-col justify-start items-center gap-5 my-6">
-					{searchFilter()}
-					{searchFilter().length == 0 && <span>No matching profiles</span>}
-				</div>
-			</div>
-		);
-	};
-	if (isLoading) {
+	const displayLoading = () => {
 		return (
 			<div className="text-center text-8xl">
 				<Spinner aria-label="Extra large spinner example" size="xl" />
 			</div>
 		);
+	};
+
+	const displayList = () => {
+		return searchFilter();
+	};
+
+	const displayEmptyList = () => {
+		return <span>No matching profiles found.</span>;
+	};
+
+	if (isLoading) {
+		return displayLoading();
 	}
-	return <>{displayList()}</>;
+
+	return (
+		<div className="flex flex-col justify-center mx-10 my-4">
+			<div className="flex w-full justify-between flex-wrap items-center gap-5">
+				<TextInput
+					id="Search"
+					placeholder="Search profile"
+					className="mr w-96"
+					icon={FaSearch}
+					sizing="lg"
+					onChange={(event) => setSearch(event.target.value)}
+				/>
+
+				<div
+					className="flex flex-row items-center justify-center gap-5 my-2"
+					id="selectBoxes"
+				>
+					<Dropdown
+						label="Dropdown button"
+						renderTrigger={() => (
+							<Button
+								size="lg"
+								className="bg-custom_purple1 flex flex-row justify-center align-middle items-center"
+								color="purple"
+							>
+								Filter
+								<BsArrowDownShort className="ml-2" size={24} />
+							</Button>
+						)}
+					>
+						<div className="flex gap-2 m-2 items-center">
+							<Checkbox
+								id="listing"
+								checked={filter.has_listing_permission}
+								onChange={() =>
+									handleFilter(
+										"has_listing_permission",
+										!filter.has_listing_permission
+									)
+								}
+							/>
+							<Label htmlFor="listing" className="flex">
+								Listing
+							</Label>
+						</div>
+						<div className="flex gap-2 m-2 items-center">
+							<Checkbox
+								id="Buying"
+								checked={filter.has_buying_permission}
+								onChange={() =>
+									handleFilter(
+										"has_buying_permission",
+										!filter.has_buying_permission
+									)
+								}
+							/>
+							<Label htmlFor="Buying" className="flex">
+								Buying
+							</Label>
+						</div>
+						<div className="flex gap-2 m-2 items-center">
+							<Checkbox
+								id="Selling"
+								checked={filter.has_selling_permission}
+								onChange={() =>
+									handleFilter(
+										"has_selling_permission",
+										!filter.has_selling_permission
+									)
+								}
+							/>
+							<Label htmlFor="Selling" className="flex">
+								Selling
+							</Label>
+						</div>
+					</Dropdown>
+					<Button
+						size="lg"
+						className="bg-custom_purple1 flex flex-row justify-center align-middle items-center"
+						color="purple"
+					>
+						Create new profile
+					</Button>
+				</div>
+			</div>
+			<div className="flex flex-col justify-start items-center gap-5 my-6">
+				{displayList()}
+				{searchFilter().length == 0 && displayEmptyList()}
+			</div>
+		</div>
+	);
 }
