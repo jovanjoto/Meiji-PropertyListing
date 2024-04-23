@@ -4,9 +4,11 @@ import { MdAdminPanelSettings, MdPublish, MdSell } from "react-icons/md";
 import { GiPayMoney } from "react-icons/gi";
 import UserProfileModal from "./UserProfileModal";
 import { useState } from "react";
+import SuspendProfileModal from "./SuspendProfileModal";
 
 export default function UserProfileCard({ profileJson }) {
 	const [showViewModal, setShowViewModal] = useState(false);
+	const [showSuspendModal, setShowSuspendModal] = useState(false);
 
 	const list_of_permissions = [];
 	if (profileJson.has_listing_permission) {
@@ -36,6 +38,7 @@ export default function UserProfileCard({ profileJson }) {
 
 	return (
 		<>
+			<SuspendProfileModal state={showSuspendModal} setState={setShowSuspendModal} profile={profileJson.name} />
 			<UserProfileModal
 				state={showViewModal}
 				setState={setShowViewModal}
@@ -68,6 +71,7 @@ export default function UserProfileCard({ profileJson }) {
 						</Button>
 						<Button
 							color="purple"
+							onClick={() => setShowSuspendModal(true)}
 							className="bg-custom_purple1 w-1/2 py-2"
 						>
 							Suspend
