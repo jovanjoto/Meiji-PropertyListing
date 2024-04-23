@@ -1,64 +1,98 @@
 import { Navbar, Dropdown } from "flowbite-react";
 import { BsFillPersonFill } from "react-icons/bs";
 import { IconContext } from "react-icons";
-import { useLocation } from "react-router-dom";
-import { BiDownArrow } from "react-icons/bi";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { AuthContext } from "./Authentication/AuthContext";
+import { jwtDecode } from "jwt-decode";
 
-export default function NavBar({ }) {
-    //get route
-    const { pathname } = useLocation();
+export default function NavBar({}) {
+	const { logout, token } = useContext(AuthContext);
+	const [permission, setPermission] = useState({
+		admin: false,
+		listing: false,
+		buying: false,
+		selling: false,
+	});
+	const navigate = useNavigate();
+	const { pathname } = useLocation();
 
-    //get role
-    const permission = "admin";
-    // an object of permissions
-    const permissions = {
-        "admin": {
-            "User Account": "/admin/viewAccounts",
-            "User Profile": "/admin/viewProfiles"
-        },
-        //add buyer and seller later
-    };
+	useEffect(() => {
+		const user = jwtDecode(token);
+		setPermission((prev) => ({
+			...prev,
+			admin: user.has_admin_permission,
+			listing: user.has_listing_permission,
+			buying: user.has_buying_permission,
+			selling: user.has_selling_permission,
+		}));
+	}, [token]);
 
+	// an object of permissions
+	const navigation_links = {
+		admin: {
+			"User Account Management": "/admin/viewAccounts",
+			"User Profile Management": "/admin/viewProfiles",
+		},
+		listing: {},
+		buying: {},
+		selling: {},
+	};
 
+	return (
+		<Navbar fluid rounded className=" max-w-full bg-gray-100 py-4">
+			<Navbar.Toggle />
+			<Navbar.Collapse>
+				{Object.entries(navigation_links).map(([perm, routes]) => {
+					if (permission[perm]) {
+						return Object.entries(routes).map(([key, value]) => {
+							console.log(key, value);
+							if (value === pathname) {
+								return (
+									<Navbar.Link
+										href={value}
+										active
+										className="text-lg mx-4"
+										key={key}
+									>
+										{key}
+									</Navbar.Link>
+								);
+							}
+							return (
+								<Navbar.Link
+									href={value}
+									className="text-lg mx-4"
+									key={key}
+								>
+									{key}
+								</Navbar.Link>
+							);
+						});
+					}
+				})}
+			</Navbar.Collapse>
 
-    const displayNavBar = () => {
-        return (
-            <>
-                <Navbar.Toggle />
-                <Navbar.Collapse>
-                    {Object.entries(permissions[permission]).map(([key, value]) => (
-                        (value === pathname) ?
-                            (<Navbar.Link href={value} active className="text-lg mx-4" key={key}>{key}</Navbar.Link>) :
-                            (<Navbar.Link href={value} className="text-lg mx-4" key={key}>{key}</Navbar.Link>)
-
-                    ))}
-                </Navbar.Collapse>
-            </>
-        );
-    }
-
-    return (
-        <Navbar fluid rounded className=" max-w-full bg-gray-100 py-4">
-
-            
-            {(permission in permissions) && (displayNavBar())}
-
-            <Dropdown
-                arrowIcon={false}
-                inline
-                label={
-                    // <Avatar img="https://flowbite.com/docs/images/people/profile-picture-5.jpg" rounded />
-                    <IconContext.Provider value={{ size: "2em" }}>
-                        <BsFillPersonFill className="hover:text-gray-500 align-middle mr-5" />
-                    </IconContext.Provider>
-                }
-            >
-                <Dropdown.Item>Log Out</Dropdown.Item>
-                <Dropdown.Item>View User Account</Dropdown.Item>
-            </Dropdown>
-        </Navbar>
-        
-
-
-    );
+			<Dropdown
+				arrowIcon={false}
+				inline
+				label={
+					// <Avatar img="https://flowbite.com/docs/images/people/profile-picture-5.jpg" rounded />
+					<IconContext.Provider value={{ size: "2em" }}>
+						<BsFillPersonFill className="hover:text-gray-500 align-middle mr-5" />
+					</IconContext.Provider>
+				}
+			>
+				<Dropdown.Item
+					onClick={() => {
+						logout();
+						navigate("/login");
+					}}
+				>
+					Log Out
+				</Dropdown.Item>
+				{/* <Dropdown.Item>View User Account</Dropdown.Item> */}
+			</Dropdown>
+		</Navbar>
+	);
 }

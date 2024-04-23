@@ -6,7 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 // importing local dependencies
 import LoginPage from "./Pages/LoginPage.jsx";
-import RegisterPage from "./Pages/RegisterPage.jsx";
+// import RegisterPage from "./Pages/RegisterPage.jsx";
 import TestPage from "./Pages/TestPage.jsx";
 import ModalTestPage from "./Pages/ModalTestPage.jsx";
 import UserAccountManagementPage from "./Pages/UserAccountManagementPage.jsx";
@@ -48,7 +48,36 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 						</PrivateRoute>
 					}
 				/>
-
+				{/* Agent Routes */}
+				<Route
+					path="/agent"
+					element={
+						<PrivateRoute listing>
+							<NavBar />
+							You are an agent!
+						</PrivateRoute>
+					}
+				/>
+				{/* Buying Routes */}
+				<Route
+					path="/"
+					element={
+						<PrivateRoute buying>
+							<NavBar />
+							You are a buyer!
+						</PrivateRoute>
+					}
+				/>
+				{/* Seller Routes */}
+				<Route
+					path="/seller"
+					element={
+						<PrivateRoute selling>
+							<NavBar />
+							You are a seller!
+						</PrivateRoute>
+					}
+				/>
 				{/* Others */}
 				<Route path="/test" element={<TestPage />} />
 				<Route path="/modalTest" element={<ModalTestPage />} />
