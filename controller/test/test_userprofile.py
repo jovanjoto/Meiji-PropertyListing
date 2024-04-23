@@ -1,7 +1,7 @@
 import pytest
 
 from app import flask_app
-from app.controller.ProfileController import UserProfileController
+from app.controller.UserProfileController import UserProfileController
 
 @pytest.mark.test_valid_create_profile
 def test_valid_create_profile():

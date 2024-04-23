@@ -6,7 +6,7 @@ from config import Config
 from app.entity import db, User, UserProfile
 from .controller.UserController import router as user_controller_bp
 from .controller.SuspensionController import router as suspension_controller_bp
-from .controller.ProfileController import router as profile_controller_bp
+from .controller.UserProfileController import router as profile_controller_bp
 from .controller.AuthController import jwt, bcrypt, router as auth_controller_bp
 
 # Initialize Flask App
