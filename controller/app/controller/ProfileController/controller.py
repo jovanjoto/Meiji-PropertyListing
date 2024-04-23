@@ -32,6 +32,8 @@ class UserProfileController():
     def searchAllProfile(self) -> dict[str, list[dict[str, str | bool]]]:
         profileListJson:list[dict[str, str | bool]] = []
         for profile in UserProfile.queryAllProfile():
+            if profile.has_admin_permission:
+                continue
             userProfileJson = {
                 "name": profile.name,
                 "description": profile.description,
@@ -40,6 +42,5 @@ class UserProfileController():
                 "has_selling_permission": profile.has_selling_permission
             }
             profileListJson.append(userProfileJson)
-
         return {"profiles": profileListJson}
     
