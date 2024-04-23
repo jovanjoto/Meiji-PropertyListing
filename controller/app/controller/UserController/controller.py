@@ -21,7 +21,7 @@ class UserController():
 		returns bool.
 		"""
 		auth = AuthController()
-		details["password"] = auth.hash_password(details["password"])
+		details["password"] = auth.hash_password(details["password"]) # type: ignore
 		# Call entity method
 		return User.createNewUserAccount(details=details)
 
@@ -38,7 +38,7 @@ class UserController():
 		returns bool.
 		"""
 		auth = AuthController()
-		new_details["password"] = auth.hash_password(new_details["password"])
+		new_details["password"] = auth.hash_password(new_details["password"]) # type: ignore
 		# Call entity method
 		return User.updateAccount(details=new_details)
 

@@ -23,11 +23,12 @@ with flask_app.app_context():
 	db.create_all()
 	# Create admin profile
 	if not UserProfile.queryUP("Admin"):
-		UserProfile.createNewUserProfile({
-			"name":"Admin", 
-			"description":"Admin profile", 
-			"has_admin_permission":True
-		})
+		profile = UserProfile(
+			name="Admin", 
+			description="Admin profile", 
+			has_admin_permission=True
+		) # type: ignore
+		db.session.add(profile)
 	# Create admin acc
 	if not User.queryUserAccount("admin@admin.com"):
 		user = User(email="admin@admin.com",
