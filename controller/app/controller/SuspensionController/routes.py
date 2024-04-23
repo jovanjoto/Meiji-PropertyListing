@@ -37,6 +37,6 @@ def suspend_user_profile():
 @router.route("/get_suspension", methods=["GET"])
 @jwt_required()
 def get_suspension():
-	json = request.get_json()
+	email = request.args["email"]
 	controller = SuspensionController()
-	return controller.querySuspension(email=json["email"])
+	return controller.querySuspension(email=email)
