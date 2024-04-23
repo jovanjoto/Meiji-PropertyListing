@@ -28,9 +28,20 @@ def _create_precondition_data():
                 "profile" : "Buyer"
             }
         )
+        user_controller.createAccount(
+            {
+                "email" : "john@uow.edu.au",
+                "phone" : "654321",
+                "password" : "bob12345",
+                "first_name" : "John",
+                "last_name" : "mama",
+                "profile" : "Buyer"
+            }
+        )
 
 def _delete_precondition_data():
      with flask_app.app_context():
         User.query.filter_by(email="bob@uow.edu.au").delete()
+        User.query.filter_by(email="john@uow.edu.au").delete()
         UserProfile.query.filter_by(name="Buyer").delete()
         db.session.commit()

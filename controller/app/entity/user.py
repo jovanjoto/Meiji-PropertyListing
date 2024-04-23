@@ -61,6 +61,10 @@ class User(db.Model):
 		# Unauthorized request to make a user with admin permissions
 		if profile.has_admin_permission:
 			return False
+		phone = cls.query.filter_by(phone=details["phone"]).one_or_none()
+		# Phone exist
+		if phone:
+			return False
 		# User already exist
 		if cls.queryUserAccount(details["email"]):
 			return False
@@ -97,6 +101,10 @@ class User(db.Model):
 			
 		with current_app.app_context():
 			user = cls.queryUserAccount(details["email"])
+			phone = cls.query.filter_by(phone=details["phone"]).one_or_none()
+			# Phone exist
+			if phone:
+				return False
 			# User does not exist
 			if not user:
 				return False

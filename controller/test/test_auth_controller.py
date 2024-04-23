@@ -10,9 +10,6 @@ from .sample_generation import _create_precondition_data, _delete_precondition_d
 def test_valid_login():
     """
     Login should be valid here
-    Assume the following user account already in the database
-    email = bob@uow.edu.au
-    password = bob12345
     """
     valid_login = [
         {"email" : "bob@uow.edu.au", "password" : "bob12345"}
@@ -35,9 +32,6 @@ def test_valid_login():
 def test_invalid_login():
     """
     Login should be invalid here
-    Assume the following user account already in the database
-    email = bob@uow.edu.au
-    password = bob12345
     """
     invalid_login = [
         {"email" : "bob@uow.edu.au", "password" : "000"},
