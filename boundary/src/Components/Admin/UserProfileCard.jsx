@@ -42,6 +42,7 @@ export default function UserProfileCard({ profileJson }) {
 			<UserProfileModal
 				state={showViewModal}
 				setState={setShowViewModal}
+				primaryKey={profileJson.name}
 			/>
 
 			<Card
