@@ -11,11 +11,11 @@ from app.controller.authentication import permissions_required
 class SuspendUserProfileController(Blueprint):
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
-		self.add_url_rule("/suspend_user_profile", view_func=self.suspend_user_profile, methods=["PUT"])
+		self.add_url_rule("/suspend_user_profile", view_func=self.suspendProfileCnt, methods=["PUT"])
 
 	@permissions_required("has_admin_permission")
 	@jwt_required()
-	def suspend_user_profile(self) -> dict[str, bool]:
+	def suspendProfileCnt(self) -> dict[str, bool]:
 		json = request.get_json()
 		profile=json["profile"]
 		reason=json["reason"]

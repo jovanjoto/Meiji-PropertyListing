@@ -7,10 +7,10 @@ from app.entity import User
 class ViewUserController(Blueprint):
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
-		self.add_url_rule("/view_user_account", view_func=self.view_user_account, methods=["GET"])
+		self.add_url_rule("/view_user_account", view_func=self.viewUserAccount, methods=["GET"])
 
 	@jwt_required()
-	def view_user_account(self) -> dict[str, dict[str,str] | bool | str]:
+	def viewUserAccount(self) -> dict[str, dict[str,str] | bool | str]:
 		email:str = request.args["email"]
 		user = User.queryUserAccount(email=email)
 		if not user:

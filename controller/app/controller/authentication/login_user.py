@@ -29,6 +29,7 @@ class LoginUserController(Blueprint):
 		if not profile:
 			return {'access_token' : None}
 		
+		# Generate token
 		access_token = create_access_token(
         identity=email, 
         additional_claims={

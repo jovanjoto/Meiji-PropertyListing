@@ -9,11 +9,11 @@ from app.controller.authentication import permissions_required, bcrypt
 class SearchUserController(Blueprint):
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
-		self.add_url_rule("/search_user_account", view_func=self.search_user_account, methods=["GET"])
+		self.add_url_rule("/search_user_account", view_func=self.searchAllAccount, methods=["GET"])
 
 	@permissions_required("has_admin_permission")
 	@jwt_required()
-	def search_user_account(self) -> dict[str, list[dict[str, str | bool | None]]]:
+	def searchAllAccount(self) -> dict[str, list[dict[str, str | bool | None]]]:
 		list_of_accs = []
 		for user in User.queryAllAccount():
 			profile = UserProfile.queryUP(user.profile)

@@ -10,11 +10,11 @@ from app.controller.authentication import permissions_required
 class ViewUserProfileController(Blueprint):
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
-		self.add_url_rule("/view_user_profile", view_func=self.view_user_profile, methods=["GET"])
+		self.add_url_rule("/view_user_profile", view_func=self.viewUP, methods=["GET"])
 		
 	@permissions_required("has_admin_permission")
 	@jwt_required()
-	def view_user_profile(self) -> dict[str, dict[str, str | bool] | None]:
+	def viewUP(self) -> dict[str, dict[str, str | bool] | None]:
 		profileName = request.args["profileName"]
 		userProfileObject = UserProfile.queryUP(profileName)
 		if not userProfileObject:
