@@ -122,7 +122,7 @@ export default function UserAccountManagementPage() {
 	};
 
 	const displayEmptyList = () => {
-		return <span>No matching profiles found.</span>;
+		return <span>No matching accounts found.</span>;
 	};
 
 	if (isLoading) {
