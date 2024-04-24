@@ -2,6 +2,7 @@ import pytest
 
 from app import flask_app
 from app.controller.ProfileController import UserProfileController
+from .sample_generation import _create_precondition_data2, _delete_precondition_data2
 
 @pytest.mark.test_valid_create_profile
 def test_valid_create_profile():
@@ -28,9 +29,15 @@ def test_valid_create_profile():
             successBool = controller.createProfile(data)
             assert successBool == True
 
+    # create adds to the database same records as precondition data
+    _delete_precondition_data2()
+
 
 @pytest.mark.test_invalid_create_profile
 def test_invalid_create_profile():
+
+    _create_precondition_data2()
+
     invalid_create = [
         {
             "name": "AllPermissions",
@@ -55,8 +62,13 @@ def test_invalid_create_profile():
             unsuccessfulBool = controller.createProfile(data)
             assert unsuccessfulBool == False
 
+    _delete_precondition_data2()
+
 @pytest.mark.test_valid_view_profile
 def test_valid_view_profile():
+
+    _create_precondition_data2()
+
     valid_profile_names = ["AllPermissions", "LeastPermissions"]
     with flask_app.app_context():
         controller = UserProfileController()
@@ -68,9 +80,14 @@ def test_valid_view_profile():
             assert type(userProfile.get("has_listing_permission")) == bool
             assert type(userProfile.get("has_buying_permission")) == bool
             assert type(userProfile.get("has_selling_permission")) == bool
+    
+    _delete_precondition_data2()
 
 @pytest.mark.test_invalid_view_profile
 def test_invalid_view_profile():
+
+    _create_precondition_data2()
+    
     invalid_profile_names = ["RandomProfile", "AnotherRandom"]
     with flask_app.app_context():
         controller = UserProfileController()
@@ -79,8 +96,13 @@ def test_invalid_view_profile():
             userProfile = controller.viewUP(data)
             assert userProfile == None
 
+    _delete_precondition_data2()
+
 @pytest.mark.test_valid_update_controller
 def test_valid_update_controller():
+
+    _create_precondition_data2()
+
     valid_update = [
         {
             "name": "AllPermissions",
@@ -102,8 +124,13 @@ def test_valid_update_controller():
             successfulBool = controller.updateProfileCnt(data)
             assert successfulBool == True
 
+    _delete_precondition_data2()
+
 @pytest.mark.test_invalid_update_controller
 def test_invalid_update_controller():
+
+    _create_precondition_data2()
+
     invalid_update = [
         {
             "name": "RandomProfile",
@@ -123,3 +150,5 @@ def test_invalid_update_controller():
         for data in invalid_update:
             unsuccessfulBool = controller.updateProfileCnt(data)
             assert unsuccessfulBool == False
+    
+    _delete_precondition_data2()

@@ -39,9 +39,37 @@ def _create_precondition_data():
             }
         )
 
+def _create_precondition_data2():
+    with flask_app.app_context():
+        profile_controller = UserProfileController()
+        profile_controller.createProfile(
+            {
+                "name": "AllPermissions",
+                "description": "Profile with listing, buying, selling permission",
+                "has_listing_permission": True,
+                "has_buying_permission": True,
+                "has_selling_permission": True
+            }
+        )
+        profile_controller.createProfile(
+            {
+                "name": "LeastPermissions",
+                "description": "Profile with no permissions",
+                "has_listing_permission": False,
+                "has_buying_permission": False,
+                "has_selling_permission": False
+            }
+        )
+
 def _delete_precondition_data():
      with flask_app.app_context():
         User.query.filter_by(email="bob@uow.edu.au").delete()
         User.query.filter_by(email="john@uow.edu.au").delete()
         UserProfile.query.filter_by(name="Buyer").delete()
+        db.session.commit()
+
+def _delete_precondition_data2():
+    with flask_app.app_context():
+        UserProfile.query.filter_by(name="AllPermissions").delete()
+        UserProfile.query.filter_by(name="LeastPermissions").delete()
         db.session.commit()
