@@ -3,7 +3,7 @@ import jwt
 
 from app import flask_app
 from config import Config
-from app.controller.AuthController import AuthController
+from app.controller.authentication import AuthController
 from .sample_generation import _create_precondition_data, _delete_precondition_data
 
 @pytest.mark.valid_login_test

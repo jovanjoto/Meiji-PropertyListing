@@ -4,10 +4,10 @@ from flask import Flask
 # Local dependencies
 from config import Config
 from app.entity import db, User, UserProfile
-from .controller.UserController import router as user_controller_bp
-from .controller.SuspensionController import router as suspension_controller_bp
-from .controller.UserProfileController import router as profile_controller_bp
-from .controller.AuthController import jwt, bcrypt, router as auth_controller_bp
+from .controller.user import view_user_controller, search_user_controller, update_user_controller, create_user_controller
+from .controller.suspension import get_suspension_controller, suspend_user_controller, suspend_profile_controller
+from .controller.profile import view_profile_controller, search_profile_controller, update_profile_controller, create_profile_controller
+from .controller.authentication import jwt, bcrypt, login_controller
 
 # Initialize Flask App
 flask_app = Flask(__name__)
@@ -42,7 +42,23 @@ with flask_app.app_context():
 		db.session.commit()
 
 # Load all routes
-flask_app.register_blueprint(user_controller_bp, url_prefix='/api/user')
-flask_app.register_blueprint(suspension_controller_bp, url_prefix='/api/suspension')
-flask_app.register_blueprint(profile_controller_bp, url_prefix='/api/profile')
-flask_app.register_blueprint(auth_controller_bp, url_prefix='/api/authentication')
+
+# Authentication
+flask_app.register_blueprint(login_controller, url_prefix='/api/authentication')
+
+# Suspension
+flask_app.register_blueprint(get_suspension_controller, url_prefix='/api/suspension')
+flask_app.register_blueprint(suspend_profile_controller, url_prefix='/api/suspension')
+flask_app.register_blueprint(suspend_user_controller, url_prefix='/api/suspension')
+
+# User
+flask_app.register_blueprint(create_user_controller, url_prefix='/api/user')
+flask_app.register_blueprint(view_user_controller, url_prefix='/api/user')
+flask_app.register_blueprint(update_user_controller, url_prefix='/api/user')
+flask_app.register_blueprint(search_user_controller, url_prefix='/api/user')
+
+# User Profile
+flask_app.register_blueprint(create_profile_controller, url_prefix='/api/profile')
+flask_app.register_blueprint(view_profile_controller, url_prefix='/api/profile')
+flask_app.register_blueprint(update_profile_controller, url_prefix='/api/profile')
+flask_app.register_blueprint(search_profile_controller, url_prefix='/api/profile')

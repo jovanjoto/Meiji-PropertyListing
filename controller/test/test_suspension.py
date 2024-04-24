@@ -1,7 +1,7 @@
 import pytest
 
 from app import flask_app
-from app.controller.SuspensionController import SuspensionController
+from app.controller.suspension import SuspensionController
 from .sample_generation import _create_precondition_data, _delete_precondition_data
 
 @pytest.mark.test_valid_suspend_account
