@@ -101,10 +101,11 @@ class User(db.Model):
 			
 		with current_app.app_context():
 			user = cls.queryUserAccount(details["email"])
-			phone = cls.query.filter_by(phone=details["phone"]).one_or_none()
-			# Phone exist
-			if phone:
-				return False
+			if details.get("phone"):
+				phone = cls.query.filter_by(phone=details["phone"]).one_or_none()
+				# Phone exist
+				if phone:
+					return False
 			# User does not exist
 			if not user:
 				return False
