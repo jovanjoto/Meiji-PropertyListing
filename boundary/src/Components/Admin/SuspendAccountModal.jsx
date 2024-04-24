@@ -5,12 +5,14 @@ import { FaChevronDown } from "react-icons/fa";
 import axios from "axios";
 import MessageModal from "./MessageModal";
 import { AuthContext } from "../Authentication/AuthContext";
+import ConfirmationModal from "../ConfirmationModal";
 
 function SuspendAccountModal({ state, setState, email, firstName, lastName }) {
 	const [durationUnit, setDurationUnit] = useState("Days");
 	const [duration, setDuration] = useState(1);
 	const [reason, setReason] = useState("");
 	const [messageModal, setMessageModal] = useState(false);
+	const [confirmationModal, setConfirmationModal] = useState(false);
 	const { token } = useContext(AuthContext);
 
 	const onCloseModal = (x) => {
@@ -57,6 +59,11 @@ function SuspendAccountModal({ state, setState, email, firstName, lastName }) {
 				state={messageModal}
 				setState={onCloseModal}
 			>{`${firstName} ${lastName} successfully suspended.`}</MessageModal>
+			<ConfirmationModal
+				state={confirmationModal}
+				setState={setConfirmationModal}
+				action={handleSubmit}
+			>Confirm suspension on {email}</ConfirmationModal>
 			<Modal
 				className=""
 				show={state}
@@ -140,7 +147,7 @@ function SuspendAccountModal({ state, setState, email, firstName, lastName }) {
 								</Button>
 								<Button
 									className="w-1/2 bg-custom_purple1 text-white"
-									onClick={() => handleSubmit()}
+									onClick={() => setConfirmationModal(true)}
 								>
 									Confirm
 								</Button>
