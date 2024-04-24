@@ -4,12 +4,14 @@ import { useContext, useState } from "react";
 import axios from "axios";
 import MessageModal from "./MessageModal";
 import { AuthContext } from "../Authentication/AuthContext";
+import ConfirmationModal from "../ConfirmationModal";
 
 function SuspendProfileModal({ state, setState, profile }) {
 	const [durationUnit, setDurationUnit] = useState("Days");
 	const [duration, setDuration] = useState(1);
 	const [reason, setReason] = useState("");
 	const [messageModal, setMessageModal] = useState(false);
+	const [confirmationModal, setConfirmationModal] = useState(false);
 	const { token } = useContext(AuthContext);
 
 	const onCloseModal = (x) => {
@@ -52,6 +54,13 @@ function SuspendProfileModal({ state, setState, profile }) {
 
 	return (
 		<>
+			<ConfirmationModal
+				state={confirmationModal}
+				setState={setConfirmationModal}
+				action={handleSubmit}
+			>
+				Confirm Suspension on {profile}
+			</ConfirmationModal>
 			<MessageModal
 				state={messageModal}
 				setState={onCloseModal}
@@ -139,7 +148,7 @@ function SuspendProfileModal({ state, setState, profile }) {
 								</Button>
 								<Button
 									className="w-1/2 bg-custom_purple1 text-white"
-									onClick={() => handleSubmit()}
+									onClick={() => setConfirmationModal(true)}
 								>
 									Confirm
 								</Button>
