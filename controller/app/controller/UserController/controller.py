@@ -36,7 +36,8 @@ class UserController():
 				- profile:str
 		returns bool.
 		"""
-		new_details["password"] = self.hash_password(new_details["password"]) # type: ignore
+		if new_details.get("password"):
+			new_details["password"] = self.hash_password(new_details["password"]) # type: ignore
 		# Call entity method
 		return User.updateAccount(details=new_details)
 
