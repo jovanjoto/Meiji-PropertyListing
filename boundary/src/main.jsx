@@ -11,6 +11,7 @@ import TestPage from "./Pages/TestPage.jsx";
 import ModalTestPage from "./Pages/ModalTestPage.jsx";
 import UserAccountManagementPage from "./Pages/UserAccountManagementPage.jsx";
 import ProfileManagementPage from "./Pages/ProfileManagementPage.jsx";
+import SuspendedPage from "./Pages/SuspendedPage.jsx";
 import AuthProvider from "./Components/Authentication/AuthContext.jsx";
 import UnauthenticatedRoute from "./Components/Authentication/UnauthenticatedRoute.jsx";
 import PrivateRoute from "./Components/Authentication/PrivateRoute.jsx";
@@ -81,6 +82,15 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 				{/* Others */}
 				<Route path="/test" element={<TestPage />} />
 				<Route path="/modalTest" element={<ModalTestPage />} />
+				<Route
+					path="/suspended"
+					element={
+						<PrivateRoute>
+							<NavBar />
+							<SuspendedPage />
+						</PrivateRoute>
+					}
+				/>
 			</Routes>
 		</BrowserRouter>
 	</AuthProvider>

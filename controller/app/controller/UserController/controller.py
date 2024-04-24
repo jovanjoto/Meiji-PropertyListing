@@ -2,7 +2,7 @@
 
 # Local dependencies
 from app.entity import User, Suspension, UserProfile
-from app.controller.AuthController import AuthController
+from app.controller.AuthController import bcrypt
 
 class UserController():
 	def __init__(self) -> None:
@@ -20,8 +20,7 @@ class UserController():
 				- profile:str
 		returns bool.
 		"""
-		auth = AuthController()
-		details["password"] = auth.hash_password(details["password"]) # type: ignore
+		details["password"] = self.hash_password(details["password"]) # type: ignore
 		# Call entity method
 		return User.createNewUserAccount(details=details)
 
@@ -37,8 +36,7 @@ class UserController():
 				- profile:str
 		returns bool.
 		"""
-		auth = AuthController()
-		new_details["password"] = auth.hash_password(new_details["password"]) # type: ignore
+		new_details["password"] = self.hash_password(new_details["password"]) # type: ignore
 		# Call entity method
 		return User.updateAccount(details=new_details)
 
@@ -93,3 +91,6 @@ class UserController():
 				})
 		
 		return {"accounts": list_of_accs}
+	
+	def hash_password(self, password:str) -> bytes:
+		return bcrypt.generate_password_hash(password)

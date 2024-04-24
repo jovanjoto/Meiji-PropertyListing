@@ -1,5 +1,5 @@
-from . import UserController, AuthController, SuspensionController, ProfileController
+from . import UserController, AuthController, SuspensionController, UserProfileController
 
 __all__ = [
-	"UserController", "SuspensionController", "ProfileController", "AuthController"
+	"UserController", "SuspensionController", "UserProfileController", "AuthController"
 ]

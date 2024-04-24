@@ -4,6 +4,7 @@ from app import flask_app
 from app.controller.ProfileController import UserProfileController
 from .sample_generation import _create_precondition_data2, _delete_precondition_data2
 
+
 @pytest.mark.test_valid_create_profile
 def test_valid_create_profile():
     valid_create = [

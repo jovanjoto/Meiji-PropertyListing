@@ -7,34 +7,29 @@ import {
   Checkbox,
   TextInput,
   Radio,
+  Spinner,
 } from "flowbite-react";
 import { FaPencilAlt, FaTimes, FaUser } from "react-icons/fa";
-import { useState, useRef } from "react";
+import { useState, useContext, useEffect } from "react";
+import { AuthContext } from "../Authentication/AuthContext";
+import axios from "axios";
+
+import MessageModal from "./MessageModal";
 
 function CreateNewUserAccountModal({ state, setState }) {
-  const passwordRef = useRef("");
-  const [isEditable, setIsEditable] = useState(true);
+  const { token, logout } = useContext(AuthContext);
   const [selectedProfile, setSelectedProfile] = useState("");
-
+  const [isLoadingProfile, setIsLoadingProfile] = useState(true);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [messageModalOpen, setMessageModalOpen] = useState(false);
+  const [profiles, setProfiles] = useState([]);
   const [account, setAccount] = useState({
-    role: "Buyer",
-    firstName: "Klay",
-    lastName: "Thompson",
-    email: "youaremysunshine@email.com",
-    password: "12345678",
-    phone: "+65 88889999",
+    first_name: "",
+    last_name : "",
+    email : "",
+    password: "",
+    phone : ""
   });
-
-  const profiles = [
-    "Buyer",
-    "Seller",
-    "Real Estate Agent",
-    "Profile1",
-    "Profile2",
-    "Profile3",
-    "Profile4",
-  ];
-
   const handleChange = (event) => {
     setAccount({
       ...account,
@@ -42,8 +37,60 @@ function CreateNewUserAccountModal({ state, setState }) {
     });
   };
 
+  useEffect(() => {
+    axios
+      .get("/api/profile/search_user_profile", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          setProfiles(res.data.profiles.map((profile) => profile.name));
+          setIsLoadingProfile(false);
+        } else {
+          logout();
+        }
+      });
+  }, []);
+
+  const createAccount = async () => {
+    await axios.put("/api/user/create_user_account",
+    {
+      email: account.email,
+      phone: account.phone,
+      password: account.password,
+      first_name: account.first_name,
+      last_name: account.last_name,
+      profile : selectedProfile
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }
+  )
+    .then((res) => {
+      if (res.data.success){
+        setIsSuccess(true);
+      } else {
+        setIsSuccess(false);
+      }
+      setMessageModalOpen(true);
+    })
+    .catch((err) => {
+      logout();
+    })
+  }
+  const onCloseModal = (x) => {
+    window.location.reload()
+  }
   return (
     <>
+    <MessageModal state={messageModalOpen} setState={onCloseModal}>
+        {isSuccess && <>Success</>}
+        {!isSuccess && <>Error</>}
+      </MessageModal>
       <Modal
         className=""
         show={state}
@@ -57,62 +104,66 @@ function CreateNewUserAccountModal({ state, setState }) {
 
         <Card className=" ">
           <div className="flex flex-col items-center">
-          <FaUser className="w-20 h-20 rounded-full mt-5"/>
+            <FaUser className="w-20 h-20 rounded-full mt-5" />
             <div className="mt-4 w-64 flex flex-col gap-y-2">
               <section className="flex flex-col">
-                <Label htmlFor="name" value="Name" />
-                <TextInput
-                  id="email"
-                  onChange={handleChange}
-                  readOnly={!isEditable}
-                />
+                <Label htmlFor="First name" value="First Name" />
+                <TextInput value={account.first_name} id="first_name" onChange={handleChange} />
+              </section>
+              <section className="flex flex-col">
+                <Label htmlFor="last_name" value="Last Name" />
+                <TextInput value={account.last_name} id="last_name" onChange={handleChange} />
               </section>
               <section className="flex flex-col">
                 <Label htmlFor="email" value="Email" />
-                <TextInput
-                  id="email"
-                  onChange={handleChange}
-                  readOnly={!isEditable}
-                />
+                <TextInput value={account.email} id="email" onChange={handleChange} />
               </section>
               <section className="flex flex-col">
-                <Label htmlfor="password" value="Password" />
+                <Label htmlFor="password" value="Password" />
                 <TextInput
                   id="password"
                   type="password"
                   onChange={handleChange}
-                  readOnly={!isEditable}
+                  value={account.password}
                 />
               </section>
               <section className="flex flex-col">
-                <Label htmlfor="phone" value="Phone" />
-                <TextInput
-                  id="phone"
-                  onChange={handleChange}
-                  readOnly={!isEditable}
-                />
+                <Label htmlFor="phone" value="Phone" />
+                <TextInput value={account.phone} id="phone" onChange={handleChange} />
               </section>
-              <Label htmlFor="role" value="Role"/>
-              <section className="flex flex-col overflow-auto h-20 gap-y-1 justify-center border ">
-        
-                {profiles.map((profile, index) => (
-                  <div key={index} className="flex items-center justify-between">
-                    <Label htmlFor={profile} value={profile} /> {/* Bugs here */}
-                    <Radio
-                      id={profile}
-                      name="role"
-                      checked={selectedProfile === profile}
-                      onChange={() => setSelectedProfile(profile)}
-                    />
-                    
-                  </div>
-                ))}
+              <Label htmlFor="roleTitle" value="Role" />
+              <section className="flex flex-col gap-y-2 border ">
+                {isLoadingProfile ? (
+                  <Spinner />
+                ) : (
+                  
+                  profiles.map((profile) => (
+                    <div
+                      key={profile}
+                      className="flex items-center justify-between"
+                    >
+                      <Label htmlFor={`${profile}`} value={profile} />
+                      <Radio
+                        id={profile}
+                        name="roles"
+                        checked={selectedProfile === profile}
+                        onChange={() => setSelectedProfile(profile)}
+                      />
+                    </div>)
+                  ))
+                }
               </section>
               <section className="flex justify-center pt-5 gap-5">
-              <Button color="failure" className=" w-1/2" onClick={() =>  setState(false)}>Cancel</Button>
+                <Button
+                  color="failure"
+                  className=" w-1/2"
+                  onClick={() => setState(false)}
+                >
+                  Cancel
+                </Button>
                 <Button
                   className="bg-custom_purple1 w-1/2"
-                  onClick={() => setState(false)}
+                  onClick={createAccount}
                 >
                   Confirm
                 </Button>

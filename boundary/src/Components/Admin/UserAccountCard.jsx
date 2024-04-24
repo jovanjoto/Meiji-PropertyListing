@@ -3,6 +3,7 @@ import { BsFillPersonFill } from "react-icons/bs";
 import { IconContext } from "react-icons";
 import UserAccountModal from "./UserAccountModal";
 import { useState } from "react";
+import SuspendAccountModal from "./SuspendAccountModal";
 
 export default function UserAccountCard({
 	profile,
@@ -14,9 +15,18 @@ export default function UserAccountCard({
 	suspensionDate,
 }) {
 	const [showViewModal, setShowViewModal] = useState(false);
+	const [showSuspendModal, setShowSuspendModal] = useState(false);
+
 	return (
 		<>
 			<UserAccountModal state={showViewModal} setState={setShowViewModal} />
+			<SuspendAccountModal
+				state={showSuspendModal}
+				setState={setShowSuspendModal}
+				email={email}
+				lastName={lastName}
+				firstName={firstName}
+			/>
 
 			<Card
 				variant="outline"
@@ -24,10 +34,10 @@ export default function UserAccountCard({
 				className="w-full"
 			>
 				<div className="flex flex-wrap justify-center md:justify-between align-middle items-center gap-y-5">
-					<div className="flex flex-row items-center gap-4 align-middle">
-						<div className="flex flex-col justify-center gap-1">
+					<div className="flex flex-row items-center gap-6 align-middle">
+						<div className="flex flex-col justify-center items-center align-middle gap-1 w-32">
 							{<BsFillPersonFill size={70} />}
-							{<div className="text-center">{profile}</div>}
+							{<p className="text-center">{profile}</p>}
 						</div>
 						<div className="flex flex-col justify-center gap-1">
 							<span className="text-3xl">
@@ -47,12 +57,23 @@ export default function UserAccountCard({
 						>
 							View
 						</Button>
-						<Button
-							color="purple"
-							className="bg-custom_purple1 w-1/2 py-2"
-						>
-							Suspend
-						</Button>
+						{isSuspended === true ? (
+							<Button
+								disabled
+								color="purple"
+								className="mx-2 bg-custom_purple1 w-1/2 ml-2 h-14 items-center my-1 text-white"
+							>
+								Suspended until {suspensionDate}
+							</Button>
+						) : (
+							<Button
+								color="purple"
+								onClick={() => setShowSuspendModal(true)}
+								className="mx-2 bg-custom_purple1 w-1/2 ml-2 h-14 items-center my-1"
+							>
+								Suspend
+							</Button>
+						)}
 					</div>
 				</div>
 			</Card>

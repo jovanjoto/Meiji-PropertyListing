@@ -21,6 +21,7 @@ export default function UserAccountManagementPage() {
 	const [isLoading, setIsLoading] = useState(false);
 	const [accountList, setAccountList] = useState([]);
 	const [filter, setFilter] = useState({});
+	const [userPageOpen, setUserPageOpen] = useState(false);
 
 	useEffect(() => {
 		setIsLoading(true);
@@ -121,7 +122,7 @@ export default function UserAccountManagementPage() {
 	};
 
 	const displayEmptyList = () => {
-		return <span>No matching profiles found.</span>;
+		return <span>No matching accounts found.</span>;
 	};
 
 	if (isLoading) {
@@ -130,6 +131,7 @@ export default function UserAccountManagementPage() {
 
 	return (
 		<div className="flex flex-col justify-center mx-10 my-4">
+			<CreateNewUserAccountModal state={userPageOpen} setState={setUserPageOpen} />
 			<div className="flex w-full justify-between flex-wrap items-center gap-5">
 				<TextInput
 					id="Search"
@@ -175,6 +177,7 @@ export default function UserAccountManagementPage() {
 						className="bg-custom_purple1 flex flex-row justify-center align-middle items-center"
 						color={"purple"}
 						size="lg"
+						onClick={() => {setUserPageOpen(true)}}
 					>
 						Create new account
 					</Button>
