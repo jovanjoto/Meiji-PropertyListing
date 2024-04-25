@@ -26,3 +26,6 @@ def pytest_configure(config):
     config.addinivalue_line(
         "markers", "search_user_account: mark test as user account search test"
     )
+    config.addinivalue_line(
+        "markers", "search_user_account: mark test as test"
+    )
