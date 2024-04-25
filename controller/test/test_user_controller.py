@@ -1,7 +1,7 @@
 import pytest
 
 from app import flask_app
-from app.controller.UserController import UserController
+from app.controller.user import UserController
 from app.entity import User
 from .sample_generation import _create_precondition_data, _delete_precondition_data
 from app.entity import db
