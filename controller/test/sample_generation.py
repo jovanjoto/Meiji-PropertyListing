@@ -3,8 +3,15 @@ from app import flask_app
 from app.entity.userprofile import UserProfile
 from app.entity.user import User
 from app.entity import db
+from flask_bcrypt import Bcrypt
 
 import json
+
+# Initialize Bcrypt
+bcrypt = Bcrypt()
+
+def hashPassword(password:str) -> bytes:
+    return bcrypt.generate_password_hash(password)
 
 def _create_precondition_data():
     with flask_app.app_context():
@@ -22,6 +29,7 @@ def _create_precondition_data():
             userAccounts = json.load(f)
         # Creating user accounts
         for account in userAccounts:
+            account["password"] = hashPassword(account["password"])
             User.createNewUserAccount(account)
         
         db.session.commit()
