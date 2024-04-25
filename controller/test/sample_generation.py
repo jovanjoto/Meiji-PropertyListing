@@ -2,47 +2,66 @@ from app import flask_app
 
 from app.entity.userprofile import UserProfile
 from app.entity.user import User
-from app.controller.profile import UserProfileController
-from app.controller.user import UserController
 from app.entity import db
+
+import json
 
 def _create_precondition_data():
     with flask_app.app_context():
-        # Creating a user
-        profile_controller = UserProfileController()
-        user_controller = UserController()
-        profile_controller.createProfile(
+        # Creating user profiles
+        UserProfile.createNewUserProfile(
             {
                 "name" : "Buyer",
                 "description" : "Buyer profile",
                 "has_buying_permission" : True
             }
         )
-        user_controller.createAccount(
+        UserProfile.createNewUserProfile(
             {
-                "email" : "bob@uow.edu.au",
-                "phone" : "123456",
-                "password" : "bob12345",
-                "first_name" : "Bob",
-                "last_name" : "ross",
-                "profile" : "Buyer"
+                "name" : "Seller",
+                "description" : "Seller profile",
+                "has_selling_permission" : True
             }
         )
-        user_controller.createAccount(
+        UserProfile.createNewUserProfile(
             {
-                "email" : "john@uow.edu.au",
-                "phone" : "654321",
-                "password" : "bob12345",
-                "first_name" : "John",
-                "last_name" : "mama",
-                "profile" : "Buyer"
+                "name" : "Real Estate Agent",
+                "description" : "Real Estate Agent profile",
+                "has_listing_permission" : True
             }
         )
 
-def _create_precondition_data2():
+        # Loads a list of user jsons
+        userAccounts = []
+        with open('./test/PRECONDITION_USER.json') as f:
+            userAccounts = json.load(f)
+        # Creating user accounts
+        for account in userAccounts:
+            User.createNewUserAccount(account)
+        
+        db.session.commit()
+
+def _delete_precondition_data():
     with flask_app.app_context():
-        profile_controller = UserProfileController()
-        profile_controller.createProfile(
+        # Loads a list of user jsons
+        userAccounts = []
+        with open('./test/PRECONDITION_USER.json') as f:
+            userAccounts = json.load(f)
+        # Deleting user accounts
+        for account in userAccounts:
+            User.query.filter_by(email=account["email"]).delete()
+
+        # Deleting user profiles
+        UserProfile.query.filter_by(name="Buyer").delete()
+        UserProfile.query.filter_by(name="Seller").delete()
+        UserProfile.query.filter_by(name="Real Estate Agent").delete()
+
+        db.session.commit()
+
+
+def _create_precondition_data_user_profile():
+    with flask_app.app_context():
+        UserProfile.createNewUserProfile(
             {
                 "name": "AllPermissions",
                 "description": "Profile with listing, buying, selling permission",
@@ -51,7 +70,7 @@ def _create_precondition_data2():
                 "has_selling_permission": True
             }
         )
-        profile_controller.createProfile(
+        UserProfile.createNewUserProfile(
             {
                 "name": "LeastPermissions",
                 "description": "Profile with no permissions",
@@ -61,14 +80,7 @@ def _create_precondition_data2():
             }
         )
 
-def _delete_precondition_data():
-     with flask_app.app_context():
-        User.query.filter_by(email="bob@uow.edu.au").delete()
-        User.query.filter_by(email="john@uow.edu.au").delete()
-        UserProfile.query.filter_by(name="Buyer").delete()
-        db.session.commit()
-
-def _delete_precondition_data2():
+def _delete_precondition_data_user_profile():
     with flask_app.app_context():
         UserProfile.query.filter_by(name="AllPermissions").delete()
         UserProfile.query.filter_by(name="LeastPermissions").delete()
