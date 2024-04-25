@@ -36,7 +36,17 @@ function UserProfileModal({ state, setState, primaryKey }) {
 	const handleConfirmButton = () => {
 		setProfile(editedProfile);
 		setIsEditable(false);
-
+		if (
+			[
+				editedProfile.has_buying_permission,
+				editedProfile.has_selling_permission,
+				editedProfile.has_listing_permission,
+			].reduce((partialSum, a) => partialSum + a, 0) == 0
+		) {
+			setMessage("Error... Please give them at least one permission");
+			setMessageModal(true);
+			return;
+		}
 		axios
 			.patch(
 				"/api/profile/update_user_profile",

@@ -64,17 +64,18 @@ function UserAccountModal({ state, setState, primaryKey }) {
 		});
 	};
 
-	const handleConfirmButton = () => {
+	const handleConfirmButton = (event) => {
+		event.preventDefault();
 		setIsEditable(false);
+		if (fullName.trim() === "") {
+			setMessage(`Name cannot be empty! please try again.`);
+			setMessageModal(true);
+			return;
+		}
 
-		console.log(fullName);
 		const names = fullName.split(" ");
-		console.log(names);
 		const first_name = names[0];
 		const last_name = names.slice(1).join(" ");
-
-		console.log(first_name + " " + last_name);
-		console.log(editedAccount.phone);
 
 		if (phoneChanged) {
 			axios
@@ -191,6 +192,7 @@ function UserAccountModal({ state, setState, primaryKey }) {
 								type="text"
 								value={fullName}
 								onChange={handleNameChange}
+								required
 							/>
 						) : (
 							<h5 className="text-xl font-medium text-gray-900 dark:text-white">
@@ -199,7 +201,10 @@ function UserAccountModal({ state, setState, primaryKey }) {
 						)}
 						<FaUser className="w-20 h-20 rounded-full my-5" />
 						<h5>{editedAccount.profile}</h5>
-						<div className="mt-4 w-64 flex flex-col gap-y-2">
+						<form
+							className="mt-4 w-64 flex flex-col gap-y-2"
+							onSubmit={handleConfirmButton}
+						>
 							<section className="flex flex-col">
 								<Label htmlFor="email" value="Email" />
 								<TextInput
@@ -207,6 +212,7 @@ function UserAccountModal({ state, setState, primaryKey }) {
 									value={editedAccount.email}
 									onChange={handleChange}
 									disabled={true}
+									required
 								/>
 							</section>
 							<section className="flex flex-col">
@@ -216,8 +222,9 @@ function UserAccountModal({ state, setState, primaryKey }) {
 									type="password"
 									value={"********"}
 									onChange={handleChange}
-									disabled={!isEditable}
+									disabled={true}
 									readOnly={!isEditable}
+									required
 								/>
 							</section>
 							<section className="flex flex-col">
@@ -228,6 +235,7 @@ function UserAccountModal({ state, setState, primaryKey }) {
 									onChange={handleChange}
 									disabled={!isEditable}
 									readOnly={!isEditable}
+									required
 								/>
 							</section>
 							<section className="flex justify-center pt-5 gap-5">
@@ -243,14 +251,14 @@ function UserAccountModal({ state, setState, primaryKey }) {
 										</Button>{" "}
 										<Button
 											className="bg-custom_purple1 w-1/2 text-white"
-											onClick={handleConfirmButton}
+											type="submit"
 										>
 											Confirm
 										</Button>{" "}
 									</>
 								)}
 							</section>
-						</div>
+						</form>
 					</div>
 				</Card>
 			</Modal>
