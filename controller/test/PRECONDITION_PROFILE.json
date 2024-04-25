@@ -1,0 +1,5 @@
+[
+{"name":"Buyer","description":"Buyer profile","has_buying_permission":1, "has_selling_permission":0, "has_listing_permission":0},
+{"name":"Seller","description":"Seller profile","has_buying_permission":0, "has_selling_permission":1, "has_listing_permission":0},
+{"name":"Real Estate Agent","description":"Real Estate Agent profile","has_buying_permission":0, "has_selling_permission":0, "has_listing_permission":1}
+]

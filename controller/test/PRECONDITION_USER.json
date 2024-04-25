@@ -1,4 +1,5 @@
-[{"email":"bob@uow.edu.au","phone":"123456","password":"bob12345","first_name":"Bob","last_name":"ross","profile":"Buyer"},
+[
+{"email":"bob@uow.edu.au","phone":"123456","password":"bob12345","first_name":"Bob","last_name":"ross","profile":"Buyer"},
 {"email":"john@uow.edu.au","phone":"654321","password":"bob12345","first_name":"John","last_name":"mama","profile": "Buyer"},
 {"email":"llhommee0@admin.ch","phone":"847-702-0302","password":"tZ4'IsuKnoEBjR","first_name":"Lyn","last_name":"L'Hommee","profile":"Buyer"},
 {"email":"eglison1@amazon.co.jp","phone":"739-867-6400","password":"wP9{Rg_!a\\!90S","first_name":"Erminie","last_name":"Glison","profile":"Seller"},
@@ -99,4 +100,5 @@
 {"email":"kganforth2o@china.com.cn","phone":"907-638-3698","password":"uG5#dDT$=lPh}1&","first_name":"Kristan","last_name":"Ganforth","profile":"Buyer"},
 {"email":"ahast2p@alexa.com","phone":"407-345-9361","password":"fW8}*N5bK","first_name":"Alanna","last_name":"Hast","profile":"Seller"},
 {"email":"tmanwell2q@gravatar.com","phone":"797-948-1015","password":"dG0=jd'p%11P76~","first_name":"Thaddeus","last_name":"Manwell","profile":"Real Estate Agent"},
-{"email":"sillingworth2r@smugmug.com","phone":"579-798-2298","password":"uG5&eF\\ZZv{yvI","first_name":"Salomi","last_name":"Illingworth","profile":"Buyer"}]
+{"email":"sillingworth2r@smugmug.com","phone":"579-798-2298","password":"uG5&eF\\ZZv{yvI","first_name":"Salomi","last_name":"Illingworth","profile":"Buyer"}
+]
