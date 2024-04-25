@@ -15,7 +15,7 @@ class CreateUserController(Blueprint):
 	@jwt_required()
 	def createAccount(self) -> dict[str, bool]:
 		details = request.get_json()
-		details["password"] = self.hash_password(details["password"]) # type: ignore
+		details["password"] = self.hashPassword(details["password"]) # type: ignore
 		# Call entity method
 		return {"success" : User.createNewUserAccount(details=details)}
 	
