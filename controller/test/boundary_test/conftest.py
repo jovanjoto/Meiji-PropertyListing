@@ -52,3 +52,27 @@ def pytest_configure(config):
     config.addinivalue_line(
         "markers", "valid_suspend_account_boundary: mark test as valid suspend account"
     )
+    config.addinivalue_line(
+        "markers", "invalid_create_profile_boundary: mark test as invalid create profile"
+    )
+    config.addinivalue_line(
+        "markers", "valid_create_profile_boundary: mark test as valid create profile"
+    )
+    config.addinivalue_line(
+        "markers", "view_profile_boundary: mark test as valid view profile"
+    )
+    config.addinivalue_line(
+        "markers", "update_profile_boundary: mark test as valid update profile"
+    )
+    config.addinivalue_line(
+        "markers", "invalid_suspend_profile_boundary: mark test as invalid suspend profile"
+    )
+    config.addinivalue_line(
+        "markers", "valid_suspend_profile_boundary: mark test as valid suspend profile"
+    )
+    config.addinivalue_line(
+        "markers", "invalid_profile_search_boundary: mark test as invalid search profile"
+    )
+    config.addinivalue_line(
+        "markers", "valid_profile_search_boundary: mark test as valid search profile"
+    )

@@ -108,6 +108,7 @@ function UserProfileModal({ state, setState, primaryKey }) {
 				)}
 				{!isEditable && (
 					<FaPencilAlt
+						id="edit-profile"
 						className="absolute top-0 right-0 m-2 rounded-md w-5 h-5 cursor-pointer"
 						onClick={() => setIsEditable(!isEditable)}
 					/>
