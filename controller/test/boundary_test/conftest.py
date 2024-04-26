@@ -25,3 +25,12 @@ def pytest_configure(config):
     config.addinivalue_line(
         "markers", "logout_boundary: mark test as valid logout test"
     )
+    config.addinivalue_line(
+        "markers", "view_account_boundary: mark test as valid view"
+    )
+    config.addinivalue_line(
+        "markers", "invalid_create_account_boundary: mark test as ivalid create account"
+    )
+    config.addinivalue_line(
+        "markers", "valid_create_account_boundary: mark test as valid create account"
+    )

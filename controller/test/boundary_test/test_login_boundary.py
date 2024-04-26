@@ -1,7 +1,6 @@
 import pytest
 from test.sample_generation import _create_precondition_data, _delete_precondition_data
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 @pytest.mark.invalid_login_boundary
@@ -28,7 +27,7 @@ def test_invalid_login_boundary(driver, webdriverwait):
         email_input.send_keys(d["email"])
         password_input.send_keys(d["password"])
         submit_button.click()
-        WebDriverWait(driver, 5).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div/div/div/div/form/div[2]/p/span')))
+        webdriverwait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div/div/div/div/form/div[2]/p/span')))
 
     _delete_precondition_data()
 
