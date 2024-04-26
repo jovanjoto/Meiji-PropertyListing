@@ -54,8 +54,8 @@ export default function UserProfileCard({ profileJson }) {
 					<div className="flex flex-row items-center gap-4 align-middle">
 						{<BsFillPersonFill size={70} />}
 						<div className="flex flex-col justify-center gap-1">
-							<span className="text-3xl">{profileJson.name}</span>
-							<div className="flex flex-row justify-start gap-2">
+							<span className="text-3xl" id="profile-name">{profileJson.name}</span>
+							<div className="flex flex-row justify-start gap-2" id="permission">
 								{list_of_permissions}
 							</div>
 						</div>
@@ -64,6 +64,7 @@ export default function UserProfileCard({ profileJson }) {
 					<div className="flex md:w-5/12 w-full items-center justify-center gap-x-5">
 						{/* view acc, suspend acc */}
 						<Button
+							id={`view-${profileJson.name}`}
 							color="purple"
 							className="bg-custom_purple1 w-1/2 py-2"
 							onClick={() => setShowViewModal(true)}
@@ -71,6 +72,7 @@ export default function UserProfileCard({ profileJson }) {
 							View
 						</Button>
 						<Button
+							id={`suspend-${profileJson.name}`}
 							color="purple"
 							onClick={() => setShowSuspendModal(true)}
 							className="bg-custom_purple1 w-1/2 py-2"

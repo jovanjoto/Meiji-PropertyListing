@@ -29,6 +29,7 @@ export default function UserAccountCard({
 			/>
 
 			<Card
+				id="account-card"
 				variant="outline"
 				direction={{ base: "column", sm: "row" }}
 				className="w-full"
@@ -37,10 +38,10 @@ export default function UserAccountCard({
 					<div className="flex flex-row items-center gap-6 align-middle">
 						<div className="flex flex-col justify-center items-center align-middle gap-1 w-32">
 							{<BsFillPersonFill size={70} />}
-							{<p className="text-center">{profile}</p>}
+							{<p className="text-center" id="profile-name">{profile}</p>}
 						</div>
 						<div className="flex flex-col justify-center gap-1">
-							<span className="text-3xl">
+							<span className="text-3xl" id="username">
 								{firstName.concat(" ", lastName)}
 							</span>
 							<span className="text-sm">{email}</span>
