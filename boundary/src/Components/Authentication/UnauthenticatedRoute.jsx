@@ -48,7 +48,7 @@ export default function UnauthenticatedRoute({ children }) {
 			return <Navigate to="/agent" />;
 		} else if (user.has_selling_permission) {
 			return <Navigate to="/seller" />;
-		} else if (user.has_selling_permission) {
+		} else if (user.has_buying_permission) {
 			return <Navigate to="/" />;
 		}
 	} else {

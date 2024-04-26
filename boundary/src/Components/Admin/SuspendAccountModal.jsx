@@ -56,6 +56,7 @@ function SuspendAccountModal({ state, setState, email, firstName, lastName }) {
 	return (
 		<>
 			<MessageModal
+				id="suspend-status"
 				state={messageModal}
 				setState={onCloseModal}
 			>{`${firstName} ${lastName} successfully suspended.`}</MessageModal>
