@@ -1,7 +1,7 @@
 import pytest
 from .utils import valid_login_admin
 from app import flask_app
-from app.entity import User, db
+from app.entity import User,db
 from test.sample_generation import _create_precondition_data, _delete_precondition_data
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
@@ -96,3 +96,109 @@ def test_invalid_create_account_boundary(driver, webdriverwait):
                     assert False
                 driver.refresh()
     _delete_precondition_data()
+
+@pytest.mark.view_account_boundary
+def test_view_account_boundary(driver, webdriverwait):
+    _create_precondition_data()
+    valid_login_admin(driver, webdriverwait)
+
+    # Wait for the element to appear
+    webdriverwait.until(EC.presence_of_element_located((By.XPATH, "/html/body/div/div/div[2]/div[1]/div")))
+
+    for i in range(1, 101):
+        card = webdriverwait.until(EC.presence_of_element_located((By.XPATH, f"/html/body/div/div/div[2]/div[{i}]/div")))
+        if "bob@uow.edu.au" in card.text:
+            view_button = webdriverwait.until(EC.element_to_be_clickable((By.XPATH, f"/html/body/div/div/div[2]/div[{i}]/div/div/div[2]/button[1]")))
+            view_button.click()
+
+            # Check if user modal pops up
+            webdriverwait.until(EC.presence_of_element_located((By.XPATH, "/html/body/div[2]/div/div/div/div/div")))
+            break
+    _delete_precondition_data()
+
+@pytest.mark.invalid_update_account_boundary
+def test_invalid_update_account_boundary(driver, webdriverwait):
+    _create_precondition_data()
+    valid_login_admin(driver, webdriverwait)
+    
+    view_button = webdriverwait.until(EC.element_to_be_clickable((By.XPATH, f"/html/body/div/div/div[2]/div[1]/div/div/div[2]/button[1]")))
+    view_button.click()
+    # Check if enter non unique phone number valid
+    edit_button = webdriverwait.until(EC.element_to_be_clickable((By.ID, 'edit-pencil')))
+    edit_button.click()
+    phone = webdriverwait.until(EC.element_to_be_clickable((By.ID, "phone")))
+    phone.clear()
+    phone.send_keys("87434921")
+    submit = webdriverwait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[2]/div/div/div/div/div/div/form/section[4]/button[2]")))
+    submit.click()
+    modal = webdriverwait.until(EC.presence_of_element_located((By.XPATH, '/html/body/div[3]/div/div/div/div')))
+    assert "Failed" in modal.text
+    _delete_precondition_data()
+
+@pytest.mark.valid_update_account_boundary
+def test_valid_update_account_boundary(driver, webdriverwait):
+    _create_precondition_data()
+    valid_login_admin(driver, webdriverwait)
+
+    view_button = webdriverwait.until(EC.element_to_be_clickable((By.XPATH, f"/html/body/div/div/div[2]/div[1]/div/div/div[2]/button[1]")))
+    view_button.click()
+
+    # Check if cancel is working
+    edit_button = webdriverwait.until(EC.element_to_be_clickable((By.ID, 'edit-pencil')))
+    edit_button.click()
+    cancel_button = webdriverwait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[2]/div/div/div/div/div/div/form/section[4]/button[1]')))
+    cancel_button.click()
+    edit_button = webdriverwait.until(EC.element_to_be_clickable((By.ID, 'edit-pencil')))
+    edit_button.click()
+
+    # Check for valid change
+    phone = webdriverwait.until(EC.element_to_be_clickable((By.ID, "phone")))
+    phone.clear()
+    phone.send_keys("87434922")
+    name = webdriverwait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[2]/div/div/div/div/div/div/input')))
+    name.clear()
+    name.send_keys("Chicken")
+    submit = webdriverwait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[2]/div/div/div/div/div/div/form/section[4]/button[2]")))
+    submit.click()
+    modal = webdriverwait.until(EC.presence_of_element_located((By.XPATH, '/html/body/div[3]/div/div/div/div')))
+    assert "success" in modal.text
+    _delete_precondition_data()
+
+@pytest.mark.valid_search_account_boundary
+def test_valid_search_account_boundary(driver, webdriverwait):
+    _create_precondition_data()
+    valid_login_admin(driver, webdriverwait)
+    # Search for peter
+    search = webdriverwait.until(EC.element_to_be_clickable((By.ID, "Search")))
+    search.send_keys("Peter")
+    cards = webdriverwait.until(EC.presence_of_all_elements_located((By.ID, "username")))
+    for card in cards:
+        if "peter" not in card.text.lower():
+            assert False
+
+    # Add filter
+    filter = webdriverwait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div/div/div[1]/div[2]/button[1]")))
+    filter.click()
+    agent_filter = webdriverwait.until(EC.element_to_be_clickable((By.ID, "Real Estate Agent")))
+    agent_filter.click()
+    seller_filter = webdriverwait.until(EC.element_to_be_clickable((By.ID, "Seller")))
+    seller_filter.click()
+    cards = webdriverwait.until(EC.presence_of_all_elements_located((By.ID, "profile-name")))
+    for card in cards:
+        if "Buyer" not in card.text:
+            assert False
+    _delete_precondition_data()
+
+@pytest.mark.invalid_search_account_boundary
+def test_invalid_search_account_boundary(driver, webdriverwait):
+    _create_precondition_data()
+    valid_login_admin(driver, webdriverwait)
+    # Search for invalid name
+    search = webdriverwait.until(EC.element_to_be_clickable((By.ID, "Search")))
+    search.send_keys("bob@@1!")
+    msg = webdriverwait.until(EC.presence_of_element_located((By.XPATH, "/html/body/div/div/div[2]/span")))
+    assert "No matching" in msg.text
+    _delete_precondition_data()
+    
+
+    

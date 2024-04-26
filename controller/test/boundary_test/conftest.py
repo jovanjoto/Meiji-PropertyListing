@@ -34,3 +34,21 @@ def pytest_configure(config):
     config.addinivalue_line(
         "markers", "valid_create_account_boundary: mark test as valid create account"
     )
+    config.addinivalue_line(
+        "markers", "invalid_update_account_boundary: mark test as invalid update account"
+    )
+    config.addinivalue_line(
+        "markers", "valid_update_account_boundary: mark test as valid update account"
+    )
+    config.addinivalue_line(
+        "markers", "valid_search_account_boundary: mark test as valid search account"
+    )
+    config.addinivalue_line(
+        "markers", "invalid_search_account_boundary: mark test as invalid search account"
+    )
+    config.addinivalue_line(
+        "markers", "invalid_suspend_account_boundary: mark test as invalid suspend account"
+    )
+    config.addinivalue_line(
+        "markers", "valid_suspend_account_boundary: mark test as valid suspend account"
+    )
