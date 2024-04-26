@@ -5,7 +5,7 @@ from app import flask_app
 from app.entity.user import User
 from app.entity import db
 from test.sample_generation import _create_precondition_data, _delete_precondition_data
-from test.controller_tests.utils import getToken
+from test.controller_test.utils import getToken
 import requests
 import json
 
