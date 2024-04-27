@@ -23,7 +23,12 @@ class User(db.Model):
 
 	# referenced by Suspension
 	userToSuspensionRel = db.relationship("Suspension", back_populates="suspensionToUserRel", cascade='all, delete, save-update')
+	# referenced by PropertyListing (agent)
+	agentToPropertyListingRel = db.relationship("PropertyListing", back_populates="propertyListingToAgentRel", cascade='all, delete, save-update')
+	# referenced by PropertyListing (seller)
+	sellerToPropertyListingRel = db.relationship("PropertyListing", back_populates="propertyListingToSellerRel", cascade='all, delete, save-update')
 	
+
 	@classmethod
 	def queryUserAccount(cls, email:str) -> Self | None:
 		"""
@@ -125,5 +130,27 @@ class User(db.Model):
 				user.last_name = details.get("last_name")			
 			if details.get("profile"):
 				user.profile = details.get("profile")			
+			db.session.commit()
+		return True
+	
+	@classmethod
+	def updatePassword(cls, newPassword:str, email:str) -> bool:
+		"""
+		Updates an existing User by passing arguments:
+			- email:str,
+			- newPassword:str, 
+		returns bool.
+		"""
+		with current_app.app_context():
+			user = cls.queryUserAccount(email)
+			# User does not exist
+			if not user:
+				return False
+			# Trying to update an admin's information
+			profile = UserProfile.queryUP(user.profile)
+			if profile and profile.has_admin_permission:
+				return False
+			# Update password
+			user.password = newPassword
 			db.session.commit()
 		return True
