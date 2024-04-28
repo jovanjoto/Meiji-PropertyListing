@@ -24,9 +24,11 @@ class User(db.Model):
 	# referenced by Suspension
 	userToSuspensionRel = db.relationship("Suspension", back_populates="suspensionToUserRel", cascade='all, delete, save-update')
 	# referenced by PropertyListing (agent)
-	agentToPropertyListingRel = db.relationship("PropertyListing", back_populates="propertyListingToAgentRel", cascade='all, delete, save-update')
+	agentToPropertyListingRel = db.relationship("PropertyListing", back_populates="propertyListingToAgentRel", cascade='all, delete, save-update', 
+											 foreign_keys="PropertyListing.agent_email")
 	# referenced by PropertyListing (seller)
-	sellerToPropertyListingRel = db.relationship("PropertyListing", back_populates="propertyListingToSellerRel", cascade='all, delete, save-update')
+	sellerToPropertyListingRel = db.relationship("PropertyListing", back_populates="propertyListingToSellerRel", cascade='all, delete, save-update', 
+											  foreign_keys="PropertyListing.seller_email")
 	
 
 	@classmethod
@@ -134,11 +136,11 @@ class User(db.Model):
 		return True
 	
 	@classmethod
-	def updatePassword(cls, newPassword:str, email:str) -> bool:
+	def updatePassword(cls, newPassword:str|bytes, email:str) -> bool:
 		"""
 		Updates an existing User by passing arguments:
 			- email:str,
-			- newPassword:str, 
+			- newPassword:str|bytes, 
 		returns bool.
 		"""
 		with current_app.app_context():

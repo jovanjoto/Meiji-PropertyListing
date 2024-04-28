@@ -2,6 +2,7 @@ flask==2.3.*
 flask-sqlalchemy==3.1.1
 flask-bcrypt==1.0.*
 flask-jwt-extended==4.6.0
+flask-mail==0.9.1
 python-dotenv==1.0.1
 pytest
 selenium==4.20.0

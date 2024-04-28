@@ -11,3 +11,12 @@ class Config(object):
 	SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
 	SQLALCHEMY_TRACK_MODIFICATIONS = False
 	JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=1)
+	# Mail configurations
+	MAIL_DEFAULT_SENDER = os.environ.get('EMAIL_USER')
+	MAIL_SERVER = "smtp-mail.outlook.com"
+	MAIL_PORT = 587
+	MAIL_USE_TLS = True
+	MAIL_USE_SSL = False
+	MAIL_DEBUG = False
+	MAIL_USERNAME = os.environ.get("EMAIL_USER")
+	MAIL_PASSWORD = os.environ.get("EMAIL_PASSWORD")

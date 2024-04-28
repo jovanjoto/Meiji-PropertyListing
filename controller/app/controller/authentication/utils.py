@@ -2,12 +2,15 @@
 from app.entity import User, Suspension
 from flask_jwt_extended import verify_jwt_in_request, get_jwt, JWTManager
 from flask_bcrypt import Bcrypt
+from flask_mail import Mail
 from functools import wraps  # type: ignore
 
 # Initialize
 jwt = JWTManager()
 # Initialize Bcrypt
 bcrypt = Bcrypt()
+# Initialize Mail
+mail = Mail()
 
 # JWT lookup loader
 @jwt.user_lookup_loader
