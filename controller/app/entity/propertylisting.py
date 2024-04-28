@@ -37,11 +37,11 @@ class PropertyListing(db.Model):
 	transaction_price = db.Column(db.Float())
 
 	# Real estate Agent
-	agent_email = db.Column(db.String(250), nullable=False)
+	agent_email = db.Column(db.String(250), db.ForeignKey('User.email'), nullable=False)
 	propertyListingToAgentRel = db.relationship("User", back_populates="agentToPropertyListingRel", cascade='all, delete, save-update',
 								  foreign_keys="PropertyListing.agent_email")
 	# Seller
-	seller_email = db.Column(db.String(250), nullable=False)
+	seller_email = db.Column(db.String(250), db.ForeignKey('User.email'), nullable=False)
 	propertyListingToSellerRel = db.relationship("User", back_populates="sellerToPropertyListingRel", cascade='all, delete, save-update',
 								  foreign_keys="PropertyListing.seller_email")
 

@@ -3,11 +3,11 @@ from flask import Flask
 
 # Local dependencies
 from config import Config
-from app.entity import db, User, UserProfile
+from app.entity import db, User, UserProfile, PropertyListing
 from .controller.user import view_user_controller, search_user_controller, update_user_controller, create_user_controller
 from .controller.suspension import get_suspension_controller, suspend_user_controller, suspend_profile_controller
 from .controller.profile import view_profile_controller, search_profile_controller, update_profile_controller, create_profile_controller
-from .controller.authentication import jwt, bcrypt, login_controller
+from .controller.authentication import jwt, bcrypt, mail, login_controller, reset_password_controller
 
 # Initialize Flask App
 flask_app = Flask(__name__)
@@ -16,6 +16,8 @@ flask_app.config.from_object(Config)
 jwt.init_app(flask_app)
 # BCrypt
 bcrypt.init_app(flask_app)
+# Mail
+mail.init_app(flask_app)
 
 # SQLAlchemy
 db.init_app(flask_app)
@@ -45,6 +47,7 @@ with flask_app.app_context():
 
 # Authentication
 flask_app.register_blueprint(login_controller, url_prefix='/api/authentication')
+flask_app.register_blueprint(reset_password_controller, url_prefix='/api/authentication')
 
 # Suspension
 flask_app.register_blueprint(get_suspension_controller, url_prefix='/api/suspension')
