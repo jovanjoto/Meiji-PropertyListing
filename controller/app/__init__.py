@@ -8,6 +8,7 @@ from .controller.user import view_user_controller, search_user_controller, updat
 from .controller.suspension import get_suspension_controller, suspend_user_controller, suspend_profile_controller
 from .controller.profile import view_profile_controller, search_profile_controller, update_profile_controller, create_profile_controller
 from .controller.authentication import jwt, bcrypt, mail, login_controller, reset_password_controller
+from .controller.property_listing import create_property_listing_controller, mark_sold_property_listing_controller, remove_property_listing_controller, update_property_listing_controller
 
 # Initialize Flask App
 flask_app = Flask(__name__)
@@ -65,3 +66,9 @@ flask_app.register_blueprint(create_profile_controller, url_prefix='/api/profile
 flask_app.register_blueprint(view_profile_controller, url_prefix='/api/profile')
 flask_app.register_blueprint(update_profile_controller, url_prefix='/api/profile')
 flask_app.register_blueprint(search_profile_controller, url_prefix='/api/profile')
+
+# Property Listing
+flask_app.register_blueprint(create_property_listing_controller, url_prefix='/api/property_listing')
+flask_app.register_blueprint(mark_sold_property_listing_controller, url_prefix='/api/property_listing')
+flask_app.register_blueprint(remove_property_listing_controller, url_prefix='/api/property_listing')
+flask_app.register_blueprint(update_property_listing_controller, url_prefix='/api/property_listing')
