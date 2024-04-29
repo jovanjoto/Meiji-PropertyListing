@@ -3,16 +3,23 @@ import { BsBuildingFill } from "react-icons/bs";
 import { BsFillHouseDoorFill } from "react-icons/bs";
 import { LuBath } from "react-icons/lu";
 import { FaBed } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 export default function PropertyListingCard({ name, id, address, num_bedrooms, num_bathrooms, district, property_type, area, is_sold, transaction_date }) {
 
+    const navigate = useNavigate();
+
     const markAsSold = () => {
         //enter function here when merging
-    }
+    };
 
     const removeListing = () => {
         //enter function here when merging
-    }
+    };
+
+    const redirectToPage = (id) => {
+        navigate(`/agent/viewPropertyListingPage/${id}`);
+    };
 
     return (
         <Card
@@ -67,7 +74,7 @@ export default function PropertyListingCard({ name, id, address, num_bedrooms, n
                     <Button
                         color="purple"
                         className="bg-custom_purple1 w-1/3 py-2"
-                        
+                        onClick={() => redirectToPage(id)}
                     >
                         View
                     </Button>
