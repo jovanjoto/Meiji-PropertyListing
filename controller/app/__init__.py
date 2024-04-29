@@ -9,6 +9,8 @@ from .controller.suspension import get_suspension_controller, suspend_user_contr
 from .controller.profile import view_profile_controller, search_profile_controller, update_profile_controller, create_profile_controller
 from .controller.authentication import jwt, bcrypt, mail, login_controller, reset_password_controller
 
+from .controller.property_listing import search_property_listing_controller, view_property_listing_controller
+
 # Initialize Flask App
 flask_app = Flask(__name__)
 flask_app.config.from_object(Config)
@@ -65,3 +67,7 @@ flask_app.register_blueprint(create_profile_controller, url_prefix='/api/profile
 flask_app.register_blueprint(view_profile_controller, url_prefix='/api/profile')
 flask_app.register_blueprint(update_profile_controller, url_prefix='/api/profile')
 flask_app.register_blueprint(search_profile_controller, url_prefix='/api/profile')
+
+# Property Listing
+flask_app.register_blueprint(search_property_listing_controller, url_prefix='/api/property_listing')
+flask_app.register_blueprint(view_property_listing_controller, url_prefix='/api/property_listing')
