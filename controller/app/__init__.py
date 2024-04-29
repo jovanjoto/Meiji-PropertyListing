@@ -10,6 +10,8 @@ from .controller.profile import view_profile_controller, search_profile_controll
 from .controller.authentication import jwt, bcrypt, mail, login_controller, reset_password_controller
 from .controller.property_listing import create_property_listing_controller, mark_sold_property_listing_controller, remove_property_listing_controller, update_property_listing_controller
 
+from .controller.property_listing import search_property_listing_controller, view_property_listing_controller
+
 # Initialize Flask App
 flask_app = Flask(__name__)
 flask_app.config.from_object(Config)
@@ -72,3 +74,5 @@ flask_app.register_blueprint(create_property_listing_controller, url_prefix='/ap
 flask_app.register_blueprint(mark_sold_property_listing_controller, url_prefix='/api/property_listing')
 flask_app.register_blueprint(remove_property_listing_controller, url_prefix='/api/property_listing')
 flask_app.register_blueprint(update_property_listing_controller, url_prefix='/api/property_listing')
+flask_app.register_blueprint(search_property_listing_controller, url_prefix='/api/property_listing')
+flask_app.register_blueprint(view_property_listing_controller, url_prefix='/api/property_listing')

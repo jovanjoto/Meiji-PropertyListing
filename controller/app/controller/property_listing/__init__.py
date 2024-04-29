@@ -2,12 +2,16 @@ from .create_property_listing import CreatePropertyListingController
 from .mark_sold_property_listing import MarkropertyListingController
 from .remove_property_listing import RemovePropertyListingController
 from .update_property_listing import UpdatePropertyListingController
+from .search_property_listing import SearchPropertyListingController
+from .view_property_listing import ViewPropertyListingController
 
 create_property_listing_controller = CreatePropertyListingController(name="create_property_listing", import_name=__name__)
 mark_sold_property_listing_controller = MarkropertyListingController(name="mark_sold_property_listing", import_name=__name__)
 remove_property_listing_controller = RemovePropertyListingController(name="remove_property_listing", import_name=__name__)
 update_property_listing_controller = UpdatePropertyListingController(name="update_property_listing", import_name=__name__)
+search_property_listing_controller = SearchPropertyListingController(name="search_property_listing", import_name=__name__)
+view_property_listing_controller = ViewPropertyListingController(name="view_property_listing", import_name=__name__)
 
 __all__ = [
-	"create_property_listing_controller", "mark_sold_property_listing_controller", "remove_property_listing_controller", "update_property_listing_controller"
+	"create_property_listing_controller", "mark_sold_property_listing_controller", "remove_property_listing_controller", "update_property_listing_controller", "search_property_listing_controller", "view_property_listing_controller"
 ]

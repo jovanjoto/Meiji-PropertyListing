@@ -28,7 +28,7 @@ function LoginCard() {
 			if (user.has_admin_permission) {
 				return navigate("/admin/viewaccounts");
 			} else if (user.has_listing_permission) {
-				return navigate("/agent");
+				return navigate("/agent/propertyListingManagementPage");
 			} else if (user.has_selling_permission) {
 				return navigate("/seller");
 			} else if (user.has_selling_permission) {
@@ -78,10 +78,19 @@ function LoginCard() {
 				<Button
 					color="purple"
 					type="submit"
-					className="mt-2 mb-5 bg-custom_purple2 hover:bg-custom-purple2"
+					className="mt-2 mb-2 bg-custom_purple2 hover:bg-custom-purple2"
 				>
 					Sign In
 				</Button>
+				<div className="mb-2 block">
+					<Label value="Forget your password? " />
+					<Link
+						to="/resetPassword"
+						className="text-sm font-medium text-blue-600 hover:underline dark:text-blue-500"
+					>
+						Reset Password
+					</Link>
+				</div>
 			</form>
 		</Card>
 	);
