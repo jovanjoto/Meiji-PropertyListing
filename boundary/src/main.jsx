@@ -16,6 +16,7 @@ import AuthProvider from "./Components/Authentication/AuthContext.jsx";
 import UnauthenticatedRoute from "./Components/Authentication/UnauthenticatedRoute.jsx";
 import PrivateRoute from "./Components/Authentication/PrivateRoute.jsx";
 import NavBar from "./Components/NavBar";
+import ResetPasswordPage from "./Pages/ResetPasswordPage.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
 	<AuthProvider>
@@ -27,6 +28,14 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 					element={
 						<UnauthenticatedRoute>
 							<LoginPage />
+						</UnauthenticatedRoute>
+					}
+				/>
+				<Route
+					path="/resetPassword"
+					element={
+						<UnauthenticatedRoute>
+							<ResetPasswordPage />
 						</UnauthenticatedRoute>
 					}
 				/>
