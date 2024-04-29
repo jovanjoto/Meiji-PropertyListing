@@ -37,9 +37,15 @@ export default function NavBar({}) {
 			"User Account Management": "/admin/viewAccounts",
 			"User Profile Management": "/admin/viewProfiles",
 		},
-		listing: {},
-		buying: {},
-		selling: {},
+		listing: {
+			"Property Listing": "/agent/propertyListingManagementPage"
+		},
+		buying: {
+			"Property Listing": "/viewPropertyListing"
+		},
+		selling: {
+			"Property Listing": "/seller/viewPropertyListing"
+		},
 	};
 
 	const handleLogout = () => {
