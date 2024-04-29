@@ -17,6 +17,7 @@ import UnauthenticatedRoute from "./Components/Authentication/UnauthenticatedRou
 import PrivateRoute from "./Components/Authentication/PrivateRoute.jsx";
 import NavBar from "./Components/NavBar";
 import ResetPasswordPage from "./Pages/ResetPasswordPage.jsx";
+import PropertyListingManagementPage from "./Pages/PropertyListingManagementPage.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
 	<AuthProvider>
@@ -60,11 +61,11 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 				/>
 				{/* Agent Routes */}
 				<Route
-					path="/agent"
+					path="/agent/propertyListingManagementPage"
 					element={
 						<PrivateRoute listing>
 							<NavBar />
-							You are an agent!
+							<PropertyListingManagementPage/>
 						</PrivateRoute>
 					}
 				/>
