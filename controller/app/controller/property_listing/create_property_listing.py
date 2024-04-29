@@ -1,8 +1,9 @@
 # Libraries
 from flask import Blueprint, request
-from flask_jwt_extended import jwt_required
-from datetime import datetime, date
+from flask_jwt_extended import jwt_required, get_jwt
+from datetime import datetime, date # type: ignore
 from werkzeug.utils import secure_filename
+from uuid import uuid4 # type: ignore
 import os
 
 # Local dependencies
@@ -15,7 +16,6 @@ class CreatePropertyListingController(Blueprint):
         super().__init__(*args, **kwargs)
         self.add_url_rule("/create_property_listing", view_func=self.createPL, methods=["PUT"])
 
-        
     def allowed_file(self, filename:str):
         ALLOWED_EXTENSIONS = {'heic', 'png', 'jpg', 'jpeg', 'gif'}
         return '.' in filename and \
@@ -24,7 +24,9 @@ class CreatePropertyListingController(Blueprint):
     @permissions_required("has_listing_permission")
     @jwt_required()
     def createPL(self) -> dict[str,bool]:
+        claims = get_jwt()
         listing_date = request.form.get("listing_date")
+        print(request.form)
         if not listing_date:
             listing_date = date.today()
         else:
@@ -42,7 +44,7 @@ class CreatePropertyListingController(Blueprint):
             file.save(image_url)
             
             propertyListingJson = {
-                "id": request.form.get("id"),
+                "id": str(uuid4()),
                 "price": request.form.get("price"),
                 "name": request.form.get("name"),
                 "type": request.form.get("type"),
@@ -54,7 +56,7 @@ class CreatePropertyListingController(Blueprint):
                 "area": request.form.get("area"),
                 "image_url": image_url,
                 "listing_date": listing_date,
-                "agent_email": request.form.get("agent_email"),
+                "agent_email": claims["email"],
                 "seller_email": request.form.get("seller_email")
             }
 

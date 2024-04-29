@@ -12,7 +12,7 @@ function DropImageInput({ file, setFile, show }) {
 				}
 			>
 				{file ? (
-					<div className="text-white flex flex-row items-center gap-4 my-2">
+					<div className="text-black flex flex-row items-center gap-4 my-2">
 						{file.name}
 						<Button
 							size={"xs"}
