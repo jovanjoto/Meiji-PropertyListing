@@ -1,259 +1,338 @@
-import { Modal, Card, Label, TextInput, Button } from "flowbite-react"
-import { FaTimes } from "react-icons/fa"
-import { useState } from "react";
+import { Modal, Card, Label, TextInput, Button, Select } from "flowbite-react";
+import { FaTimes } from "react-icons/fa";
+import { useContext, useState } from "react";
 import { FileInput } from "flowbite-react";
+import DropImageInput from "../DropImageInput";
+import { AuthContext } from "../Authentication/AuthContext";
+import MessageModal from "../Admin/MessageModal";
+import axios from "axios";
 
 export default function CreateNewPropertyModal({ state, setState }) {
-    // const [propertyType, setPropertyType] = useState("HDB");
-    const [numBedrooms, setNumBedrooms] = useState(1);
-    const [numBathrooms, setNumBathrooms] = useState(1);
-    const [area, setArea] = useState(100);
-    const [property, setproperty] = useState({
-        name: "",
-        id: "0",
-        address: "",
-        num_bedrooms: 1,
-        num_bathrooms: 1,
-        district: "",
-        property_type: "",
-        area: 1.0,
-        is_sold: false,
-        transaction_date: "",
-        transaction_price: 0.0,
-        img_url: ""
-    });
+	const { token } = useContext(AuthContext);
+	const [messageModalOpen, setMessageModalOpen] = useState(false);
+	const [isSuccess, setIsSuccess] = useState(false);
+	const list_of_district = [
+		"D01 Boat Quay / Raffles Place / Marina",
+		"D02 Chinatown / Tanjong Pagar",
+		"D03 Alexandra / Commonwealth",
+		"D04 Harbourfront / Telok Blangah",
+		"D05 Buona Vista / West Coast / Clementi New Town",
+		"D06 City Hall / Clarke Quay",
+		"D07 Beach Road / Bugis / Rochor",
+		"D08 Farrer Park / Serangoon Rd",
+		"D09 Orchard / River Valley",
+		"D10 Tanglin / Holland / Bukit Timah",
+		"D11 Newton / Novena",
+		"D21 Clementi Park / Upper Bukit Timah",
+		"D12 Balestier / Toa Payoh",
+		"D13 Macpherson / Potong Pasir",
+		"D14 Eunos / Geylang / Paya Lebar",
+		"D15 East Coast / Marine Parade",
+		"D16 Bedok / Upper East Coast",
+		"D17 Changi Airport / Changi Village",
+		"D18 Pasir Ris / Tampines",
+		"D19 Hougang / Punggol / Sengkang",
+		"D20 Ang Mo Kio / Bishan / Thomson",
+		"D22 Boon Lay / Jurong / Tuas",
+		"D23 Dairy Farm / Bukit Panjang / Choa Chu Kang",
+		"D24 Lim Chu Kang / Tengah",
+		"D25 Admiralty / Woodlands",
+		"D26 Mandai / Upper Thomson",
+		"D27 Sembawang / Yishun",
+		"D28 Seletar / Yio Chu Kang",
+	];
 
+	const [property, setproperty] = useState({
+		name: "",
+		address: "",
+		price: 1000,
+		num_bedrooms: 1,
+		num_bathrooms: 1,
+		district: "",
+		property_type: "",
+		area: 1.0,
+		file: null,
+	});
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        console.log(property)
-        if (property.num_bedrooms < 0 || property.num_bedrooms > 8 || property.num_bathrooms < 0 || property.num_bathrooms > 8 || property.area < 0) {
-            return false;
-        } else {
-            console.log(property);
-        }
-        return true;
+	// const handleSubmit = (event) => {
+	// 	event.preventDefault();
+	// 	console.log(property);
+	// 	if (
+	// 		property.num_bedrooms < 0 ||
+	// 		property.num_bedrooms > 8 ||
+	// 		property.num_bathrooms < 0 ||
+	// 		property.num_bathrooms > 8 ||
+	// 		property.area < 0
+	// 	) {
+	// 		return false;
+	// 	} else {
+	// 		console.log(property);
+	// 	}
+	// 	return true;
+	// };
 
-    }
+	const handleSubmit = (event) => {
+		event.preventDefault();
+		if (
+			property.num_bathrooms > 0 &&
+			property.num_bathrooms <= 8 &&
+			property.num_bedrooms > 0 &&
+			property.num_bedrooms <= 8 &&
+			property.area > 0
+		) {
+			var formData = new FormData();
+			formData.append("name", property.name);
+			formData.append("address", property.type);
+			formData.append("price", property.price);
+			formData.append("num_bedrooms", property.num_bedrooms);
+			formData.append("num_bathrooms", property.num_bathrooms);
+			formData.append("district", property.district);
+			formData.append("type", property.type);
+			formData.append("area", property.area);
+			formData.append("file", property.file);
 
-    const handleChange = (attribute, value) => {
-        setproperty({
-            ...property,
-            [attribute]: value,
-        });
-    };
+			axios
+				.put("/api/property_listing/create_property_listing", formData, {
+					headers: {
+						Authorization: `Bearer ${token}`,
+						"Content-Type": "multipart/form-data",
+					},
+				})
+				.then((res) => {
+					if (res.data.success) {
+						setIsSuccess(true);
+					}
+				})
+				.catch((error) => {
+					console.log(error);
+				})
+				.then(() => setMessageModalOpen(true));
+		} else {
+			alert("Invalid data");
+		}
+	};
 
-    return (
-        <>
-            <Modal
-                show={state}
-                onClose={() => setState(false)}
-            >
-                <FaTimes
-                    className="absolute top-0 left-0 m-2 rounded-md w-5 h-5 cursor-pointer" // Added absolute positioning
-                    onClick={() => setState(false)}
-                />
-                <Card>
-                    <form
-                        onSubmit={handleSubmit}>
-                        <div
-                            className="flex flex-row justify-between">
-                            <div
-                                className="mr-5 w-1/2">
-                                <Label
-                                    htmlFor="dropzone-file"
-                                    className="flex h-full w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600"
-                                >
-                                    <div
-                                        className="flex flex-col items-center justify-center pb-6 pt-5">
-                                        <svg
-                                            className="mb-4 h-8 w-8 text-gray-500 dark:text-gray-400"
-                                            aria-hidden="true"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            fill="none"
-                                            viewBox="0 0 20 16"
-                                        >
-                                            <path
-                                                stroke="currentColor"
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                strokeWidth="2"
-                                                d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
-                                            />
-                                        </svg>
-                                        <p
-                                            className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                                            <span
-                                                className="font-semibold">
-                                                Click to upload
-                                            </span> or drag and drop
-                                        </p>
-                                        <p className="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG</p>
-                                    </div>
-                                    <FileInput id="dropzone-file"
-                                        className="hidden"
-                                        onChange={(event) => handleChange("img_url", event.target.files[0])} />
-                                </Label>
-                            </div>
-                            <div
-                                className="w-1/2">
-                                <div>
-                                    <section
-                                        className="flex flex-col">
-                                        <Label
-                                            htmlFor="name"
-                                            value="Listing Name" />
-                                        <TextInput
-                                            value={property.name}
-                                            id="name"
-                                            onChange={(event) => handleChange("name", event.target.value)}
-                                            required
-                                        />
-                                    </section>
+	const handleChange = (attribute, value) => {
+		setproperty({
+			...property,
+			[attribute]: value,
+		});
+	};
 
-                                    <section
-                                        className="flex flex-col">
-                                        <Label
-                                            htmlFor="address"
-                                            value="Address" />
-                                        <TextInput
-                                            value={property.address}
-                                            id="address"
-                                            onChange={(event) => handleChange("address", event.target.value)}
-                                            required
-                                        />
-                                    </section>
+	const onCloseModal = (x) => {
+		window.location.reload();
+	};
 
-                                    <section
-                                        className="flex flex-col">
-                                        <Label
-                                            htmlFor="district"
-                                            value="District" />
-                                        <TextInput
-                                            value={property.district}
-                                            id="district"
-                                            onChange={(event) => handleChange("district", event.target.value)}
-                                            required
-                                        />
-                                    </section>
+	return (
+		<>
+			<MessageModal state={messageModalOpen} setState={onCloseModal}>
+				{isSuccess && <>Success</>}
+				{!isSuccess && <>Error</>}
+			</MessageModal>
+			<Modal show={state} onClose={() => setState(false)}>
+				<FaTimes
+					className="absolute top-0 left-0 m-2 rounded-md w-5 h-5 cursor-pointer" // Added absolute positioning
+					onClick={() => setState(false)}
+				/>
+				<Card>
+					<form onSubmit={handleSubmit}>
+						<div className="flex flex-row justify-between">
+							<div className="mr-5 w-1/2">
+								<DropImageInput
+									show={state}
+									file={property.file}
+									setFile={(val) => handleChange("file", val)}
+								/>
+							</div>
 
-                                    <section
-                                        className="flex flex-col">
-                                        <Label
-                                            htmlFor="property_type"
-                                            value="Property Type" />
-                                        <div
-                                            className="flex flex-row my-2">
-                                            <Button.Group
-                                                id="property_type">
-                                                <Button
-                                                    value="HDB"
-                                                    className={(property.property_type === "HDB" ? ("bg-custom_purple1 outline") : ("bg-white text-black outline"))}
-                                                    onClick={() => handleChange("property_type", "HDB")}
-                                                >
-                                                    HDB
-                                                </Button>
-                                                <Button
-                                                    value="Condominium"
-                                                    className={(property.property_type === "Condominium" ? ("bg-custom_purple1 outline") : ("bg-white text-black outline"))}
-                                                    onClick={() => handleChange("property_type", "Condominium")}
-                                                >
-                                                    Condominium
-                                                </Button>
-                                                <Button
-                                                    value="Landed"
-                                                    className={(property.property_type === "Landed" ? ("bg-custom_purple1 outline") : ("bg-white text-black outline"))}
-                                                    onClick={() => handleChange("property_type", "Landed")}
-                                                >
-                                                    Landed
-                                                </Button>
+							<div className="w-1/2 flex flex-col gap-1">
+								<section className="flex flex-col">
+									<Label htmlFor="name" value="Listing Name" />
+									<TextInput
+										value={property.name}
+										id="name"
+										onChange={(event) =>
+											handleChange("name", event.target.value)
+										}
+										required
+									/>
+								</section>
 
-                                            </Button.Group>
-                                        </div>
+								<section className="flex flex-col">
+									<Label htmlFor="address" value="Address" />
+									<TextInput
+										value={property.address}
+										id="address"
+										onChange={(event) =>
+											handleChange("address", event.target.value)
+										}
+										required
+									/>
+								</section>
 
-                                    </section>
+								<section className="flex flex-col">
+									<Label htmlFor="district" value="District" />
+									<Select name="district" required>
+										{list_of_district.map((value, index) => (
+											<option
+												key={index}
+												value={value}
+												onClick={() =>
+													handleChange("district", value)
+												}
+											>
+												{value}
+											</option>
+										))}
+									</Select>
+								</section>
 
-                                    <section
-                                        className="flex flex-col">
-                                        <Label
-                                            htmlFor="num_bedrooms"
-                                            value="Bedrooms" />
-                                        <TextInput
-                                            id="num_bedrooms"
-                                            className="w-full"
-                                            color={property.num_bedrooms > 8 || property.num_bedrooms < 1 ? ("failure") : ("success")} type="number"
-                                            value={property.num_bedrooms}
-                                            onChange={(event) => handleChange("num_bedrooms", event.target.value)}
-                                            required />
+								<section className="flex flex-col">
+									<Label
+										htmlFor="property_type"
+										value="Property Type"
+									/>
+									<div className="flex flex-row my-2">
+										<Button.Group id="property_type">
+											<Button
+												value="HDB"
+												color={"purple"}
+												className={
+													property.property_type === "HDB"
+														? "hover:text-white bg-custom_purple2 outline outline-1"
+														: "hover:text-white bg-white text-black outline outline-1"
+												}
+												onClick={() =>
+													handleChange("property_type", "HDB")
+												}
+											>
+												HDB
+											</Button>
+											<Button
+												value="Condominium"
+												color={"purple"}
+												className={
+													property.property_type === "Condominium"
+														? "hover:text-white bg-custom_purple2 outline"
+														: "hover:text-white bg-white text-black outline outline-1"
+												}
+												onClick={() =>
+													handleChange(
+														"property_type",
+														"Condominium"
+													)
+												}
+											>
+												Condominium
+											</Button>
+											<Button
+												value="Landed"
+												color={"purple"}
+												className={
+													property.property_type === "Landed"
+														? "hover:text-white bg-custom_purple2 outline"
+														: "hover:text-white bg-white text-black outline outline-1"
+												}
+												onClick={() =>
+													handleChange("property_type", "Landed")
+												}
+											>
+												Landed
+											</Button>
+										</Button.Group>
+									</div>
+								</section>
 
-                                    </section>
+								<section className="flex flex-col">
+									<Label htmlFor="num_bedrooms" value="Bedrooms" />
+									<TextInput
+										id="num_bedrooms"
+										className="w-full"
+										color={
+											property.num_bedrooms > 8 ||
+											property.num_bedrooms < 1
+												? "failure"
+												: "success"
+										}
+										type="number"
+										value={property.num_bedrooms}
+										onChange={(event) =>
+											handleChange(
+												"num_bedrooms",
+												event.target.value
+											)
+										}
+										required
+									/>
+								</section>
 
-                                    <section
-                                        className="flex flex-col">
-                                        <Label
-                                            htmlFor="num_bathrooms"
-                                            value="Bathrooms" />
-                                        <TextInput
-                                            id="num_bathrooms"
-                                            className="w-full"
-                                            color={property.num_bathrooms > 8 || property.num_bathrooms < 1 ? ("failure") : ("success")} type="number"
-                                            value={property.num_bathrooms}
-                                            onChange={(event) => handleChange("num_bathrooms", event.target.value)}
-                                            required />
-                                    </section>
+								<section className="flex flex-col">
+									<Label htmlFor="num_bathrooms" value="Bathrooms" />
+									<TextInput
+										id="num_bathrooms"
+										className="w-full"
+										color={
+											property.num_bathrooms > 8 ||
+											property.num_bathrooms < 1
+												? "failure"
+												: "success"
+										}
+										type="number"
+										value={property.num_bathrooms}
+										onChange={(event) =>
+											handleChange(
+												"num_bathrooms",
+												event.target.value
+											)
+										}
+										required
+									/>
+								</section>
 
-                                    <section
-                                        className="flex flex-col">
-                                        <Label
-                                            htmlFor="area"
-                                            value="Floor Size" />
-                                        <TextInput
-                                            id="area"
-                                            className="w-full"
-                                            color={property.area < 0 ? ("failure") : ("success")}
-                                            type="number"
-                                            value={property.area}
-                                            onChange={(event) => handleChange("area", event.target.value)}
-                                            required />
-                                    </section>
+								<section className="flex flex-col">
+									<Label htmlFor="area" value="Floor Size" />
+									<TextInput
+										id="area"
+										className="w-full"
+										color={property.area < 0 ? "failure" : "success"}
+										type="number"
+										value={property.area}
+										onChange={(event) =>
+											handleChange("area", event.target.value)
+										}
+										required
+									/>
+								</section>
 
-                                    <section
-                                        className="flex flex-col">
-                                        <Label
-                                            htmlFor="transaction_price"
-                                            value="Price" />
-                                        <TextInput
-                                            value={property.transaction_price}
-                                            id="transaction_price"
-                                            onChange={(event) => handleChange("transaction_price", event.target.value)}
-                                            required
-                                        />
-                                    </section>
-                                </div>
-
-                            </div>
-                        </div>
-                        <div
-                            className="flex justify-center my-2 pt-5 gap-5">
-                            <Button
-                                color="failure"
-                                className="w-1/2"
-                                onClick={() => setState(false)}
-                            >Cancel
-                            </Button>
-                            <Button
-                                type="submit"
-                                className="bg-custom_purple1 w-1/2"
-                            >
-                                Submit
-                            </Button>
-                        </div>
-
-
-                    </form>
-
-                </Card>
-            </Modal>
-        </>
-    )
+								<section className="flex flex-col">
+									<Label htmlFor="transaction_price" value="Price" />
+									<TextInput
+										value={property.price}
+										id="transaction_price"
+										type="number"
+										onChange={(event) =>
+											handleChange("price", event.target.value)
+										}
+										required
+									/>
+								</section>
+							</div>
+						</div>
+						<div className="flex justify-center my-2 pt-5 gap-5">
+							<Button
+								color="failure"
+								className="w-1/2"
+								onClick={() => setState(false)}
+							>
+								Cancel
+							</Button>
+							<Button type="submit" className="bg-custom_purple1 w-1/2">
+								Submit
+							</Button>
+						</div>
+					</form>
+				</Card>
+			</Modal>
+		</>
+	);
 }

@@ -105,7 +105,7 @@ export default function PropertyListingManagementPage({ }) {
     }
 
     return (
-        <div className="flex flex-col justify-center mx-10 my-4">
+        <div className="flex flex-col justify-center items-center align-middle mx-10 my-4">
             <CreateNewPropertyModal state={createNewPropertyModal} setState={setPropertyModalOpen} />
             <div className="flex w-full justify-between flex-wrap items-center gap-5">
                 <TextInput
