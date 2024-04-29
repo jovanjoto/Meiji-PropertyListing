@@ -4,7 +4,7 @@ import { BsFillHouseDoorFill } from "react-icons/bs";
 import { LuBath } from "react-icons/lu";
 import { FaBed } from "react-icons/fa";
 
-export default function PropertyListingCard({ name, id, address, num_bedrooms, num_bathrooms, district, property_type, area, is_sold, transaction_date }) {
+export default function PropertyListingCard({ name, id, address, num_bedrooms, num_bathrooms, district, price, property_type, area, is_sold, transaction_date }) {
 
     const markAsSold = () => {
         //enter function here when merging
@@ -52,8 +52,8 @@ export default function PropertyListingCard({ name, id, address, num_bedrooms, n
                                 </div>
 
                                 <div className="flex flex-col">
-                                    <span className="text-sm mr-2">District: {district} </span>
-                                    <span className="text-sm mr-2">Area: {area} m2</span>
+                                    <span className="text-sm mr-2">Price: {price} </span>
+                                    <span className="text-sm mr-2">Area: {area} sqft</span>
                                 </div>
 
                             </div>
