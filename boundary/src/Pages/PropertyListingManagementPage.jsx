@@ -12,6 +12,7 @@ import { BsArrowDownShort } from "react-icons/bs";
 
 import PropertyListingCard from "../Components/Agent/PropertyListingCard";
 import CreateNewPropertyModal from "../Components/Agent/CreateNewPropertyModal";
+import MarkAsSoldModal from "../Components/Agent/MarkAsSoldModal";
 
 export default function PropertyListingManagementPage({}) {
   // const [propertyListingsList, setPropertyListingsList] = useState([]);
@@ -56,7 +57,7 @@ export default function PropertyListingManagementPage({}) {
       area: 500.0,
       price: 500000,
       is_sold: false,
-      transaction_date: "30/3/2016",
+      transaction_date: "",
     },
     {
       name: "Property Name 2",
@@ -68,7 +69,7 @@ export default function PropertyListingManagementPage({}) {
       property_type: "landed",
       area: 1200.0,
       price: 100000,
-      is_Sold: true,
+      is_sold: true,
       transaction_date: "30/2/2015",
     },
     {
@@ -82,7 +83,7 @@ export default function PropertyListingManagementPage({}) {
       area: 500.0,
       price: 200000,
       is_sold: false,
-      transaction_date: "30/3/2016",
+      transaction_date: "",
     },
   ]);
   const propertyType = ["all", "HDB", "condominium", "landed"];
