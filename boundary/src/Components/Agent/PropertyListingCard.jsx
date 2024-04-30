@@ -17,10 +17,7 @@ export default function PropertyListingCard({ name, id, address, num_bedrooms, n
     const [showMarkAsSoldModal, setShowMarkAsSold] = useState(false);
     const [confirmationModal, setConfirmationModal] = useState(false);
     const [messageModal, setMessageModal] = useState(false);
-
-  const markAsSold = () => {
-    //enter function here when merging
-  };
+	const navigate = useNavigate();
 
     const onCloseModal = (x) => {
 		setMessageModal(x);
@@ -31,6 +28,10 @@ export default function PropertyListingCard({ name, id, address, num_bedrooms, n
         //enter function here when merging
     };
 
+	const redirectToPage = (id) => {
+        navigate(`/agent/viewPropertyListingPage/${id}`);
+    };
+	
     const removeListing = () => {
         //enter function here when merging
         axios
@@ -52,22 +53,6 @@ export default function PropertyListingCard({ name, id, address, num_bedrooms, n
             })
             .catch((err) => {console.log(err)});
     };
-
-  return (
-    <Card
-      id="account-card"
-      variant="outline"
-      direction={{ base: "column", sm: "row" }}
-      className="w-full my-2"
-    >
-      <div className="flex flex-wrap justify-center md:justify-between align-middle items-center gap-y-5">
-        <div className="flex flex-row items-center gap-6 align-middle">
-          <div className="flex flex-col justify-center items-center align-middle gap-1 w-32">
-            {property_type === "HDB" || property_type === "condo" ? (
-              <BsBuildingFill size={50} />
-            ) : (
-              <BsFillHouseDoorFill size={50} />
-            )}
 
     return (
         <>
