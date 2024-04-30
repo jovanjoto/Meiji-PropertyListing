@@ -11,6 +11,7 @@ class Config(object):
 	SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
 	SQLALCHEMY_TRACK_MODIFICATIONS = False
 	JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=1)
+	UPLOAD_FOLDER = os.path.join('controller', 'property_images')
 	# Mail configurations
 	MAIL_DEFAULT_SENDER = os.environ.get('EMAIL_USER')
 	MAIL_SERVER = "smtp-mail.outlook.com"

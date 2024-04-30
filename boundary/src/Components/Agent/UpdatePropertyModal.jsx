@@ -14,7 +14,20 @@ import { AuthContext } from "../Authentication/AuthContext";
 import MessageModal from "../Admin/MessageModal";
 import axios from "axios";
 
-export default function CreateNewPropertyModal({ state, setState }) {
+export default function UpdatePropertyModal({
+	state,
+	setState,
+	id,
+	name,
+	address,
+	price,
+	num_of_bedrooms,
+	num_of_bathrooms,
+	district,
+	property_type,
+	area,
+	description,
+}) {
 	const { token } = useContext(AuthContext);
 	const [messageModalOpen, setMessageModalOpen] = useState(false);
 	const [isSuccess, setIsSuccess] = useState(false);
@@ -50,66 +63,67 @@ export default function CreateNewPropertyModal({ state, setState }) {
 	];
 
 	const [property, setproperty] = useState({
-		name: "",
-		address: "",
-		price: 1000,
-		num_bedrooms: 1,
-		num_bathrooms: 1,
-		district: "D01 Boat Quay / Raffles Place / Marina",
-		property_type: "HDB",
-		area: 1.0,
-		seller_email: "",
+		name: name,
+		address: address,
+		price: price,
+		num_of_bedrooms: num_of_bedrooms,
+		num_of_bathrooms: num_of_bathrooms,
+		district: district,
+		property_type: property_type,
+		area: area,
 		file: null,
-		description: "",
+		description: description,
 	});
-
-	// const handleSubmit = (event) => {
-	// 	event.preventDefault();
-	// 	console.log(property);
-	// 	if (
-	// 		property.num_bedrooms < 0 ||
-	// 		property.num_bedrooms > 8 ||
-	// 		property.num_bathrooms < 0 ||
-	// 		property.num_bathrooms > 8 ||
-	// 		property.area < 0
-	// 	) {
-	// 		return false;
-	// 	} else {
-	// 		console.log(property);
-	// 	}
-	// 	return true;
-	// };
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
 		if (
-			property.num_bathrooms > 0 &&
-			property.num_bathrooms <= 8 &&
-			property.num_bedrooms > 0 &&
-			property.num_bedrooms <= 8 &&
+			property.num_of_bathrooms > 0 &&
+			property.num_of_bathrooms <= 8 &&
+			property.num_of_bedrooms > 0 &&
+			property.num_of_bedrooms <= 8 &&
 			property.area > 0 &&
 			property.price > 0 &&
 			property.name.trim() != "" &&
 			property.address.trim() != "" &&
-			property.seller_email.trim() != "" &&
-			property.description.trim() != "" &&
-			property.file != null
+			property.description.trim() != ""
 		) {
 			var formData = new FormData();
-			formData.append("name", property.name);
-			formData.append("address", property.address);
-			formData.append("price", property.price);
-			formData.append("num_of_bedrooms", property.num_bedrooms);
-			formData.append("num_of_bathrooms", property.num_bathrooms);
-			formData.append("district", property.district);
-			formData.append("type", property.property_type);
-			formData.append("area", property.area);
-			formData.append("seller_email", property.seller_email);
-			formData.append("description", property.description);
-			formData.append("file", property.file);
+			formData.append("id", id);
+
+			if (property.name != name) {
+				formData.append("name", property.name);
+			}
+			if (property.address != address) {
+				formData.append("address", property.address);
+			}
+			if (property.price != price) {
+				formData.append("price", property.price);
+			}
+			if (property.num_of_bedrooms != num_of_bedrooms) {
+				formData.append("num_of_bedrooms", property.num_of_bedrooms);
+			}
+			if (property.num_of_bathrooms != num_of_bathrooms) {
+				formData.append("num_of_bathrooms", property.num_of_bathrooms);
+			}
+			if (property.district != district) {
+				formData.append("district", property.district);
+			}
+			if (property.property_type != property_type) {
+				formData.append("type", property.property_type);
+			}
+			if (property.area != area) {
+				formData.append("area", property.area);
+			}
+			if (property.description != description) {
+				formData.append("description", property.description);
+			}
+			if (property.file != null) {
+				formData.append("file", property.file);
+			}
 
 			axios
-				.put("/api/property_listing/create_property_listing", formData, {
+				.patch("/api/property_listing/update_property_listing", formData, {
 					headers: {
 						Authorization: `Bearer ${token}`,
 						"Content-Type": "multipart/form-data",
@@ -130,10 +144,10 @@ export default function CreateNewPropertyModal({ state, setState }) {
 	};
 
 	const handleChange = (attribute, value) => {
-		setproperty((prev) => ({
-			...prev,
+		setproperty({
+			...property,
 			[attribute]: value,
-		}));
+		});
 	};
 
 	const onCloseModal = (x) => {
@@ -143,8 +157,8 @@ export default function CreateNewPropertyModal({ state, setState }) {
 	return (
 		<>
 			<MessageModal state={messageModalOpen} setState={onCloseModal}>
-				{isSuccess && <>Success</>}
-				{!isSuccess && <>Error</>}
+				{isSuccess && <>{property_type.name} has been successfully updated</>}
+				{!isSuccess && <>Error when updating, please try again.</>}
 			</MessageModal>
 			<Modal show={state} onClose={() => setState(false)}>
 				<FaTimes
@@ -265,6 +279,7 @@ export default function CreateNewPropertyModal({ state, setState }) {
 								<div className="flex flex-col mr-5 w-1/2">
 									<Label htmlFor="description" value="Description" />
 									<Textarea
+										value={property.description}
 										placeholder="Description about your property..."
 										onChange={(ev) =>
 											handleChange("description", ev.target.value)
@@ -276,21 +291,21 @@ export default function CreateNewPropertyModal({ state, setState }) {
 
 								<div className="w-1/2 flex flex-col gap-1 justify-between">
 									<section className="flex flex-col">
-										<Label htmlFor="num_bedrooms" value="Bedrooms" />
+										<Label htmlFor="num_of_bedrooms" value="Bedrooms" />
 										<TextInput
-											id="num_bedrooms"
+											id="num_of_bedrooms"
 											className="w-full"
 											color={
-												property.num_bedrooms > 8 ||
-												property.num_bedrooms < 1
+												property.num_of_bedrooms > 8 ||
+												property.num_of_bedrooms < 1
 													? "failure"
 													: "success"
 											}
 											type="number"
-											value={property.num_bedrooms}
+											value={property.num_of_bedrooms}
 											onChange={(event) =>
 												handleChange(
-													"num_bedrooms",
+													"num_of_bedrooms",
 													event.target.value
 												)
 											}
@@ -300,23 +315,23 @@ export default function CreateNewPropertyModal({ state, setState }) {
 
 									<section className="flex flex-col">
 										<Label
-											htmlFor="num_bathrooms"
+											htmlFor="num_of_bathrooms"
 											value="Bathrooms"
 										/>
 										<TextInput
-											id="num_bathrooms"
+											id="num_of_bathrooms"
 											className="w-full"
 											color={
-												property.num_bathrooms > 8 ||
-												property.num_bathrooms < 1
+												property.num_of_bathrooms > 8 ||
+												property.num_of_bathrooms < 1
 													? "failure"
 													: "success"
 											}
 											type="number"
-											value={property.num_bathrooms}
+											value={property.num_of_bathrooms}
 											onChange={(event) =>
 												handleChange(
-													"num_bathrooms",
+													"num_of_bathrooms",
 													event.target.value
 												)
 											}
@@ -352,24 +367,6 @@ export default function CreateNewPropertyModal({ state, setState }) {
 											type="number"
 											onChange={(event) =>
 												handleChange("price", event.target.value)
-											}
-											required
-										/>
-									</section>
-									<section className="flex flex-col">
-										<Label
-											htmlFor="seller_email"
-											value="Owner Email"
-										/>
-										<TextInput
-											value={property.seller_email}
-											id="seller_email"
-											type="email"
-											onChange={(event) =>
-												handleChange(
-													"seller_email",
-													event.target.value
-												)
 											}
 											required
 										/>

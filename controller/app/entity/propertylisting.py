@@ -105,7 +105,7 @@ class PropertyListing(db.Model):
 		if not agent:
 			return False
 		agent_profile = UserProfile.queryUP(agent.profile)
-		if not agent_profile or agent_profile.has_listing_permission:
+		if not (agent_profile and agent_profile.has_listing_permission):
 			return False
 		
 		# Check seller exist, and has a profile with selling permissions
@@ -113,7 +113,7 @@ class PropertyListing(db.Model):
 		if not seller:
 			return False
 		seller_profile = UserProfile.queryUP(seller.profile)
-		if not seller_profile or seller_profile.has_selling_permission:
+		if not (seller_profile and seller_profile.has_selling_permission):
 			return False
 
 		# Initialize new PropertyListing
@@ -135,12 +135,12 @@ class PropertyListing(db.Model):
 		if not property_listing:
 			return False
 		with current_app.app_context():
-			db.session.delete(property_listing)
+			cls.query.filter_by(id=listing_id).delete()
 			db.session.commit()
 		return True
 	
 	@classmethod
-	def updatePL(cls, details:dict[str,str|float|PropertyType|int|date]) -> bool:
+	def updatePL(cls, details:dict[str,str|float|PropertyType|int|None]) -> bool:
 		"""
 		Updates an existing PropertyListing by passing arguments:
 			- details: dict[str,str|float|PropertyType|int|date], which contains pairs:
@@ -165,7 +165,7 @@ class PropertyListing(db.Model):
 			if not seller:
 				return False
 			seller_profile = UserProfile.queryUP(seller.profile)
-			if not seller_profile or seller_profile.has_selling_permission:
+			if not (seller_profile and seller_profile.has_selling_permission):
 				return False
 			
 		with current_app.app_context():
@@ -176,6 +176,7 @@ class PropertyListing(db.Model):
 
 			# Update information
 			if details.get("price"):
+				print(details.get("price"), type(details.get("price")))
 				property_listing.price = details.get("price")
 			if details.get("name"):
 				property_listing.name = details.get("name")
@@ -215,7 +216,7 @@ class PropertyListing(db.Model):
 		with current_app.app_context():
 			property_listing = cls.queryPL(str(details["id"]))
 			# property listing does not exist or is already sold
-			if not property_listing or property_listing.is_sold:
+			if not (property_listing and not property_listing.is_sold):
 				return False
 
 			# If empty date
@@ -231,7 +232,7 @@ class PropertyListing(db.Model):
 
 			# Update information
 			property_listing.is_sold = True
-			property_listing.transaction_date = details["transaction_price"]
+			property_listing.transaction_date = details["transaction_date"]
 			property_listing.transaction_price = details["transaction_price"]
 			db.session.commit()
 		return True
