@@ -6,7 +6,7 @@ import { CiLocationOn } from "react-icons/ci";
 
 import ViewPropertyListingCard from "../Components/PropertyListing/ViewPropertyListingCard";
 
-export default function ViewPropertyListingPage({}) {
+export default function ViewPropertyListingPage({editable}) {
   const sampleObject = {
     success: true,
     listing: {
@@ -23,7 +23,7 @@ export default function ViewPropertyListingPage({}) {
       property_type: "HDB",
       furnish: "Fully Furnished",
       area: 500.0,
-      is_sold: false,
+      is_sold: true,
       transaction_date: "30/3/2016",
     },
   };
@@ -42,7 +42,7 @@ export default function ViewPropertyListingPage({}) {
   const id = params.id;
   return (
     <>
-        <ViewPropertyListingCard property={sampleObject} agent={sampleAgent} />
+        <ViewPropertyListingCard property={sampleObject} agent={sampleAgent} editable={editable}/>
     </>
   );
 }
