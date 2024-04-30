@@ -145,7 +145,7 @@ export default function PropertyListingManagementPage({}) {
 						num_bedrooms={propertyJson.num_of_bedrooms}
 						district={propertyJson.district}
 						price={propertyJson.price}
-						property_type={propertyJson.property_type}
+						property_type={propertyJson.type}
 						area={propertyJson.area}
 						is_sold={propertyJson.is_sold}
 						transaction_date={propertyJson.transaction_date}

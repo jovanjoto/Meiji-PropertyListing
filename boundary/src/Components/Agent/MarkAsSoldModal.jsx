@@ -1,17 +1,23 @@
 import { useState } from "react"
 import MessageModal from "../Admin/MessageModal";
 import ConfirmationModal from "../ConfirmationModal";
-import { Modal, Card, Label, TextInput, Datepicker, Button } from "flowbite-react";
+import { Modal, Card, Label, TextInput, Button } from "flowbite-react";
+import DatePicker from "../DatePicker";
 import { BsBuildingFill, BsFillHouseDoorFill } from "react-icons/bs";
 
 
 export default function MarkAsSoldModal({ state, setState, id, name, property_type }) {
     const [messageModal, onCloseModal] = useState(false);
     const [confirmationModal, setConfirmationModal] = useState(false);
+    const [data, setData] = useState({
+        "date": new Date(),
+        "price": 0
+    });
 
     const handleSubmit = () => {
         //handle submit
     }
+    console.log(data);
     return (
         <>
             <MessageModal
@@ -32,6 +38,7 @@ export default function MarkAsSoldModal({ state, setState, id, name, property_ty
             <Modal
                 show={state}
                 onClose={() => setState(false)}
+                size="md"
                 popup
             >
                 <Card
@@ -51,17 +58,29 @@ export default function MarkAsSoldModal({ state, setState, id, name, property_ty
                         <form onSubmit={handleSubmit}>
 
                             <Label htmlFor="dateSold"/>
-                            <Datepicker
-                                id="dateSold"
-                                maxDate={new Date()}
-                                className="w-64"
-                                title="Date Sold"
+                            <DatePicker
+                                id="date"
+                                data={data}
+                                setData={(date) => setData(date)}
+                                update_key="date"
+                                className="w-full"
+                                max_date= {new Date()}
                             />
-
+                            
                             <div className="mt-4 flex flex-col gap-y-5 my-5">
                                 <section className="flex flex-col w-full ">
                                     <Label htmlFor="price" value="Price" />
-                                    <TextInput id="price" type="number" className="w-64" />
+                                    <TextInput
+                                        id="price"
+                                        value={data.price}
+                                        type="number"
+                                        className="w-64"
+                                        onChange={(ev) => setData(
+                                            (prev) => ({
+                                                ...prev,
+                                                price: ev.target.value
+                                            })
+                                        )}/>
                                 </section>
 
                             </div>
