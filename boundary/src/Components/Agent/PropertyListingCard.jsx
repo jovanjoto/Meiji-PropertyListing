@@ -46,7 +46,7 @@ export default function PropertyListingCard({ name, id, address, num_bedrooms, n
                 <div className="flex flex-wrap justify-center md:justify-between align-middle items-center gap-y-5">
                     <div className="flex flex-row items-center gap-6 align-middle">
                         <div className="flex flex-col justify-center items-center align-middle gap-1 w-32">
-                            {(property_type === "HDB" || property_type === "condo") ?
+                            {(property_type === "HDB" || property_type === "CONDO") ?
                                 <BsBuildingFill size={50} /> :
                                 <BsFillHouseDoorFill size={50} />}
 
@@ -69,12 +69,11 @@ export default function PropertyListingCard({ name, id, address, num_bedrooms, n
                                             <span className="text-sm mr-2">{num_bathrooms}</span>
                                             <span><LuBath size={20} /></span>
                                         </div>
-
                                     </div>
 
                                     <div className="flex flex-col">
-                                        <span className="text-sm mr-2">Price: {price} </span>
-                                        <span className="text-sm mr-2">Area: {area} sqft</span>
+                                        <span className="text-md font-medium mr-2">${price}</span>
+                                        <span className="text-sm mr-2">{area} sqft</span>
                                     </div>
 
                                 </div>
