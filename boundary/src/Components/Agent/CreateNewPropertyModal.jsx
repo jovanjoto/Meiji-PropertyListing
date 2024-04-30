@@ -93,7 +93,7 @@ export default function CreateNewPropertyModal({ state, setState }) {
 			property.address.trim() != "" &&
 			property.seller_email.trim() != "" &&
 			property.description.trim() != "" &&
-			property.file !=  null
+			property.file != null
 		) {
 			var formData = new FormData();
 			formData.append("name", property.name);
@@ -130,10 +130,10 @@ export default function CreateNewPropertyModal({ state, setState }) {
 	};
 
 	const handleChange = (attribute, value) => {
-		setproperty({
-			...property,
+		setproperty((prev) => ({
+			...prev,
 			[attribute]: value,
-		});
+		}));
 	};
 
 	const onCloseModal = (x) => {
@@ -228,16 +228,12 @@ export default function CreateNewPropertyModal({ state, setState }) {
 													value="CONDO"
 													color={"purple"}
 													className={
-														property.property_type ===
-														"CONDO"
+														property.property_type === "CONDO"
 															? "hover:text-white bg-custom_purple2 outline"
 															: "hover:text-white bg-white text-black outline outline-1"
 													}
 													onClick={() =>
-														handleChange(
-															"property_type",
-															"CONDO"
-														)
+														handleChange("property_type", "CONDO")
 													}
 												>
 													Condominium
