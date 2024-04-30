@@ -1,4 +1,4 @@
-import { Card, Button } from "flowbite-react"
+import { Card, Button } from "flowbite-react";
 import { BsBuildingFill } from "react-icons/bs";
 import { BsFillHouseDoorFill } from "react-icons/bs";
 import { LuBath } from "react-icons/lu";
@@ -11,13 +11,16 @@ import axios from "axios";
 import MessageModal from "../Admin/MessageModal";
 import { AuthContext } from "../Authentication/AuthContext";
 
+
 export default function PropertyListingCard({ name, id, address, num_bedrooms, num_bathrooms, district, price, property_type, area, is_sold, transaction_date }) {
     const { token } = useContext(AuthContext)
     const [showMarkAsSoldModal, setShowMarkAsSold] = useState(false);
     const [confirmationModal, setConfirmationModal] = useState(false);
     const [messageModal, setMessageModal] = useState(false);
 
-    const navigate = useNavigate();
+  const markAsSold = () => {
+    //enter function here when merging
+  };
 
     const onCloseModal = (x) => {
 		setMessageModal(x);
@@ -50,9 +53,21 @@ export default function PropertyListingCard({ name, id, address, num_bedrooms, n
             .catch((err) => {console.log(err)});
     };
 
-    const redirectToPage = (id) => {
-        navigate(`/agent/viewPropertyListingPage/${id}`);
-    };
+  return (
+    <Card
+      id="account-card"
+      variant="outline"
+      direction={{ base: "column", sm: "row" }}
+      className="w-full my-2"
+    >
+      <div className="flex flex-wrap justify-center md:justify-between align-middle items-center gap-y-5">
+        <div className="flex flex-row items-center gap-6 align-middle">
+          <div className="flex flex-col justify-center items-center align-middle gap-1 w-32">
+            {property_type === "HDB" || property_type === "condo" ? (
+              <BsBuildingFill size={50} />
+            ) : (
+              <BsFillHouseDoorFill size={50} />
+            )}
 
     return (
         <>
