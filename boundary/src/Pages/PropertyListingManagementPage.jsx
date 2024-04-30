@@ -14,6 +14,7 @@ import { AuthContext } from "../Components/Authentication/AuthContext";
 
 import PropertyListingCard from "../Components/Agent/PropertyListingCard";
 import CreateNewPropertyModal from "../Components/Agent/CreateNewPropertyModal";
+import MarkAsSoldModal from "../Components/Agent/MarkAsSoldModal";
 
 export default function PropertyListingManagementPage({}) {
   const { token } = useContext(AuthContext);
