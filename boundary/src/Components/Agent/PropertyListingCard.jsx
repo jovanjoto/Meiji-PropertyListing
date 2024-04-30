@@ -68,7 +68,7 @@ export default function PropertyListingCard({ name, id, address, num_bedrooms, n
 				id="suspend-status"
 				state={messageModal}
 				setState={onCloseModal}
-			>{`${name} successfully suspended.`}</MessageModal>
+			>{`${name} successfully removed.`}</MessageModal>
             <ConfirmationModal
 				state={confirmationModal}
 				setState={setConfirmationModal}
