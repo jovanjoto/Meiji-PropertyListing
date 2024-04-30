@@ -21,8 +21,8 @@ function ConfirmationModal({ state, setState, action, children }) {
 						{children}
 					</h1>
 					<section className="flex justify-center gap-5 w-full mt-5">
-						<Button onClick={() => setState(false)} className="w-1/4 bg-custom_purple1">No</Button>
-						<Button onClick={() => action()} className="w-1/4 bg-custom_purple1">Yes</Button>
+						<Button onClick={() => setState(false)} className="w-1/4" color="failure">Cancel</Button>
+						<Button onClick={() => action()} className="w-1/4 bg-custom_purple1">Confirm</Button>
 					</section>
 				</Modal.Body>
 			</Modal>
