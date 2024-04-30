@@ -9,21 +9,48 @@ import {
 } from "flowbite-react";
 import { FaSearch } from "react-icons/fa";
 import { BsArrowDownShort } from "react-icons/bs";
+import axios from "axios";
+import { AuthContext } from "../Components/Authentication/AuthContext";
 
 import PropertyListingCard from "../Components/Agent/PropertyListingCard";
 import CreateNewPropertyModal from "../Components/Agent/CreateNewPropertyModal";
 import MarkAsSoldModal from "../Components/Agent/MarkAsSoldModal";
 
 export default function PropertyListingManagementPage({}) {
-  // const [propertyListingsList, setPropertyListingsList] = useState([]);
+  const { token } = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
   const [createNewPropertyModal, setPropertyModalOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState({
     district: {
-      jurongwest: true,
-      jurongeast: true,
-      central: true,
+      "D01 Boat Quay / Raffles Place / Marina": true,
+      "D02 Chinatown / Tanjong Pagar": true,
+      "D03 Alexandra / Commonwealth": true,
+      "D04 Harbourfront / Telok Blangah": true,
+      "D05 Buona Vista / West Coast / Clementi New Town": true,
+      "D06 City Hall / Clarke Quay": true,
+      "D07 Beach Road / Bugis / Rochor": true,
+      "D08 Farrer Park / Serangoon Rd": true,
+      "D09 Orchard / River Valley": true,
+      "D10 Tanglin / Holland / Bukit Timah": true,
+      "D11 Newton / Novena": true,
+      "D21 Clementi Park / Upper Bukit Timah": true,
+      "D12 Balestier / Toa Payoh": true,
+      "D13 Macpherson / Potong Pasir": true,
+      "D14 Eunos / Geylang / Paya Lebar": true,
+      "D15 East Coast / Marine Parade": true,
+      "D16 Bedok / Upper East Coast": true,
+      "D17 Changi Airport / Changi Village": true,
+      "D18 Pasir Ris / Tampines": true,
+      "D19 Hougang / Punggol / Sengkang": true,
+      "D20 Ang Mo Kio / Bishan / Thomson": true,
+      "D22 Boon Lay / Jurong / Tuas": true,
+      "D23 Dairy Farm / Bukit Panjang / Choa Chu Kang": true,
+      "D24 Lim Chu Kang / Tengah": true,
+      "D25 Admiralty / Woodlands": true,
+      "D26 Mandai / Upper Thomson": true,
+      "D27 Sembawang / Yishun": true,
+      "D28 Seletar / Yio Chu Kang": true,
     },
     propertyType: "all",
     maxPrice: 1000000,
@@ -45,49 +72,30 @@ export default function PropertyListingManagementPage({}) {
     maxFloorSize: 5000,
     minFloorSize: 0,
   });
-  const [propertyList, setPropertyList] = useState([
-    {
-      name: "Property Name 1",
-      id: "1",
-      address: "31 Thomson Rd",
-      num_bedrooms: 5,
-      num_bathrooms: 5,
-      district: "jurongwest",
-      property_type: "HDB",
-      area: 500.0,
-      price: 500000,
-      is_sold: false,
-      transaction_date: "",
-    },
-    {
-      name: "Property Name 2",
-      id: "2",
-      address: "32 Thomson Rd",
-      num_bedrooms: 6,
-      num_bathrooms: 6,
-      district: "jurongeast",
-      property_type: "landed",
-      area: 1200.0,
-      price: 100000,
-      is_sold: true,
-      transaction_date: "30/2/2015",
-    },
-    {
-      name: "Property Name 3",
-      id: "3",
-      address: "31 Thomson Rd",
-      num_bedrooms: 3,
-      num_bathrooms: 3,
-      district: "central",
-      property_type: "HDB",
-      area: 500.0,
-      price: 200000,
-      is_sold: false,
-      transaction_date: "",
-    },
-  ]);
-  const propertyType = ["all", "HDB", "condominium", "landed"];
-  const checkSearch = (propertyListing) => {};
+  const [propertyList, setPropertyList] = useState([]);
+
+  useEffect(() => {
+    setIsLoading(true);
+    if (token) {
+      axios
+        .get("/api/property_listing/search_managed_property_listings", {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((res) => {
+          if (res.status === 200) {
+            setPropertyList(res.data.properties);
+          } else {
+            console.log(res.status);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+        .then(() => setIsLoading(false));
+    }
+  }, []);
+
+  const propertyType = ["all", "HDB", "CONDO", "LANDED"];
 
   const displayLoading = () => {
     return (
@@ -98,14 +106,22 @@ export default function PropertyListingManagementPage({}) {
   };
 
   const checkSearchFilter = (propertyJson) => {
-    return filter.district[propertyJson.district] 
-    && propertyJson.price < filter.maxPrice && propertyJson.price > filter.minPrice
-    && (filter.propertyType === "all" || propertyJson.property_type === filter.propertyType)
-    && (Object.values(filter.bedroom).every(value => value === false) || filter.bedroom[propertyJson.num_bedrooms] || (propertyJson.num_bedrooms > 5 && filter.bedroom[5]))
-    && (Object.values(filter.bathroom).every(value => value === false) || filter.bathroom[propertyJson.num_bathrooms] || (propertyJson.num_bathrooms > 5 && filter.bathroom[5]))
-    && propertyJson.area < filter.maxFloorSize && propertyJson.area > filter.minFloorSize
-    && propertyJson.name.toLowerCase().includes(search.toLowerCase());
-
+    return (
+      filter.district[propertyJson.district] &&
+      propertyJson.price < filter.maxPrice &&
+      propertyJson.price > filter.minPrice &&
+      (filter.propertyType === "all" ||
+        propertyJson.type === filter.propertyType) &&
+      (Object.values(filter.bedroom).every((value) => value === false) ||
+        filter.bedroom[propertyJson.num_of_bedrooms] ||
+        (propertyJson.num_of_bedrooms > 5 && filter.bedroom[5])) &&
+      (Object.values(filter.bathroom).every((value) => value === false) ||
+        filter.bathroom[propertyJson.num_of_bathrooms] ||
+        (propertyJson.num_of_bathrooms > 5 && filter.bathroom[5])) &&
+      propertyJson.area < filter.maxFloorSize &&
+      propertyJson.area > filter.minFloorSize &&
+      propertyJson.name.toLowerCase().includes(search.toLowerCase())
+    );
   };
 
   const searchFilter = () => {
@@ -118,8 +134,8 @@ export default function PropertyListingManagementPage({}) {
             name={propertyJson.name}
             id={propertyJson.id}
             address={propertyJson.address}
-            num_bathrooms={propertyJson.num_bathrooms}
-            num_bedrooms={propertyJson.num_bedrooms}
+            num_bathrooms={propertyJson.num_of_bathrooms}
+            num_bedrooms={propertyJson.num_of_bedrooms}
             district={propertyJson.district}
             price={propertyJson.price}
             property_type={propertyJson.property_type}
@@ -428,7 +444,7 @@ export default function PropertyListingManagementPage({}) {
 
       <div>
         {displayList()}
-        {/* {searchFilter().length == 0 && displayEmptyList()} */}
+        {searchFilter().length == 0 && displayEmptyList()}
       </div>
     </div>
   );
