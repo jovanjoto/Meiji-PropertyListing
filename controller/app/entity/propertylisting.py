@@ -140,7 +140,7 @@ class PropertyListing(db.Model):
 		return True
 	
 	@classmethod
-	def updatePL(cls, details:dict[str,str|float|PropertyType|int|date]) -> bool:
+	def updatePL(cls, details:dict[str,str|float|PropertyType|int|None]) -> bool:
 		"""
 		Updates an existing PropertyListing by passing arguments:
 			- details: dict[str,str|float|PropertyType|int|date], which contains pairs:
@@ -176,6 +176,7 @@ class PropertyListing(db.Model):
 
 			# Update information
 			if details.get("price"):
+				print(details.get("price"), type(details.get("price")))
 				property_listing.price = details.get("price")
 			if details.get("name"):
 				property_listing.name = details.get("name")
