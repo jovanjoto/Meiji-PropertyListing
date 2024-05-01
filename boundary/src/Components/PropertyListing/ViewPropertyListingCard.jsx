@@ -8,17 +8,20 @@ import { PiBathtubBold, PiHouseLine } from "react-icons/pi";
 import { MdOutlineCropSquare } from "react-icons/md";
 import { GrLocationPin } from "react-icons/gr";
 
-function ViewPropertyListingCard({ property, agent }) {
+function ViewPropertyListingCard({ property, agent, editable }) {
 
   const propertyTypeTags = {
     "HDB" :  <p className="px-4 py-1 bg-custom_purple1 text-white text-xs rounded-full mb-4 mt">HDB</p>,
     "CONDO" : <p className="px-2 bg-custom_purple2 text-white text-xs rounded-full mb-2 mt">Condominium</p>,
     "LANDED" : <p className="px-2 bg-custom_purple3 text-white text-xs rounded-full mb-2 mt">Landed</p>,
   };
+
+  const bgColor = "bg-red-500" ? property.listing.is_sold : "";
   
 
   return (
-    <Card className="w-5/6  h-full mt-40 mx-auto">
+    <Card className={`w-5/6 h-full mt-40 mx-auto ${bgColor}`}>
+    {/* // <Card className="w-5/6 h-full mt-40 mx-auto bg-red-500"> */}
       <div className="flex flex-row justify-center gap-12">
         <div className="">
           <img
@@ -29,16 +32,22 @@ function ViewPropertyListingCard({ property, agent }) {
         </div>
 
         {/* HTML Card For Property's Information */}
+        
         <a
           href="#"
-          class="block  p-6 bg-white border border-gray-200 rounded-lg shadow  dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 w-3/4 cursor-default"
+          class={property.listing.is_sold ? "bg-red-200 block p-6 bg-white border border-gray-200 rounded-lg shadow  dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 w-3/4 cursor-default" : "block p-6 bg-white border border-gray-200 rounded-lg shadow  dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 w-3/4 cursor-default"}
         >
           <header className="border-b border-black">
             <section className="flex justify-between flex-row">
               <h1 className="text-4xl font-bold text-gray-900 mb-1">
                 {property.listing.name}
               </h1>
-              <FaPencilAlt className="mr-2 mt-2 cursor-pointer" size={18} />
+              {editable ? (
+                <FaPencilAlt className="mr-2 mt-2 cursor-pointer" size={18} />
+              ) : (
+                <></>
+              )}
+              
             </section>
             <section className="flex justify-between flex-row mb-2 gap-7">
               <div className="flex flex-row gap-4">
@@ -65,7 +74,7 @@ function ViewPropertyListingCard({ property, agent }) {
           <header className="flex border-b border-black">
             {/* Price */}
             <section className="w-1/2 border-r border-black py-5">
-              <h1 className="text-4xl">S$17.000</h1>
+              <h1 className="text-4xl">${property.listing.price}</h1>
             </section>
             {/* Logo - More Information */}
             <section className="w-1/2">
@@ -149,6 +158,15 @@ function ViewPropertyListingCard({ property, agent }) {
               </a>
             </div>
           </body>
+          <br />
+          {property.listing.is_sold ? (
+            <h3 className="text-2xl font-bold tracking-tight text-gray-900 text-center">
+              Property has been sold!
+            </h3>) : (
+              <></>
+            )
+          }
+          
         </a>
       </div>
     </Card>
