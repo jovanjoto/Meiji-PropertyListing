@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, useEffect } from "react-router-dom";
 import { Card, Label } from "flowbite-react";
 import sampleImg from "../../assets/sample_img.jpg";
 import { IoLocationOutline } from "react-icons/io5";
@@ -11,11 +11,24 @@ import { GrLocationPin } from "react-icons/gr";
 function ViewPropertyListingCard({ property, agent }) {
 
   const propertyTypeTags = {
-    "HDB" :  <p className="px-4 py-1 bg-custom_purple1 text-white text-xs rounded-full mb-4 mt">HDB</p>,
-    "CONDO" : <p className="px-2 bg-custom_purple2 text-white text-xs rounded-full mb-2 mt">Condominium</p>,
-    "LANDED" : <p className="px-2 bg-custom_purple3 text-white text-xs rounded-full mb-2 mt">Landed</p>,
+    HDB: (
+      <p className="px-4 py-1 bg-custom_purple1 text-white text-xs rounded-full mb-4 mt">
+        HDB
+      </p>
+    ),
+    CONDO: (
+      <p className="px-2 bg-custom_purple2 text-white text-xs rounded-full mb-2 mt">
+        Condominium
+      </p>
+    ),
+    LANDED: (
+      <p className="px-2 bg-custom_purple3 text-white text-xs rounded-full mb-2 mt">
+        Landed
+      </p>
+    ),
   };
-  
+
+  useEffect
 
   return (
     <Card className="w-5/6  h-full mt-40 mx-auto">
@@ -64,91 +77,84 @@ function ViewPropertyListingCard({ property, agent }) {
 
           <header className="flex border-b border-black">
             {/* Price */}
-            <section className="w-1/2 border-r border-black py-5">
+            <section className="w-full border-black py-5">
               <h1 className="text-4xl">S$17.000</h1>
             </section>
             {/* Logo - More Information */}
-            <section className="w-1/2">
-              <div className="flex flex-row justify-between px-8 mt-4">
-                <div className="flex flex-col items-center">
+
+          </header>
+          <section className="w-1/2 pt-5">
+              <div className="flex flex-col justify-between gap-7 mt-4">
+                <div className="flex flex-row items-center gap-5">
                   <MdOutlineKingBed className="" size={22} />
-                  <span>{property.listing.num_bedrooms}</span>
+                  <span>{property.listing.num_bedrooms} bedrooms</span>
                 </div>
-                <div className="flex flex-col items-center">
+                <div className="flex flex-row items-center gap-5">
                   <PiBathtubBold className="" size={22} />
-                  <span>{property.listing.num_bathrooms}</span>
+                  <span>{property.listing.num_bathrooms} bathrooms</span>
                 </div>
-                <div className="flex flex-col items-center">
+                <div className="flex flex-row items-center gap-5">
                   <MdOutlineCropSquare className="" size={22} />
-                  <div className="flex flex-col items-center ">
+                  <div className="flex flex-row items-center ">
                     <span className="text-sm leading-tight">
-                      {property.listing.area} <br /> sqft
+                      {property.listing.area} sqft
                     </span>
                   </div>
                 </div>
-                <div className="flex flex-col items-center">
+                <div className="flex flex-row items-center gap-5">
                   <FaLightbulb className="" size={22} />
-                  <span
-                    className="text-xs text-center mt-1"
-                    dangerouslySetInnerHTML={{
-                      __html: property.listing.furnish.replace(" ", "<br />"),
-                    }}
-                  />
+                  <span className="text-sm text-center mt-1"> {property.listing.furnish} </span>
                 </div>
               </div>
             </section>
-          </header>
-          <body className="flex flex-row mt-6 justify-between mx-auto">
-            <div className="w-1/2">
-              <h3 className="text-2xl font-bold tracking-tight text-gray-900">
-                About This Property
-              </h3>
-              <span className="text-lg">{property.listing.description}</span>
-            </div>
-            <div className="w-1/2 mt-5 ml-8 flex justify-end mr-5">
-              <a class="block p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 w-3/4 justify-end ">
-                <div className="flex flex-row  items-center mb-4">
-                  <FaUser
-                    className="mr-2 rounded-full size-7 bg-white"
-                    size={18}
-                  />
-                  <section className="flex flex-col">
-                    <h1 className="">{agent.agent.name}</h1>
-                    <div className="flex flex-row items-center">
-                      <FaStar className="mr-1" size={12} />
-                      <p className="text-sm">{agent.agent.rating}</p>
-                    </div>
-                  </section>
-                </div>
-                <div className="flex flex-col gap-4">
-                  <section className="flex flex-col">
-                    <Label
-                      className="text-gray-500 text-xs"
-                      color=""
-                      value="Phone :"
-                    />
-                    <Label
-                      className="text-black text-xs"
-                      color=""
-                      value={agent.agent.phone_number}
-                    />
-                  </section>
-                  <section className="flex flex-col">
-                    <Label
-                      className="text-gray-500 text-xs"
-                      color=""
-                      value="Email :"
-                    />
-                    <Label
-                      className="text-black text-xs"
-                      color=""
-                      value={agent.agent.email}
-                    />
-                  </section>
-                </div>
-              </a>
-            </div>
-          </body>
+        </a>
+      </div>
+      <div className="flex flex-row">
+        <div className="w-1/2">
+          <h3 className="text-2xl font-bold tracking-tight text-gray-900">
+            About This Property
+          </h3>
+          <span className="text-lg">{property.listing.description}</span>
+        </div>
+
+        {/* Agent Card */}
+        <a class="block p-6 bg-white border border-gray-200 rounded-lg shadow w-3/5 justify-start">
+          <div className="flex flex-row  items-center mb-4">
+            <FaUser className="mr-2 rounded-full size-7 bg-white" size={18} />
+            <section className="flex flex-col">
+              <h1 className="">{agent.agent.name}</h1>
+              <div className="flex flex-row items-center">
+                <FaStar className="mr-1" size={12} />
+                <p className="text-sm">{agent.agent.rating}</p>
+              </div>
+            </section>
+          </div>
+          <div className="flex flex-col gap-4">
+            <section className="flex flex-col">
+              <Label
+                className="text-gray-500 text-xs"
+                color=""
+                value="Phone :"
+              />
+              <Label
+                className="text-black text-xs"
+                color=""
+                value={agent.agent.phone_number}
+              />
+            </section>
+            <section className="flex flex-col">
+              <Label
+                className="text-gray-500 text-xs"
+                color=""
+                value="Email :"
+              />
+              <Label
+                className="text-black text-xs"
+                color=""
+                value={agent.agent.email}
+              />
+            </section>
+          </div>
         </a>
       </div>
     </Card>
@@ -156,34 +162,3 @@ function ViewPropertyListingCard({ property, agent }) {
 }
 
 export default ViewPropertyListingCard;
-
-{
-  /* <div className="">
-<section className="">
-  <h1 className="text-2xl font-bold text-gray-900">
-    {sampleObject.listing.name}
-
-  </h1>
-</section>
-<section className="">
-  <CiLocationOn className="mr-2" size={18} />
-  <p className="text-xs text-gray-600 ">
-    {sampleObject.listing.address}
-  </p>
-</section>
-<section className="">
-  <h1 className="text-xl font-bold tracking-tight text-gray-900">
-    {sampleObject.listing.price}
-  </h1>
-</section>
-<section>
-  <h3 className="text-xl font-bold tracking-tight text-gray-900">
-    About This Property
-  </h3>
-  <p className="text-gray-900">{sampleObject.listing.description}</p>
-</section>
-</div>
-<div>
-
-</div> */
-}

@@ -1,12 +1,14 @@
 import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 import { Card } from "flowbite-react";
 import sampleImg from "../assets/sample_img.jpg";
 import { CiLocationOn } from "react-icons/ci";
+import axios from 'axios';
 
 import ViewPropertyListingCard from "../Components/PropertyListing/ViewPropertyListingCard";
 
-export default function ViewPropertyListingPage({}) {
+export default function ViewPropertyListingPage({property_id}) {
   const sampleObject = {
     success: true,
     listing: {
@@ -38,10 +40,44 @@ export default function ViewPropertyListingPage({}) {
     },
   }
 
+  const [propertyState, setPropertyState] = useState({});
+
+  // get property 
+  useEffect(() => {
+    axios.get(`/agent/view_property_lisintg/${property_id}`)
+      .then(response => {
+        // Handle the response data
+        console.log(response.data);
+        setPropertyState(response.data)
+      })
+      .catch(error => {
+        // Handle the error
+        console.error(error);
+      });
+  }, []);
+
+  // get agent 
+  useEffect(() => {
+    axios.get(`/agent/view_property_lisintg/${property_id}`)
+      .then(response => {
+        // Handle the response data
+        console.log(response.data);
+        setPropertyState(response.data)
+      })
+      .catch(error => {
+        // Handle the error
+        console.error(error);
+      });
+  }, []);
+  
+
+
+
   const params = useParams();
   const id = params.id;
   return (
     <>
+    {/* change property to propertyState, change agent to agentState */}
         <ViewPropertyListingCard property={sampleObject} agent={sampleAgent} />
     </>
   );
