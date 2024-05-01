@@ -1,4 +1,3 @@
-import { useParams, useEffect } from "react-router-dom";
 import { Card, Label } from "flowbite-react";
 import sampleImg from "../../assets/sample_img.jpg";
 import { IoLocationOutline } from "react-icons/io5";
@@ -7,174 +6,189 @@ import { MdOutlineKingBed } from "react-icons/md";
 import { PiBathtubBold, PiHouseLine } from "react-icons/pi";
 import { MdOutlineCropSquare } from "react-icons/md";
 import { GrLocationPin } from "react-icons/gr";
+import React, { useEffect, useState } from "react";
+import UpdatePropertyModal from "../Agent/UpdatePropertyModal";
 
-function ViewPropertyListingCard({ property, agent, editable }) {
+function ViewPropertyListingCard({
+	id,
+	price,
+	name,
+	type,
+	address,
+	district,
+	description,
+	num_of_bedrooms,
+	num_of_bathrooms,
+	area,
+	image_url,
+	listing_date,
+	is_sold,
+	transaction_date,
+	agent,
+	editable,
+}) {
+	const [showUpdateModal, setShowUpdateModal] = useState(false);
+	const SGDollar = new Intl.NumberFormat("en-US", {
+		style: "currency",
+		currency: "SGD",
+	});
 
-  const propertyTypeTags = {
-    HDB: (
-      <p className="px-4 py-1 bg-custom_purple1 text-white text-xs rounded-full mb-4 mt">
-        HDB
-      </p>
-    ),
-    CONDO: (
-      <p className="px-2 bg-custom_purple2 text-white text-xs rounded-full mb-2 mt">
-        Condominium
-      </p>
-    ),
-    LANDED: (
-      <p className="px-2 bg-custom_purple3 text-white text-xs rounded-full mb-2 mt">
-        Landed
-      </p>
-    ),
-  };
+	return (
+		<>
+			<UpdatePropertyModal
+				state={showUpdateModal}
+				setState={setShowUpdateModal}
+				id={id}
+				name={name}
+				address={address}
+				price={price}
+				num_of_bedrooms={num_of_bedrooms}
+				num_of_bathrooms={num_of_bathrooms}
+				district={district}
+				property_type={type}
+				area={area}
+				description={description}
+			/>
+			<Card className={`w-5/6 2xl:w-10/12 mx-auto bg-gray-100`}>
+				{is_sold && (
+					<div className="flex w-full h-full justify-center items-center bg-custom_purple2 text-white font-bold rounded-lg">
+						THIS PROPERTY HAS BEEN SOLD ON {transaction_date}
+					</div>
+				)}
+				<div
+					className={`flex flex-col lg:flex-row justify-between gap-12 ${
+						is_sold && "text-gray-400"
+					}`}
+				>
+					<img src={image_url} className="lg:w-1/2 rounded shadow" />
 
+					{/* HTML Card For Property's Information */}
 
-  const bgColor = "bg-red-500" ? property.listing.is_sold : "";
+					<div className="block p-6 bg-white border border-gray-200 lg:w-1/2 rounded-lg shadow cursor-default">
+						<header className="border-b border-black">
+							<section className="flex justify-between flex-row mb-4">
+								<h1 className="text-5xl font-bold mb-1">{name}</h1>
+								{editable && !is_sold && (
+									<div className="hover:bg-gray-100 p-2 mr-2 mt-2 rounded-lg">
+										<FaPencilAlt
+											className="cursor-pointer"
+											size={24}
+											onClick={() => setShowUpdateModal(true)}
+										/>
+									</div>
+								)}
+							</section>
+							<section className="flex justify-between flex-col mb-2 gap-3">
+								<section className="flex flex-row">
+									<IoLocationOutline className="mr-2" size={20} />
+									<p className="text-sm ">{address}</p>
+								</section>
+								<section className="flex flex-row">
+									<GrLocationPin className="mr-2" size={20} />
+									<p className="text-sn">{district}</p>
+								</section>
 
-  return (
-    <Card className={`w-5/6 h-full mt-40 mx-auto ${bgColor}`}>
-    {/* // <Card className="w-5/6 h-full mt-40 mx-auto bg-red-500"> */}
-      <div className="flex flex-row justify-center gap-12">
-        <div className="">
-          <img
-            src={sampleImg}
-            className=""
-            style={{ width: "750px", height: "450px" }}
-          />
-        </div>
+								<div className="flex flex-row gap-2">
+									<span
+										className={`px-4 py-1 ${
+											is_sold ? "bg-gray-400" : "bg-custom_purple2"
+										} text-white text-xs rounded-full mb-2 mt`}
+									>
+										{type}
+									</span>
+									<span className="text-custom_purple3">
+										Listed on {listing_date}
+									</span>
+								</div>
+							</section>
+						</header>
 
-        {/* HTML Card For Property's Information */}
-        
-        <a
-          href="#"
-          class={property.listing.is_sold ? "bg-red-200 block p-6 bg-white border border-gray-200 rounded-lg shadow  dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 w-3/4 cursor-default" : "block p-6 bg-white border border-gray-200 rounded-lg shadow  dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 w-3/4 cursor-default"}
-        >
-          <header className="border-b border-black">
-            <section className="flex justify-between flex-row">
-              <h1 className="text-4xl font-bold text-gray-900 mb-1">
-                {property.listing.name}
-              </h1>
-              {editable ? (
-                <FaPencilAlt className="mr-2 mt-2 cursor-pointer" size={18} />
-              ) : (
-                <></>
-              )}
-              
-            </section>
-            <section className="flex justify-between flex-row mb-2 gap-7">
-              <div className="flex flex-row gap-4">
-                <section className="flex flex-row">
-                  <IoLocationOutline className="mr-2" size={18} />
-                  <p className="text-xs text-gray-900">
-                    {property.listing.address}
-                  </p>
-                </section>
-                <section className="flex flex-row">
-                  <GrLocationPin className="mr-2" size={18} />
-                  <p className="text-xs text-gray-900">
-                    {property.listing.district}
-                  </p>
-                </section>
-              </div>
-
-              <div className="flex flex-row mr-5">
-                {propertyTypeTags[property.listing.property_type]}
-              </div>
-            </section>
-          </header>
-
-          <header className="flex border-b border-black">
-            {/* Price */}
-            <section className="w-full border-black py-5">
-              <h1 className="text-4xl">S$17.000</h1>
-            </section>
-            {/* Logo - More Information */}
-
-          </header>
-          <section className="w-1/2 pt-5">
-              <div className="flex flex-col justify-between gap-7 mt-4">
-                <div className="flex flex-row items-center gap-5">
-                  <MdOutlineKingBed className="" size={22} />
-                  <span>{property.listing.num_bedrooms} bedrooms</span>
-                </div>
-                <div className="flex flex-row items-center gap-5">
-                  <PiBathtubBold className="" size={22} />
-                  <span>{property.listing.num_bathrooms} bathrooms</span>
-                </div>
-                <div className="flex flex-row items-center gap-5">
-                  <MdOutlineCropSquare className="" size={22} />
-                  <div className="flex flex-row items-center ">
-                    <span className="text-sm leading-tight">
-                      {property.listing.area} sqft
-                    </span>
-                  </div>
-                </div>
-                <div className="flex flex-row items-center gap-5">
-                  <FaLightbulb className="" size={22} />
-                  <span className="text-sm text-center mt-1"> {property.listing.furnish} </span>
-                </div>
-              </div>
-            </section>
-        </a>
-      </div>
-      <div className="flex flex-row">
-        <div className="w-1/2">
-          <h3 className="text-2xl font-bold tracking-tight text-gray-900">
-            About This Property
-          </h3>
-          <span className="text-lg">{property.listing.description}</span>
-        </div>
-
-        {/* Agent Card */}
-        <a class="block p-6 bg-white border border-gray-200 rounded-lg shadow w-3/5 justify-start">
-          <div className="flex flex-row  items-center mb-4">
-            <FaUser className="mr-2 rounded-full size-7 bg-white" size={18} />
-            <section className="flex flex-col">
-              <h1 className="">{agent.agent.name}</h1>
-              <div className="flex flex-row items-center">
-                <FaStar className="mr-1" size={12} />
-                <p className="text-sm">{agent.agent.rating}</p>
-              </div>
-            </section>
-          </div>
-          <div className="flex flex-col gap-4">
-            <section className="flex flex-col">
-              <Label
-                className="text-gray-500 text-xs"
-                color=""
-                value="Phone :"
-              />
-              <Label
-                className="text-black text-xs"
-                color=""
-                value={agent.agent.phone_number}
-              />
-            </section>
-            <section className="flex flex-col">
-              <Label
-                className="text-gray-500 text-xs"
-                color=""
-                value="Email :"
-              />
-              <Label
-                className="text-black text-xs"
-                color=""
-                value={agent.agent.email}
-              />
-            </section>
-            <br />
-          {property.listing.is_sold ? (
-            <h3 className="text-2xl font-bold tracking-tight text-gray-900 text-center">
-              Property has been sold!
-            </h3>) : (
-              <></>
-            )
-          }
-          </div>
-        </a>
-      </div>
-    </Card>
-  );
+						<header className="flex border-b border-black">
+							{/* Price */}
+							<section className="w-full border-black py-5">
+								<h1 className="text-4xl font-semibold">
+									{SGDollar.format(price)}
+								</h1>
+							</section>
+							{/* Logo - More Information */}
+						</header>
+						<div className="flex flex-row justify-between mt-4">
+							<section className="flex flex-col gap-5">
+								<div className="flex flex-row items-center gap-5">
+									<MdOutlineKingBed className="" size={24} />
+									<span>{num_of_bedrooms} bedroom(s)</span>
+								</div>
+								<div className="flex flex-row items-center gap-5">
+									<PiBathtubBold className="" size={24} />
+									<span>{num_of_bathrooms} bathroom(s)</span>
+								</div>
+								<div className="flex flex-row items-center gap-5">
+									<MdOutlineCropSquare className="" size={24} />
+									<div className="flex flex-row items-center ">
+										<span className="leading-tight">{area} sqft</span>
+									</div>
+								</div>
+							</section>
+							{/* Agent Card */}
+							<a className="block p-6 bg-white border border-gray-200 rounded-lg shadow lg:w-1/2 justify-start">
+								<div className="flex flex-row items-center mb-4">
+									<FaUser
+										className="mr-3 rounded-full bg-white"
+										size={42}
+									/>
+									<section className="flex flex-col justify-center">
+										<h1 className="text-2xl font-semibold">
+											{agent.first_name + " " + agent.last_name}
+										</h1>
+										{/* <div className="flex flex-row items-center">
+									<FaStar className="mr-1" size={12} />
+									<p className="text-sm">{agent.rating}</p>
+								</div> */}
+									</section>
+								</div>
+								<div className="flex flex-col gap-4">
+									<section className="flex flex-col">
+										<Label
+											className="text-gray-500 text-md"
+											color=""
+											value="Phone :"
+										/>
+										<Label
+											className="text-md"
+											color=""
+											value={agent.phone}
+										/>
+									</section>
+									<section className="flex flex-col">
+										<Label
+											className="text-gray-500 text-md"
+											color=""
+											value="Email :"
+										/>
+										<Label
+											className="text-md"
+											color=""
+											value={agent.email}
+										/>
+									</section>
+								</div>
+							</a>
+						</div>
+					</div>
+				</div>
+				<div
+					className={`flex flex-col p-6 bg-white border border-gray-200 rounded-lg shadow justify-between gap-1 mt-2 ${
+						is_sold && "text-gray-400"
+					}`}
+				>
+					<h3 className="text-2xl font-bold tracking-tight">
+						About This Property
+					</h3>
+					<p className="text-md mt-1 text-justify">{description}</p>
+				</div>
+			</Card>
+		</>
+	);
 }
 
 export default ViewPropertyListingCard;
