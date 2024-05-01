@@ -19,6 +19,7 @@ import NavBar from "./Components/NavBar";
 import ResetPasswordPage from "./Pages/ResetPasswordPage.jsx";
 import PropertyListingManagementPage from "./Pages/PropertyListingManagementPage.jsx";
 import ViewPropertyListingPage from "./Pages/ViewPropertyListingPage.jsx";
+import PropertyListingMarketPage from "./Pages/PropertyListingMarketPage.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
 	<AuthProvider>
@@ -76,7 +77,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 					element={
 						<PrivateRoute listing>
 							<NavBar />
-							<ViewPropertyListingPage/>
+							<ViewPropertyListingPage editable={true}/>
 						</PrivateRoute>
 					}
 				/>
@@ -86,7 +87,16 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 					element={
 						<PrivateRoute buying>
 							<NavBar />
-							You are a buyer!
+							<PropertyListingMarketPage/>
+						</PrivateRoute>
+					}
+				/>
+				<Route 
+					path="/buyer/viewPropertyListingPage/:id"
+					element={
+						<PrivateRoute buying>
+							<NavBar />
+							<ViewPropertyListingPage editable={false}/>
 						</PrivateRoute>
 					}
 				/>

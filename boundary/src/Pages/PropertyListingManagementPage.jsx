@@ -214,6 +214,38 @@ export default function PropertyListingManagementPage({}) {
 										</Button>
 									)}
 								>
+									<div className="flex gap-2 my-2 mx-2">
+										<Checkbox
+										checked={Object.values(filter.district).every((value) => value === true)}
+										onChange={() => {
+											const allChecked = Object.values(filter.district).every((value) => value === true);
+											if (allChecked){
+												Object.keys(filter.district).forEach((key) => {
+													setFilter((prevFilter) => ({
+													  ...prevFilter,
+													  district: {
+														...prevFilter.district,
+														[key]: false,
+													  },
+													}));
+												  });
+											} else {
+												Object.keys(filter.district).forEach((key) => {
+													setFilter((prevFilter) => ({
+													  ...prevFilter,
+													  district: {
+														...prevFilter.district,
+														[key]: true,
+													  },
+													}));
+												  });
+											}
+										}}
+										/>
+										<Label htmlFor="buyer" className="flex">
+										All
+										</Label>
+									</div>
 									{Object.keys(filter.district).map((key) => (
 										<div key={key} className="flex gap-2 my-2 mx-2">
 											<Checkbox

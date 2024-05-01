@@ -25,7 +25,7 @@ export default function ViewPropertyListingPage({property_id}) {
       property_type: "HDB",
       furnish: "Fully Furnished",
       area: 500.0,
-      is_sold: false,
+      is_sold: true,
       transaction_date: "30/3/2016",
     },
   };

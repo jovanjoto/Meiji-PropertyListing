@@ -17,7 +17,7 @@ class SearchPropertyListingController(Blueprint):
     for pl in PropertyListing.queryAllAvailablePL():
       list_of_pls.append({
         "id" : pl.id,
-        "price" : pl.price,
+        "price" : pl.transaction_price if pl.is_sold else pl.price,
         "name" : pl.name, 
         "type" : pl.type,
         "address" : pl.address,
@@ -30,8 +30,7 @@ class SearchPropertyListingController(Blueprint):
         "image_url" : pl.image_url,
         "listing_date" : pl.listing_date,
         "seller_email" : pl.seller_email,
-        "transaction_date" : pl.transaction_date,
-        "transaction_price" : pl.transaction_price,
+        "transaction_date" : pl.transaction_date.strftime("%Y-%m-%d") if pl.is_sold else None,
         "agent_email" : pl.agent_email,
         "seller_email" : pl.seller_email
       })
@@ -46,7 +45,7 @@ class SearchPropertyListingController(Blueprint):
     for pl in PropertyListing.queryAllSoldPL():
       list_of_sold_pls.append({
         "id" : pl.id,
-        "price" : pl.price,
+        "price" : pl.transaction_price if pl.is_sold else pl.price,
         "name" : pl.name, 
         "type" : pl.type,
         "address" : pl.address,
@@ -59,8 +58,7 @@ class SearchPropertyListingController(Blueprint):
         "listing_date" : pl.listing_date,
         "is_sold" : pl.is_sold,
         "seller_email" : pl.seller_email,
-        "transaction_date" : pl.transaction_date,
-        "transaction_price" : pl.transaction_price,
+        "transaction_date" : pl.transaction_date.strftime("%Y-%m-%d") if pl.is_sold else None,
         "agent_email" : pl.agent_email,
         "seller_email" : pl.seller_email
       })
@@ -75,7 +73,7 @@ class SearchPropertyListingController(Blueprint):
     for pl in PropertyListing.queryAllManagedPL(agent_email=agent_email):
       list_of_managed_pls.append({
         "id" : pl.id,
-        "price" : pl.price,
+        "price" : pl.transaction_price if pl.is_sold else pl.price,
         "name" : pl.name, 
         "type" : pl.type,
         "address" : pl.address,
@@ -88,8 +86,7 @@ class SearchPropertyListingController(Blueprint):
         "listing_date" : pl.listing_date,
         "is_sold" : pl.is_sold,
         "seller_email" : pl.seller_email,
-        "transaction_date" : pl.transaction_date,
-        "transaction_price" : pl.transaction_price,
+        "transaction_date" : pl.transaction_date.strftime("%Y-%m-%d") if pl.is_sold else None,
         "agent_email" : pl.agent_email,
         "seller_email" : pl.seller_email
       })

@@ -8,7 +8,7 @@ import { PiBathtubBold, PiHouseLine } from "react-icons/pi";
 import { MdOutlineCropSquare } from "react-icons/md";
 import { GrLocationPin } from "react-icons/gr";
 
-function ViewPropertyListingCard({ property, agent }) {
+function ViewPropertyListingCard({ property, agent, editable }) {
 
   const propertyTypeTags = {
     HDB: (
@@ -28,10 +28,12 @@ function ViewPropertyListingCard({ property, agent }) {
     ),
   };
 
-  useEffect
+
+  const bgColor = "bg-red-500" ? property.listing.is_sold : "";
 
   return (
-    <Card className="w-5/6  h-full mt-40 mx-auto">
+    <Card className={`w-5/6 h-full mt-40 mx-auto ${bgColor}`}>
+    {/* // <Card className="w-5/6 h-full mt-40 mx-auto bg-red-500"> */}
       <div className="flex flex-row justify-center gap-12">
         <div className="">
           <img
@@ -42,16 +44,22 @@ function ViewPropertyListingCard({ property, agent }) {
         </div>
 
         {/* HTML Card For Property's Information */}
+        
         <a
           href="#"
-          class="block  p-6 bg-white border border-gray-200 rounded-lg shadow  dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 w-3/4 cursor-default"
+          class={property.listing.is_sold ? "bg-red-200 block p-6 bg-white border border-gray-200 rounded-lg shadow  dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 w-3/4 cursor-default" : "block p-6 bg-white border border-gray-200 rounded-lg shadow  dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 w-3/4 cursor-default"}
         >
           <header className="border-b border-black">
             <section className="flex justify-between flex-row">
               <h1 className="text-4xl font-bold text-gray-900 mb-1">
                 {property.listing.name}
               </h1>
-              <FaPencilAlt className="mr-2 mt-2 cursor-pointer" size={18} />
+              {editable ? (
+                <FaPencilAlt className="mr-2 mt-2 cursor-pointer" size={18} />
+              ) : (
+                <></>
+              )}
+              
             </section>
             <section className="flex justify-between flex-row mb-2 gap-7">
               <div className="flex flex-row gap-4">
@@ -154,6 +162,14 @@ function ViewPropertyListingCard({ property, agent }) {
                 value={agent.agent.email}
               />
             </section>
+            <br />
+          {property.listing.is_sold ? (
+            <h3 className="text-2xl font-bold tracking-tight text-gray-900 text-center">
+              Property has been sold!
+            </h3>) : (
+              <></>
+            )
+          }
           </div>
         </a>
       </div>
