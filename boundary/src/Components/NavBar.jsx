@@ -41,7 +41,7 @@ export default function NavBar({}) {
 			"Property Listing": "/agent/propertyListingManagementPage"
 		},
 		buying: {
-			"Property Listing": "/viewPropertyListing"
+			"Property Listing": "/"
 		},
 		selling: {
 			"Property Listing": "/seller/viewPropertyListing"
@@ -62,7 +62,7 @@ export default function NavBar({}) {
 			>
 				Are you sure you want to logout?
 			</ConfirmationModal>
-			<Navbar fluid rounded className=" max-w-full bg-gray-100 py-4">
+			<Navbar fluid rounded className=" max-w-full bg-gray-50 py-4 shadow">
 				<Navbar.Toggle />
 				<Navbar.Collapse>
 					{Object.entries(navigation_links).map(([perm, routes]) => {

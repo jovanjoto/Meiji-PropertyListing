@@ -157,7 +157,7 @@ export default function UpdatePropertyModal({
 	return (
 		<>
 			<MessageModal state={messageModalOpen} setState={onCloseModal}>
-				{isSuccess && <>{property_type.name} has been successfully updated</>}
+				{isSuccess && <>{name} has been successfully updated</>}
 				{!isSuccess && <>Error when updating, please try again.</>}
 			</MessageModal>
 			<Modal show={state} onClose={() => setState(false)}>

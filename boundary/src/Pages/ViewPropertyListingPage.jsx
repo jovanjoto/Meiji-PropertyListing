@@ -1,84 +1,87 @@
-import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
 
-import { Card } from "flowbite-react";
+import { Card, Spinner } from "flowbite-react";
 import sampleImg from "../assets/sample_img.jpg";
 import { CiLocationOn } from "react-icons/ci";
-import axios from 'axios';
+import axios from "axios";
 
 import ViewPropertyListingCard from "../Components/PropertyListing/ViewPropertyListingCard";
+import { AuthContext } from "../Components/Authentication/AuthContext";
+import { jwtDecode } from "jwt-decode";
 
-export default function ViewPropertyListingPage({property_id}) {
-  const sampleObject = {
-    success: true,
-    listing: {
-      name: "Property Name 1",
-      id: "1",
-      img_url: "sample_img",
-      address: "31 Thomson Rd",
-      description:
-        "This is a sample description which may take up a few paragraphs",
-      price: 10000.0,
-      num_bedrooms: 5,
-      num_bathrooms: 5,
-      district: "Springleaf",
-      property_type: "HDB",
-      furnish: "Fully Furnished",
-      area: 500.0,
-      is_sold: true,
-      transaction_date: "30/3/2016",
-    },
-  };
+export default function ViewPropertyListingPage() {
+	const { token } = useContext(AuthContext);
+	const params = useParams();
+	const id = params.id;
+	const [isLoading, setIsLoading] = useState(false);
+	const [property, setProperty] = useState();
+	const navigate = useNavigate();
+	const user = jwtDecode(token);
+	console.log(user.email);
+	useEffect(() => {
+		setIsLoading(true);
+		axios
+			.get(`/api/property_listing/view_property_listing?id=${id}`, {
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			})
+			.then((res) => {
+				if (res.data.success) {
+					setProperty(() => ({
+						...res.data.data,
+						editable: user.email === res.data.data.agent.email,
+					}));
+				} else {
+					navigate("/");
+				}
+			})
+			.catch((error) => {
+				navigate("/");
+			})
+			.then(() => setIsLoading(false));
+	}, [id]);
+	console.log(property);
+	const displayLoading = () => {
+		return (
+			<div className="text-center text-8xl">
+				<Spinner aria-label="Extra large spinner example" size="xl" />
+			</div>
+		);
+	};
 
-  const sampleAgent = {
-    success: true,
-    agent: {
-      name: "Lebron James",
-      rating : 5,
-      phone_number : "12345678",
-      email : "lebronjames@mail.com"
-    },
-  }
+	const displayPL = (data) => {
+		return (
+			<ViewPropertyListingCard
+				id={id}
+				price={data.price}
+				name={data.name}
+				type={data.type}
+				address={data.address}
+				district={data.district}
+				description={data.description}
+				num_of_bedrooms={data.num_of_bedrooms}
+				num_of_bathrooms={data.num_of_bathrooms}
+				area={data.area}
+				image_url={data.image_url}
+				listing_date={data.listing_date}
+				is_sold={data.is_sold}
+				transaction_date={data.transaction_date}
+				seller_email={data.seller_email}
+				agent={data.agent}
+				editable={data.editable}
+			/>
+		);
+	};
 
-  const [propertyState, setPropertyState] = useState({});
+	if (isLoading || !property) {
+		return displayLoading();
+	}
 
-  // get property 
-  useEffect(() => {
-    axios.get(`/agent/view_property_lisintg/${property_id}`)
-      .then(response => {
-        // Handle the response data
-        console.log(response.data);
-        setPropertyState(response.data)
-      })
-      .catch(error => {
-        // Handle the error
-        console.error(error);
-      });
-  }, []);
-
-  // get agent 
-  useEffect(() => {
-    axios.get(`/agent/view_property_lisintg/${property_id}`)
-      .then(response => {
-        // Handle the response data
-        console.log(response.data);
-        setPropertyState(response.data)
-      })
-      .catch(error => {
-        // Handle the error
-        console.error(error);
-      });
-  }, []);
-  
-
-
-
-  const params = useParams();
-  const id = params.id;
-  return (
-    <>
-    {/* change property to propertyState, change agent to agentState */}
-        <ViewPropertyListingCard property={sampleObject} agent={sampleAgent} />
-    </>
-  );
+	return (
+		<div className="my-24 justify-center items-center align-middle">
+			{displayPL(property)}
+		</div>
+	);
 }

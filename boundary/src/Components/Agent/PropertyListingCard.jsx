@@ -23,7 +23,6 @@ export default function PropertyListingCard({
 	area,
 	is_sold,
 	transaction_date,
-	transaction_price,
 }) {
 	const { token } = useContext(AuthContext);
 	const [showMarkAsSoldModal, setShowMarkAsSold] = useState(false);
@@ -34,10 +33,6 @@ export default function PropertyListingCard({
 	const onCloseModal = (x) => {
 		setMessageModal(x);
 		window.location.reload();
-	};
-
-	const markAsSold = () => {
-		//enter function here when merging
 	};
 
 	const redirectToPage = (id) => {
@@ -169,7 +164,6 @@ export default function PropertyListingCard({
 							<Button
 								disabled
 								color="purple"
-								onClick={markAsSold}
 								className="mx-2 bg-custom_purple1 w-1/3 ml-2 h-14 items-center my-1 text-white"
 							>
 								Sold on {transaction_date}

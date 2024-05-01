@@ -6,3 +6,4 @@ flask-mail==0.9.1
 python-dotenv==1.0.1
 pytest
 selenium==4.20.0
+pillow==10.3.0
