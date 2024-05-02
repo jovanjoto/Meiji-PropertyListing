@@ -91,6 +91,12 @@ export default function PropertyListingManagementPage({}) {
 				.then((res) => {
 					if (res.status === 200) {
 						setPropertyList(res.data.properties);
+						setFilter({
+							...filter,
+							maxPrice: res.data.properties.reduce((acc, value) => {
+								return (acc = acc > value.price ? acc : value.price);
+							}, 0),
+						});
 					} else {
 						console.log(res.status);
 					}
@@ -115,8 +121,8 @@ export default function PropertyListingManagementPage({}) {
 	const checkSearchFilter = (propertyJson) => {
 		return (
 			filter.district[propertyJson.district] &&
-			propertyJson.price < filter.maxPrice &&
-			propertyJson.price > filter.minPrice &&
+			propertyJson.price <= filter.maxPrice &&
+			propertyJson.price >= filter.minPrice &&
 			(filter.propertyType === "all" ||
 				propertyJson.type === filter.propertyType) &&
 			(Object.values(filter.bedroom).every((value) => value === false) ||
@@ -130,6 +136,10 @@ export default function PropertyListingManagementPage({}) {
 			propertyJson.name.toLowerCase().includes(search.toLowerCase())
 		);
 	};
+
+	const max_price_filter = propertyList.reduce((acc, value) => {
+		return (acc = acc > value.price ? acc : value.price);
+	}, 0);
 
 	const searchFilter = () => {
 		let filtered_list = [];
@@ -216,34 +226,42 @@ export default function PropertyListingManagementPage({}) {
 								>
 									<div className="flex gap-2 my-2 mx-2">
 										<Checkbox
-										checked={Object.values(filter.district).every((value) => value === true)}
-										onChange={() => {
-											const allChecked = Object.values(filter.district).every((value) => value === true);
-											if (allChecked){
-												Object.keys(filter.district).forEach((key) => {
-													setFilter((prevFilter) => ({
-													  ...prevFilter,
-													  district: {
-														...prevFilter.district,
-														[key]: false,
-													  },
-													}));
-												  });
-											} else {
-												Object.keys(filter.district).forEach((key) => {
-													setFilter((prevFilter) => ({
-													  ...prevFilter,
-													  district: {
-														...prevFilter.district,
-														[key]: true,
-													  },
-													}));
-												  });
-											}
-										}}
+											checked={Object.values(filter.district).every(
+												(value) => value === true
+											)}
+											onChange={() => {
+												const allChecked = Object.values(
+													filter.district
+												).every((value) => value === true);
+												if (allChecked) {
+													Object.keys(filter.district).forEach(
+														(key) => {
+															setFilter((prevFilter) => ({
+																...prevFilter,
+																district: {
+																	...prevFilter.district,
+																	[key]: false,
+																},
+															}));
+														}
+													);
+												} else {
+													Object.keys(filter.district).forEach(
+														(key) => {
+															setFilter((prevFilter) => ({
+																...prevFilter,
+																district: {
+																	...prevFilter.district,
+																	[key]: true,
+																},
+															}));
+														}
+													);
+												}
+											}}
 										/>
 										<Label htmlFor="buyer" className="flex">
-										All
+											All
 										</Label>
 									</div>
 									{Object.keys(filter.district).map((key) => (
@@ -269,7 +287,9 @@ export default function PropertyListingManagementPage({}) {
 								</Dropdown>
 							</div>
 							<div className="flex flex-col">
-								<Label className="font-normal mb-2">Property type:</Label>
+								<Label className="font-normal mb-2">
+									Property type:
+								</Label>
 								<Button.Group id="property_type">
 									<Button
 										value="all"
@@ -335,9 +355,12 @@ export default function PropertyListingManagementPage({}) {
 									<div
 										className="bg-indigo-300 h-1.5 rounded-full absolute"
 										style={{
-											left: `${(filter.minPrice / 1000000) * 100}%`,
+											left: `${
+												(filter.minPrice / max_price_filter) * 100
+											}%`,
 											right: `${
-												100 - (filter.maxPrice / 1000000) * 100
+												100 -
+												(filter.maxPrice / max_price_filter) * 100
 											}%`,
 										}}
 									></div>
@@ -354,7 +377,7 @@ export default function PropertyListingManagementPage({}) {
 											}
 										}}
 										min={0}
-										max={1000000}
+										max={max_price_filter}
 										id="medium-range"
 										type="range"
 										value={filter.minPrice}
@@ -371,7 +394,7 @@ export default function PropertyListingManagementPage({}) {
 											}
 										}}
 										min={0}
-										max={1000000}
+										max={max_price_filter}
 										id="medium-range"
 										type="range"
 										value={filter.maxPrice}
@@ -417,7 +440,8 @@ export default function PropertyListingManagementPage({}) {
 												})
 											}
 										>
-											{number}{number==5 && "+"}
+											{number}
+											{number == 5 && "+"}
 										</Button>
 									))}
 								</Button.Group>
@@ -445,7 +469,8 @@ export default function PropertyListingManagementPage({}) {
 												})
 											}
 										>
-											{number}{number==5 && "+"}
+											{number}
+											{number == 5 && "+"}
 										</Button>
 									))}
 								</Button.Group>

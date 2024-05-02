@@ -93,6 +93,12 @@ export default function PropertyListingMarketPage({}) {
 					.then((res) => {
 						if (res.status === 200) {
 							setPropertyList(res.data.properties);
+							setFilter({
+								...filter,
+								maxPrice: res.data.properties.reduce((acc, value) => {
+									return (acc = acc > value.price ? acc : value.price);
+								}, 0),
+							});
 						} else {
 							console.log(res.status);
 						}
@@ -131,11 +137,15 @@ export default function PropertyListingMarketPage({}) {
 		);
 	};
 
+	const max_price_filter = propertyList.reduce((acc, value) => {
+		return (acc = acc > value.price ? acc : value.price);
+	}, 0);
+
 	const checkSearchFilter = (propertyJson) => {
 		return (
 			filter.district[propertyJson.district] &&
-			propertyJson.price < filter.maxPrice &&
-			propertyJson.price > filter.minPrice &&
+			propertyJson.price <= filter.maxPrice &&
+			propertyJson.price >= filter.minPrice &&
 			(filter.propertyType === "all" ||
 				propertyJson.type === filter.propertyType) &&
 			(Object.values(filter.bedroom).every((value) => value === false) ||
@@ -360,9 +370,9 @@ export default function PropertyListingMarketPage({}) {
 									<div
 										className="bg-indigo-300 h-1.5 rounded-full absolute"
 										style={{
-											left: `${(filter.minPrice / 1000000) * 100}%`,
+											left: `${(filter.minPrice / max_price_filter) * 100}%`,
 											right: `${
-												100 - (filter.maxPrice / 1000000) * 100
+												100 - (filter.maxPrice / max_price_filter) * 100
 											}%`,
 										}}
 									></div>
@@ -379,7 +389,7 @@ export default function PropertyListingMarketPage({}) {
 											}
 										}}
 										min={0}
-										max={1000000}
+										max={max_price_filter}
 										id="medium-range"
 										type="range"
 										value={filter.minPrice}
@@ -396,7 +406,7 @@ export default function PropertyListingMarketPage({}) {
 											}
 										}}
 										min={0}
-										max={1000000}
+										max={max_price_filter}
 										id="medium-range"
 										type="range"
 										value={filter.maxPrice}
