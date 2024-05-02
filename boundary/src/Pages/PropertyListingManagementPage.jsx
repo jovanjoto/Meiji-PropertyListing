@@ -95,7 +95,7 @@ export default function PropertyListingManagementPage({}) {
 							...filter,
 							maxPrice: res.data.properties.reduce((acc, value) => {
 								return (acc = acc > value.price ? acc : value.price);
-							}, 10000000),
+							}, 0),
 						});
 					} else {
 						console.log(res.status);
