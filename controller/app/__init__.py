@@ -83,3 +83,4 @@ flask_app.register_blueprint(search_owned_pl_controller, url_prefix='/api/proper
 # Shortlist
 flask_app.register_blueprint(shortlist_property_controller, url_prefix='/api/shortlist')
 flask_app.register_blueprint(remove_shortlist_controller, url_prefix='/api/shortlist')
+flask_app.register_blueprint(count_shortlist_controller, url_prefix='/api/shortlist')

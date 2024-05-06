@@ -16,6 +16,6 @@ class RemoveShortlistController(Blueprint):
 	def removeShortlist(self) -> dict[str,bool]:
 		buyer_email = get_jwt()["email"]
 		json = request.get_json()
-		property_id = json.get("property_id")
-		successBool = Shortlist.removeShortlist(propertyId=property_id, buyerEmail=buyer_email)
+		propertyId = json.get("propertyId")
+		successBool = Shortlist.removeShortlist(propertyId=propertyId, buyerEmail=buyer_email)
 		return {"success": successBool}
