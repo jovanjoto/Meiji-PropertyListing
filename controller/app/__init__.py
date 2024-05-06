@@ -11,6 +11,7 @@ from .controller.profile import view_profile_controller, search_profile_controll
 from .controller.authentication import jwt, bcrypt, mail, login_controller, reset_password_controller
 from .controller.property_listing import *
 from .controller.shortlist import *
+from .controller.views import *
 
 # Initialize Flask App
 flask_app = Flask(__name__)
@@ -85,3 +86,6 @@ flask_app.register_blueprint(search_owned_pl_controller, url_prefix='/api/proper
 flask_app.register_blueprint(shortlist_property_controller, url_prefix='/api/shortlist')
 flask_app.register_blueprint(remove_shortlist_controller, url_prefix='/api/shortlist')
 flask_app.register_blueprint(count_shortlist_controller, url_prefix='/api/shortlist')
+
+# Views
+flask_app.register_blueprint(count_views_controller, url_prefix='/api/views')

@@ -1,5 +1,5 @@
-from . import user, authentication, suspension, profile, shortlist
+from . import user, authentication, suspension, profile, shortlist, views
 
 __all__ = [
-	"user", "suspension", "profile", "authentication", "shortlist"
+	"user", "suspension", "profile", "authentication", "shortlist", "views"
 ]
