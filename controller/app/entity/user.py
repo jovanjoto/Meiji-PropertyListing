@@ -29,6 +29,20 @@ class User(db.Model):
 	# referenced by PropertyListing (seller)
 	sellerToPropertyListingRel = db.relationship("PropertyListing", back_populates="propertyListingToSellerRel", cascade='all, delete, save-update', 
 											  foreign_keys="PropertyListing.seller_email")
+	# referenced by Shortlist
+	buyerToShortlistRel = db.relationship("Shortlist", back_populates="shortlistToBuyerRel", cascade='all, delete, save-update')
+	# referenced by Review (agent)
+	agentToReviewRel = db.relationship("Review", back_populates="reviewToAgentRel", cascade='all, delete, save-update',
+									foreign_keys="Review.agentEmail")
+	# referenced by Review (reviewer)
+	reviewerToReviewRel = db.relationship("Review", back_populates="reviewToReviewerRel", cascade='all, delete, save-update',
+									foreign_keys="Review.reviewerEmail")
+	# referenced by Rating (agent)
+	agentToRatingRel = db.relationship("Rating", back_populates="ratingToAgentRel", cascade='all, delete, save-update',
+									foreign_keys="Rating.agentEmail")
+	# referenced by Rating (rater)
+	raterToRatingRel = db.relationship("Rating", back_populates="ratingToRaterRel", cascade='all, delete, save-update',
+									foreign_keys="Rating.reviewerEmail")
 	
 
 	@classmethod
