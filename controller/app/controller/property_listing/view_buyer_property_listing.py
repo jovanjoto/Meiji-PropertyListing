@@ -1,14 +1,15 @@
 from flask import Blueprint, request
+from flask.views import View
 from flask_jwt_extended import jwt_required
 from base64 import encodebytes # type: ignore
 from PIL import Image
 import io
-from app.entity import PropertyListing, User
+from app.entity import PropertyListing, User, Views
 
-class ViewPropertyListingController(Blueprint):
+class ViewBuyerPropertyListingController(Blueprint):
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
-		self.add_url_rule("/view_property_listing", view_func=self.viewPL, methods=["GET"])
+		self.add_url_rule("/view_buyer_property_listing", view_func=self.viewPL, methods=["GET"])
 
 	@jwt_required()
 	def viewPL(self) -> dict[str, dict[str,str] | bool | str]:
@@ -20,6 +21,11 @@ class ViewPropertyListingController(Blueprint):
 		agent = User.queryUserAccount(pl.agent_email)
 		if not agent:
 			return {"success": False, "message": "Property Listing's agent not found."}
+
+		# Increment views
+		increment_success = Views.incrementViews(id)
+		if not increment_success:
+			return {"success": False, "message": "Technical error."}
 
 		# converts img_url to bytes
 		img = Image.open(pl.image_url, mode="r")
