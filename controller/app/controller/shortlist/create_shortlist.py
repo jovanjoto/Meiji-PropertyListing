@@ -6,7 +6,7 @@ from flask_jwt_extended import jwt_required, get_jwt
 from app.entity import Shortlist
 from app.controller.authentication import permissions_required
 
-class ShortlistNewPropertyController(Blueprint):
+class ShortlistPropertyController(Blueprint):
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
 		self.add_url_rule("/shortlist_property", view_func=self.shortlistProperty, methods=["POST"])
