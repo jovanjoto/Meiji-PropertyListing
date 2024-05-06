@@ -44,6 +44,14 @@ class PropertyListing(db.Model):
 	seller_email = db.Column(db.String(250), db.ForeignKey('User.email'), nullable=False)
 	propertyListingToSellerRel = db.relationship("User", back_populates="sellerToPropertyListingRel", cascade='all, delete, save-update',
 								  foreign_keys="PropertyListing.seller_email")
+	
+	# referenced by Views
+	propertyListingToViewsRel = db.relationship("Views", back_populates="viewsToPropertyListingRel", cascade='all, delete, save-update')
+
+	# referenced by Shortlist
+	propertyListingToShortlistRel = db.relationship("Shortlist", back_populates="shortlistToPropertyListingRel", cascade='all, delete, save-update')
+
+	
 
 	@classmethod
 	def queryPL(cls, id:str) -> Self | None:
@@ -64,6 +72,15 @@ class PropertyListing(db.Model):
 		return cls.query.filter_by(agent_email=agent_email).all()
 	
 	@classmethod
+	def queryManagedSoldPL(cls, REAEmail:str) -> list[Self]:
+		"""
+		Queries all sold PropertyListing listed by a specified agent, takes in arguments:
+			- REAEmail:str, 
+		returns an list of PropertyListing instance.
+		"""
+		return cls.query.filter_by(agent_email=REAEmail, is_sold=True).all()
+	
+	@classmethod
 	def queryAllAvailablePL(cls) -> list[Self]:
 		"""
 		Queries all available PropertyListing.
@@ -78,6 +95,15 @@ class PropertyListing(db.Model):
 		returns an list of PropertyListing instance.
 		"""
 		return cls.query.filter_by(is_sold=True).all()
+	
+	@classmethod
+	def queryAllOwnedPL(cls, sellerEmail:str) -> list[Self]:
+		"""
+		Queries all owned PropertyListing, takes in arguments:
+			- sellerEmail:str, 
+		returns an list of PropertyListing instance.
+		"""
+		return cls.query.filter_by(seller_email=sellerEmail).all()
 	
 	@classmethod
 	def createNewPL(cls, details:dict[str,str|float|PropertyType|int|date]) -> bool:
