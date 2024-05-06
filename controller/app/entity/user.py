@@ -42,7 +42,7 @@ class User(db.Model):
 									foreign_keys="Rating.agentEmail")
 	# referenced by Rating (rater)
 	raterToRatingRel = db.relationship("Rating", back_populates="ratingToRaterRel", cascade='all, delete, save-update',
-									foreign_keys="Rating.reviewerEmail")
+									foreign_keys="Rating.raterEmail")
 	
 
 	@classmethod
