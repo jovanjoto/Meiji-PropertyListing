@@ -75,6 +75,7 @@ flask_app.register_blueprint(mark_sold_property_listing_controller, url_prefix='
 flask_app.register_blueprint(remove_property_listing_controller, url_prefix='/api/property_listing')
 flask_app.register_blueprint(update_property_listing_controller, url_prefix='/api/property_listing')
 flask_app.register_blueprint(view_property_listing_controller, url_prefix='/api/property_listing')
+flask_app.register_blueprint(view_buyer_property_listing_controller, url_prefix='/api/property_listing')
 flask_app.register_blueprint(search_managed_pl_controller, url_prefix='/api/property_listing')
 flask_app.register_blueprint(search_new_pl_controller, url_prefix='/api/property_listing')
 flask_app.register_blueprint(search_sold_pl_controller, url_prefix='/api/property_listing')
