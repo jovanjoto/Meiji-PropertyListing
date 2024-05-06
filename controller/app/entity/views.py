@@ -16,8 +16,8 @@ class Views(db.Model):
 
 	# Part of composite key (qualifier)
 	propertyListingId = db.Column(db.String(250), db.ForeignKey("PropertyListing.id"), nullable=False, primary_key=True)
-	viewsToPropertyListingRel = db.relationship("PropertyListing", back_populates="viewsToPropertyListingRel", cascade="all, delete, save-update",
-									foreign_keys="Views.id")
+	viewsToPropertyListingRel = db.relationship("PropertyListing", back_populates="propertyListingToViewsRel", cascade="all, delete, save-update",
+									foreign_keys="Views.propertyListingId")
 
 	@classmethod
 	def findPropertyViews(cls, propertyId:str) -> list[Self]:

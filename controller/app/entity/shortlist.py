@@ -13,10 +13,10 @@ class Shortlist(db.Model):
     # Composite key 
     propertyListingId = db.Column(db.String(250), db.ForeignKey("PropertyListing.id"), nullable=False, primary_key=True)
     userEmail = db.Column(db.String(250), db.ForeignKey("User.email"), nullable=False, primary_key=True)
-    shortlistToPropertyListingRel = db.relationship("PropertyListing", back_populates="shortlistToPropertyListingRel", cascade="all, delete, save-update",
-                                   foreign_keys="PropertyListing.id")
-    shortlistToBuyerRel = db.relationship("User", back_populates="shortlistToBuyerRel", cascade="all, delete, save-update",
-                                   foreign_keys="User.email")
+    shortlistToPropertyListingRel = db.relationship("PropertyListing", back_populates="propertyListingToShortlistRel", cascade="all, delete, save-update",
+                                   foreign_keys="Shortlist.propertyListingId")
+    shortlistToBuyerRel = db.relationship("User", back_populates="buyerToShortlistRel", cascade="all, delete, save-update",
+                                   foreign_keys="Shortlist.userEmail")
     
     @classmethod
     def countPropertyShortlists(cls, propertyId:str) -> int:

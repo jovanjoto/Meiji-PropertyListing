@@ -14,9 +14,9 @@ class Rating(db.Model):
     # Composite key 
     agentEmail = db.Column(db.String(250), db.ForeignKey("User.email"), nullable=False, primary_key=True)
     raterEmail = db.Column(db.String(250), db.ForeignKey("User.email"), nullable=False, primary_key=True)
-    ratingToAgentRel = db.relationship("User", back_populates="ratingToAgentRel", cascade="all, delete, save-update",
+    ratingToAgentRel = db.relationship("User", back_populates="agentToRatingRel", cascade="all, delete, save-update",
                                     foreign_keys="Rating.agentEmail")
-    ratingToRaterRel = db.relationship("User", back_populates="ratingToRaterRel", cascade="all, delete, save-update",
+    ratingToRaterRel = db.relationship("User", back_populates="raterToRatingRel", cascade="all, delete, save-update",
                                     foreign_keys="Rating.raterEmail")
 
     @classmethod
