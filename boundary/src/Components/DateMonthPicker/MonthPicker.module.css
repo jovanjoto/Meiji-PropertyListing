@@ -1,0 +1,72 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700&display=swap');
+
+.month:hover {
+  border-radius: var(--month-border-radius);
+  background-color: var(--month-hover-bg-color);
+}
+
+.month {
+  padding: var(--month-select-padding);
+  border: solid 1px transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-color);
+  font-size: 16px;
+}
+
+.active {
+  border-radius: var(--month-border-radius);
+  background: var(--month-active-bg-color) !important;
+}
+
+.disabled {
+  cursor: not-allowed;
+  color: var(--disabled-text-color);
+  color: grey
+}
+
+.yearContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  margin-bottom: var(--year-display-margin-bottom);
+  margin-top: var(--year-display-margin-top);
+  width: 60%;
+}
+
+.monthsContainer {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 1rem;
+}
+
+.pickerContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--picker-padding);
+  border-radius: 7px;
+  border: 1px solid rgb(0 0 0 / 35%);
+  color: var(--text-color);
+  position: absolute;
+  box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.1);
+  background: var(--picker-bg-color);
+  width: var(--month-input-width);
+}
+
+.button {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+.bold1 {
+  font-size: 1.4rem;
+}
+
+.pickerContainer::selection {
+  background-color: transparent;
+}
+
