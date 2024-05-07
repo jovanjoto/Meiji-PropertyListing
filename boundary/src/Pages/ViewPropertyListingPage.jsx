@@ -9,6 +9,8 @@ import axios from "axios";
 import ViewPropertyListingCard from "../Components/PropertyListing/ViewPropertyListingCard";
 import { AuthContext } from "../Components/Authentication/AuthContext";
 import { jwtDecode } from "jwt-decode";
+import UpdatePropertyModal from "../Components/Agent/UpdatePropertyModal";
+import RateAgentModal from "../Components/PropertyListing/RateAgentModal";
 
 export default function ViewPropertyListingPage() {
 	const { token } = useContext(AuthContext);
@@ -16,6 +18,8 @@ export default function ViewPropertyListingPage() {
 	const id = params.id;
 	const [isLoading, setIsLoading] = useState(false);
 	const [property, setProperty] = useState();
+	const [showUpdateModal, setShowUpdateModal] = useState(false);
+	const [showAgentReviewModal, setShowAgentReviewModal] = useState(false);
 	const navigate = useNavigate();
 	const user = jwtDecode(token);
 	console.log(user.email);
@@ -51,6 +55,33 @@ export default function ViewPropertyListingPage() {
 		);
 	};
 
+	const openUpdatePL = () => {
+		setShowUpdateModal(true);
+	}
+
+	const displayUpdatePLPage = (showUpdateModalState, setShowUpdateModalState) => {
+		return (
+			<UpdatePropertyModal
+				state={showUpdateModalState}
+				setState={setShowUpdateModalState}
+				id={property.id}
+				name={property.name}
+				address={property.address}
+				price={property.price}
+				num_of_bedrooms={property.num_of_bedrooms}
+				num_of_bathrooms={property.num_of_bathrooms}
+				district={property.district}
+				property_type={property.type}
+				area={property.area}
+				description={property.description}
+			/>
+		);
+	}
+
+	
+
+	
+
 	const displayPL = (data) => {
 		return (
 			<ViewPropertyListingCard
@@ -71,6 +102,10 @@ export default function ViewPropertyListingPage() {
 				seller_email={data.seller_email}
 				agent={data.agent}
 				editable={data.editable}
+				showUpdateModalState={showUpdateModal}
+				setShowUpdateModalState={setShowUpdateModal}
+				openUpdatePLFunc={openUpdatePL}
+				displayUpdatePLPageFunc={displayUpdatePLPage}
 			/>
 		);
 	};

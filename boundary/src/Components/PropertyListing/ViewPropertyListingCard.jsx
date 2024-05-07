@@ -1,4 +1,4 @@
-import { Card, Label } from "flowbite-react";
+import { Card, Label, Button } from "flowbite-react";
 import sampleImg from "../../assets/sample_img.jpg";
 import { IoLocationOutline } from "react-icons/io5";
 import { FaPencilAlt, FaLightbulb, FaUser, FaStar } from "react-icons/fa";
@@ -8,6 +8,8 @@ import { MdOutlineCropSquare } from "react-icons/md";
 import { GrLocationPin } from "react-icons/gr";
 import React, { useEffect, useState } from "react";
 import UpdatePropertyModal from "../Agent/UpdatePropertyModal";
+import RateAgentModal from "./RateAgentModal";
+import ReviewAgentModal from "./ReviewAgentModal";
 
 function ViewPropertyListingCard({
 	id,
@@ -26,29 +28,63 @@ function ViewPropertyListingCard({
 	transaction_date,
 	agent,
 	editable,
+	showUpdateModalState,
+	setShowUpdateModalState,
+	openUpdatePLFunc,
+	displayUpdatePLPageFunc,
+
 }) {
-	const [showUpdateModal, setShowUpdateModal] = useState(false);
 	const SGDollar = new Intl.NumberFormat("en-US", {
 		style: "currency",
 		currency: "SGD",
 	});
 
+	const [showAgentRatingModal, setShowAgentRatingModal] = useState(false);
+	const [showAgentReviewModal, setShowAgentReviewModal] = useState(false);
+	const rate = (agent_email) => {
+		setShowAgentRatingModal(true);
+		console.log(agent_email);
+	}
+
+	const promptRating = () => {
+		return (
+			<>
+				{/* {console.log(agent)} */}
+				<RateAgentModal
+					email={agent.email}
+					first_name={agent.first_name}
+					last_name={agent.last_name}
+					state={showAgentRatingModal}
+					setState={setShowAgentRatingModal}
+				/>
+			</>
+		);
+	}
+
+	const review = (agent_email) => {
+		setShowAgentReviewModal(true);
+		
+	}
+
+	const promptReview = () => {
+		return (
+			<>
+				<ReviewAgentModal
+					email={agent.email}
+					first_name={agent.first_name}
+					last_name={agent.last_name}
+					state={showAgentReviewModal}
+					setState={setShowAgentReviewModal}
+				/>
+			</>
+		)
+	}
+
 	return (
 		<>
-			<UpdatePropertyModal
-				state={showUpdateModal}
-				setState={setShowUpdateModal}
-				id={id}
-				name={name}
-				address={address}
-				price={price}
-				num_of_bedrooms={num_of_bedrooms}
-				num_of_bathrooms={num_of_bathrooms}
-				district={district}
-				property_type={type}
-				area={area}
-				description={description}
-			/>
+			{showAgentRatingModal && promptRating()}
+			{showAgentReviewModal && promptReview()}
+			{displayUpdatePLPageFunc(showUpdateModalState, setShowUpdateModalState)}
 			<Card className={`w-5/6 2xl:w-10/12 mx-auto bg-gray-100`}>
 				{is_sold && (
 					<div className="flex w-full h-full justify-center items-center bg-custom_purple2 text-white font-bold rounded-lg">
@@ -56,9 +92,8 @@ function ViewPropertyListingCard({
 					</div>
 				)}
 				<div
-					className={`flex flex-col lg:flex-row justify-between gap-12 ${
-						is_sold && "text-gray-400"
-					}`}
+					className={`flex flex-col lg:flex-row justify-between gap-12 ${is_sold && "text-gray-400"
+						}`}
 				>
 					<img src={image_url} className="lg:w-1/2 rounded shadow" />
 
@@ -73,7 +108,7 @@ function ViewPropertyListingCard({
 										<FaPencilAlt
 											className="cursor-pointer"
 											size={24}
-											onClick={() => setShowUpdateModal(true)}
+											onClick={openUpdatePLFunc}
 										/>
 									</div>
 								)}
@@ -90,9 +125,8 @@ function ViewPropertyListingCard({
 
 								<div className="flex flex-row gap-2">
 									<span
-										className={`px-4 py-1 ${
-											is_sold ? "bg-gray-400" : "bg-custom_purple2"
-										} text-white text-xs rounded-full mb-2 mt`}
+										className={`px-4 py-1 ${is_sold ? "bg-gray-400" : "bg-custom_purple2"
+											} text-white text-xs rounded-full mb-2 mt`}
 									>
 										{type}
 									</span>
@@ -171,15 +205,26 @@ function ViewPropertyListingCard({
 											value={agent.email}
 										/>
 									</section>
+									<section className="flex flex-row justify-around">
+										<Button
+											color="purple"
+											className="bg-custom_purple1 w-2/5"
+											onClick={() => rate(agent.email)}
+										>Rate</Button>
+										<Button
+											color="purple"
+											className="bg-custom_purple1 w-2/5"
+											onClick={()=> review(agent.email)}
+										>Review</Button>
+									</section>
 								</div>
 							</a>
 						</div>
 					</div>
 				</div>
 				<div
-					className={`flex flex-col p-6 bg-white border border-gray-200 rounded-lg shadow justify-between gap-1 mt-2 ${
-						is_sold && "text-gray-400"
-					}`}
+					className={`flex flex-col p-6 bg-white border border-gray-200 rounded-lg shadow justify-between gap-1 mt-2 ${is_sold && "text-gray-400"
+						}`}
 				>
 					<h3 className="text-2xl font-bold tracking-tight">
 						About This Property
