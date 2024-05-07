@@ -1,0 +1,19 @@
+.monthInputField {
+  width: var(--month-input-width);
+  min-width: 200px;
+  cursor: pointer;
+  font-size: var(--month-input-font-size);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--month-input-padding);
+  border-radius: 5px;
+  border: 1px solid #0000005b;
+  background: var(--input-bg-color);
+  color: var(--input-text-color);
+  margin-bottom: 1rem;
+}
+
+.monthInputField:hover {
+  background: var(--input-hover-bg-color);
+}
