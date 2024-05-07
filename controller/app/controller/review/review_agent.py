@@ -9,14 +9,14 @@ from app.controller.authentication import permissions_required
 class ReviewAgentController(Blueprint):
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
-		self.add_url_rule("/review_agent", view_func=self.reviewAgent, methods=["PUT"])
+		self.add_url_rule("/review_agent", view_func=self.reviewAgent, methods=["POST"])
 		
-	@permissions_required("has_listing_permission", "has_selling_permission")
+	@permissions_required("has_buying_permission", "has_selling_permission")
 	@jwt_required()
 	def reviewAgent(self) -> dict[str, bool]:
 		reviewInfo = request.get_json()
 		reviewer_email = get_jwt()["email"]
-		agent_email = reviewInfo.agent_email
-		review = reviewInfo.review
+		agent_email = reviewInfo["agent_email"]
+		review = reviewInfo["review"]
 		successBool = Review.createReview(agent_email=agent_email, reviewer_email=reviewer_email, review=review)
 		return {"success": successBool}

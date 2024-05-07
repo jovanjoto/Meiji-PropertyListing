@@ -7,7 +7,6 @@ import { PiBathtubBold, PiHouseLine } from "react-icons/pi";
 import { MdOutlineCropSquare } from "react-icons/md";
 import { GrLocationPin } from "react-icons/gr";
 import React, { useContext, useEffect, useState } from "react";
-import UpdatePropertyModal from "../Agent/UpdatePropertyModal";
 import RateAgentModal from "./RateAgentModal";
 import ReviewAgentModal from "./ReviewAgentModal";
 import { CiHeart } from "react-icons/ci";
@@ -15,6 +14,7 @@ import { FaHeart } from "react-icons/fa";
 import { AuthContext } from "../Authentication/AuthContext";
 import ConfirmationModal from "../ConfirmationModal";
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 
 function ViewPropertyListingCard({
@@ -39,13 +39,13 @@ function ViewPropertyListingCard({
 	openUpdatePLFunc,
 	displayUpdatePLPageFunc,
 	is_shortlisted,
-
 }) {
 	const SGDollar = new Intl.NumberFormat("en-US", {
 		style: "currency",
 		currency: "SGD",
 	});
 	const { token } = useContext(AuthContext);
+	const user = jwtDecode(token);
 	const navigate = useNavigate();
 	const [showAgentRatingModal, setShowAgentRatingModal] = useState(false);
 	const [showAgentReviewModal, setShowAgentReviewModal] = useState(false);
@@ -54,12 +54,11 @@ function ViewPropertyListingCard({
 	const rate = (agent_email) => {
 		setShowAgentRatingModal(true);
 		console.log(agent_email);
-	}
+	};
 
 	const promptRating = () => {
 		return (
 			<>
-				{/* {console.log(agent)} */}
 				<RateAgentModal
 					email={agent.email}
 					first_name={agent.first_name}
@@ -69,12 +68,11 @@ function ViewPropertyListingCard({
 				/>
 			</>
 		);
-	}
+	};
 
 	const review = (agent_email) => {
 		setShowAgentReviewModal(true);
-		
-	}
+	};
 
 	const promptReview = () => {
 		return (
@@ -87,64 +85,74 @@ function ViewPropertyListingCard({
 					setState={setShowAgentReviewModal}
 				/>
 			</>
-		)
-	}
+		);
+	};
 
 	const shortlist = () => {
-		axios.post("/api/shortlist/shortlist_property",
-		{
-			propertyId : id,
-		},
-		{
-			headers: {
-				Authorization: `Bearer ${token}`,
-			}
-		}
-		)
-		.then((res) => {
-			if (res.data.success === true){
-				setShortlisted(true);
-			}
-		})
-		.catch((err) => {
-			console.log(err);
-			navigate("/")
-		});
-	}
+		axios
+			.post(
+				"/api/shortlist/shortlist_property",
+				{
+					propertyId: id,
+				},
+				{
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+				}
+			)
+			.then((res) => {
+				if (res.data.success === true) {
+					setShortlisted(true);
+				}
+			})
+			.catch((err) => {
+				console.log(err);
+				navigate("/");
+			});
+	};
 
 	const clickRemoveIcon = () => {
 		setConfirmationOpen(true);
-	}
+	};
 
 	const clickYes = () => {
-		axios.delete("/api/shortlist/remove_shortlist_property", {
-			headers: {
-				Authorization: `Bearer ${token}`,
-			},
-			data: {
-				propertyId: id
-			}
-		})
-	.then((res) => {
-		if (res.data.success === true){
-			setShortlisted(false);
-			setConfirmationOpen(false);
-		}
-	})
-	.catch((err) => {
-		console.log(err);
-		navigate("/");
-	})
-	}
+		axios
+			.delete("/api/shortlist/remove_shortlist_property", {
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+				data: {
+					propertyId: id,
+				},
+			})
+			.then((res) => {
+				if (res.data.success === true) {
+					setShortlisted(false);
+					setConfirmationOpen(false);
+				}
+			})
+			.catch((err) => {
+				console.log(err);
+				navigate("/");
+			});
+	};
 
 	return (
 		<>
-			<ConfirmationModal state={confirmationOpen} setState={setConfirmationOpen} action={clickYes}>
+			<ConfirmationModal
+				state={confirmationOpen}
+				setState={setConfirmationOpen}
+				action={clickYes}
+			>
 				Are you sure to remove this shortlist?
 			</ConfirmationModal>
 			{showAgentRatingModal && promptRating()}
 			{showAgentReviewModal && promptReview()}
-			{displayUpdatePLPageFunc(showUpdateModalState, setShowUpdateModalState)}
+			{displayUpdatePLPageFunc(
+				showUpdateModalState,
+				setShowUpdateModalState
+			)}
 			<Card className={`w-5/6 2xl:w-10/12 mx-auto bg-gray-100`}>
 				{is_sold && (
 					<div className="flex w-full h-full justify-center items-center bg-custom_purple2 text-white font-bold rounded-lg">
@@ -152,8 +160,9 @@ function ViewPropertyListingCard({
 					</div>
 				)}
 				<div
-					className={`flex flex-col lg:flex-row justify-between gap-12 ${is_sold && "text-gray-400"
-						}`}
+					className={`flex flex-col lg:flex-row justify-between gap-12 ${
+						is_sold && "text-gray-400"
+					}`}
 				>
 					<img src={image_url} className="lg:w-1/2 rounded shadow" />
 
@@ -185,8 +194,9 @@ function ViewPropertyListingCard({
 
 								<div className="flex flex-row gap-2">
 									<span
-										className={`px-4 py-1 ${is_sold ? "bg-gray-400" : "bg-custom_purple2"
-											} text-white text-xs rounded-full mb-2 mt`}
+										className={`px-4 py-1 ${
+											is_sold ? "bg-gray-400" : "bg-custom_purple2"
+										} text-white text-xs rounded-full mb-2 mt`}
 									>
 										{type}
 									</span>
@@ -203,10 +213,15 @@ function ViewPropertyListingCard({
 								<h1 className="text-4xl font-semibold">
 									{SGDollar.format(price)}
 								</h1>
-								{shortListed ?
-									<FaHeart size={42} color="red" onClick={clickRemoveIcon}/> :
-									<CiHeart size={42} onClick={shortlist}/>
-								}
+								{user.has_buying_permission ? shortListed ? (
+									<FaHeart
+										size={42}
+										color="red"
+										onClick={clickRemoveIcon}
+									/>
+								) : (
+									<CiHeart size={42} onClick={shortlist} />
+								):<></>}
 							</section>
 							{/* Logo - More Information */}
 						</header>
@@ -269,26 +284,33 @@ function ViewPropertyListingCard({
 											value={agent.email}
 										/>
 									</section>
-									<section className="flex flex-row justify-around">
-										<Button
-											color="purple"
-											className="bg-custom_purple1 w-2/5"
-											onClick={() => rate(agent.email)}
-										>Rate</Button>
-										<Button
-											color="purple"
-											className="bg-custom_purple1 w-2/5"
-											onClick={()=> review(agent.email)}
-										>Review</Button>
-									</section>
+									{user.has_buying_permission && (
+										<section className="flex flex-row justify-around">
+											<Button
+												color="purple"
+												className="bg-custom_purple1 w-2/5"
+												onClick={() => rate(agent.email)}
+											>
+												Rate
+											</Button>
+											<Button
+												color="purple"
+												className="bg-custom_purple1 w-2/5"
+												onClick={() => review(agent.email)}
+											>
+												Review
+											</Button>
+										</section>
+									)}
 								</div>
 							</a>
 						</div>
 					</div>
 				</div>
 				<div
-					className={`flex flex-col p-6 bg-white border border-gray-200 rounded-lg shadow justify-between gap-1 mt-2 ${is_sold && "text-gray-400"
-						}`}
+					className={`flex flex-col p-6 bg-white border border-gray-200 rounded-lg shadow justify-between gap-1 mt-2 ${
+						is_sold && "text-gray-400"
+					}`}
 				>
 					<h3 className="text-2xl font-bold tracking-tight">
 						About This Property
