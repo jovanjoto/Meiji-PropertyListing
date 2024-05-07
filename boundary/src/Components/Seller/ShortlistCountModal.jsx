@@ -23,17 +23,6 @@ function ShortlistCountModal({ state, setState, dataset }) { // MAKE SURE TO PUT
   const [selectedChart, setSelectedChart] = useState("Bar");
 
   // * Chart Stuff * //
-  dataset = { // Example dataset
-    labels: [
-      "Mar 2021",
-      "Apr 2021",
-      "May 2021",
-      "Jun 2021",
-      "Jul 2021",
-      "Aug 2021",
-    ],
-    data: [100, 200, 300, 400, 500, 600],
-  };
 
   let bool =
     dataset.labels.length === dataset.data.length && dataset.labels.length > 0;
