@@ -1,10 +1,10 @@
 from flask import Blueprint, request
 from flask.views import View
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt
 from base64 import encodebytes # type: ignore
 from PIL import Image
 import io
-from app.entity import PropertyListing, User, Views
+from app.entity import PropertyListing, User, Views, Shortlist
 
 class ViewBuyerPropertyListingController(Blueprint):
 	def __init__(self, *args, **kwargs):
@@ -14,6 +14,7 @@ class ViewBuyerPropertyListingController(Blueprint):
 	@jwt_required()
 	def viewPL(self) -> dict[str, dict[str,str] | bool | str]:
 		id = request.args["id"]
+		email = get_jwt()["email"]
 		pl = PropertyListing.queryPL(id)
 		if not pl: 
 			return {"success": False, "message": "Property Listing not found."}
@@ -21,6 +22,8 @@ class ViewBuyerPropertyListingController(Blueprint):
 		agent = User.queryUserAccount(pl.agent_email)
 		if not agent:
 			return {"success": False, "message": "Property Listing's agent not found."}
+
+		is_shortlisted = Shortlist.checkIfShortlisted(pl, email)
 
 		# Increment views
 		increment_success = Views.incrementViews(id)
@@ -46,6 +49,7 @@ class ViewBuyerPropertyListingController(Blueprint):
 			"area" : pl.area,
 			"image_url" : 'data:image/png;base64,' + encoded_img,
 			"listing_date" : pl.listing_date.strftime("%Y-%m-%d"),
+			"is_shortlisted": is_shortlisted,
 			"is_sold" : pl.is_sold,
 			"seller_email" : pl.seller_email,
 			"transaction_date" : pl.transaction_date.strftime("%Y-%m-%d") if pl.is_sold else None,
