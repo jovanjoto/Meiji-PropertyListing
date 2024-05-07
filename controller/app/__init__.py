@@ -11,7 +11,8 @@ from .controller.authentication import jwt, bcrypt, mail, login_controller, rese
 from .controller.property_listing import *
 from .controller.shortlist import *
 from .controller.views import *
-# from .controller.rating import view_rating_controller
+from .controller.rating import view_rating_controller, rate_agent_controller
+from .controller.review import view_review_controller, review_agent_controller
 
 # Initialize Flask App
 flask_app = Flask(__name__)
@@ -92,4 +93,9 @@ flask_app.register_blueprint(count_shortlist_controller, url_prefix='/api/shortl
 flask_app.register_blueprint(count_views_controller, url_prefix='/api/views')
 
 # Ratings
-# flask_app.register_blueprint(view_rating_controller, url_prefix='/api/rating')
+flask_app.register_blueprint(view_rating_controller, url_prefix='/api/rating')
+flask_app.register_blueprint(rate_agent_controller, url_prefix='/api/rating')
+
+# Reviews
+flask_app.register_blueprint(view_review_controller, url_prefix='/api/review')
+flask_app.register_blueprint(review_agent_controller, url_prefix='/api/review')
