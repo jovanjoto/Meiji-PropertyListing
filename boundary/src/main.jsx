@@ -89,7 +89,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           element={
             <PrivateRoute listing>
               <NavBar />
-							<ViewRatingsPage />
+              <ViewRatingsPage />
             </PrivateRoute>
           }
         />
@@ -99,7 +99,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           element={
             <PrivateRoute listing>
               <NavBar />
-              <ViewReviewsPage/>
+              <ViewReviewsPage />
             </PrivateRoute>
           }
         />
@@ -137,7 +137,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           path="/test"
           element={
             <>
-              <TestPage/>
+              <TestPage />
             </>
           }
         />
