@@ -1,7 +1,6 @@
 # Libraries
-from flask import Blueprint, request
-from flask.views import View
-from flask_jwt_extended import jwt_required
+from flask import Blueprint
+from flask_jwt_extended import get_jwt, jwt_required
 
 # Local dependencies
 from app.entity import Rating, User
@@ -15,16 +14,17 @@ class ViewRatingController(Blueprint):
 	@permissions_required("has_listing_permission")
 	@jwt_required()
 	def viewAllREARating(self) -> dict[str,list[dict[str,float]]]:
-		email = request.args["email"]
+		email = get_jwt()["email"]
 		ratingData = []
 		for rating in Rating.queryAllREARating(email):
 			raterEmail = rating.raterEmail
 			user = User.queryUserAccount(raterEmail)
-			ratingData.append({
-				"rating": rating.rating,
-				"userFirstName": user.first_name,
-				"userLastName": user.last_name,
-				"userEmail": user.email,
-				"userPhone": user.phone
-			})
+			if user:
+				ratingData.append({
+					"rating": rating.rating,
+					"userFirstName": user.first_name,
+					"userLastName": user.last_name,
+					"userEmail": user.email,
+					"userPhone": user.phone
+				})
 		return {"ratings": ratingData}

@@ -1,10 +1,9 @@
 # Libraries
 from flask import Blueprint, request
-from flask.views import View
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt
 
 # Local dependencies
-from app.entity import Review, User
+from app.entity import Review
 from app.controller.authentication import permissions_required
 
 class ReviewAgentController(Blueprint):
@@ -16,8 +15,8 @@ class ReviewAgentController(Blueprint):
 	@jwt_required()
 	def reviewAgent(self) -> dict[str, bool]:
 		reviewInfo = request.get_json()
+		reviewer_email = get_jwt()["email"]
 		agent_email = reviewInfo.agent_email
-		reviewer_email = reviewInfo.reviewer_email
 		review = reviewInfo.review
 		successBool = Review.createReview(agent_email=agent_email, reviewer_email=reviewer_email, review=review)
 		return {"success": successBool}

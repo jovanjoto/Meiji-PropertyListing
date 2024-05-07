@@ -1,10 +1,9 @@
 # Libraries
 from flask import Blueprint, request
-from flask.views import View
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt
 
 # Local dependencies
-from app.entity import Rating, User
+from app.entity import Rating
 from app.controller.authentication import permissions_required
 
 class RateAgentController(Blueprint):
@@ -16,8 +15,8 @@ class RateAgentController(Blueprint):
 	@jwt_required()
 	def rateAgent(self) -> dict[str, bool]:
 		rateInfo = request.get_json()
+		rater_email = get_jwt()["email"]
 		agent_email = rateInfo.agent_email
-		rater_email = rateInfo.rater_email
 		rating = rateInfo.rating
 		successBool = Rating.createRating(agent_email=agent_email, rater_email=rater_email, rating=rating)
 		return {"success": successBool}
