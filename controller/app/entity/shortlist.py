@@ -28,7 +28,7 @@ class Shortlist(db.Model):
         return cls.query.filter_by(propertyListingId=propertyId).count()
 
     @classmethod
-    def createNewPropertyShortlist(cls, propertyId:str, buyerEmail:str) -> bool:
+    def createPropertyShortlist(cls, propertyId:str, buyerEmail:str) -> bool:
         """
         Creates a new Shortlist for new property by passing arguments:
         - propertyId:str,
@@ -39,15 +39,10 @@ class Shortlist(db.Model):
         propertyListing = PropertyListing.queryPL(propertyId)
         if not propertyListing:
             return False
-        # Property listing is already sold 
-        if propertyListing.is_sold:
-            return False
+
         # Buyer doesn't exist
         buyer = User.queryUserAccount(buyerEmail)
         if not buyer:
-            return False
-        # User is not a buyer
-        if buyer.profile != "Buyer":
             return False
         
         # Initialize new shortlist
@@ -58,39 +53,9 @@ class Shortlist(db.Model):
             db.session.commit()
         return True
     
-    @classmethod
-    def createSoldPropertyShortlist(cls, propertyId:str, buyerEmail:str) -> bool:
-        """
-        Creates a new Shortlist for sold property by passing arguments:
-        - propertyId:str,
-        - buyerEmail:str
-        returns bool.
-        """
-        # Property doesn't exist
-        propertyListing = PropertyListing.queryPL(propertyId)
-        if not propertyListing:
-            return False
-        # Property listing is not yet sold 
-        if propertyListing.is_sold == False:
-            return False
-        # Buyer doesn't exist
-        buyer = User.queryUserAccount(buyerEmail)
-        if not buyer:
-            return False
-        # User is not a buyer
-        if buyer.profile != "Buyer":
-            return False
-        
-        # Initialize new shortlist
-        soldShortlist = cls(propertyListingId=propertyId, userEmail=buyerEmail)
-        # Commit to DB
-        with current_app.app_context():
-            db.session.add(soldShortlist)
-            db.session.commit()
-        return True
     
     @classmethod
-    def removeShortlistNew(cls, propertyId:str, buyerEmail:str) -> bool:
+    def removeShortlist(cls, propertyId:str, buyerEmail:str) -> bool:
         """
         Creates a new Shortlist for new property by passing arguments:
         - propertyId:str,
@@ -101,26 +66,10 @@ class Shortlist(db.Model):
         shortlist = cls.query.filter_by(id=propertyId).one_or_none()
         if not shortlist:
             return False
+        
         # Delete shortlist
         with current_app.app_context():
             shortlist.delete()
             db.session.commit()
         return True
     
-    @classmethod
-    def removeShortlistSold(cls, propertyId:str, buyerEmail:str) -> bool:
-        """
-        Creates a new Shortlist for sold property by passing arguments:
-        - propertyId:str,
-        - buyerEmail:str
-        returns bool.
-        """
-        # Shortlist doesn't exist
-        shortlist = cls.query.filter_by(id=propertyId).one_or_none()
-        if not shortlist:
-            return False
-        # Delete shortlist
-        with current_app.app_context():
-            shortlist.delete()
-            db.session.commit()
-        return True

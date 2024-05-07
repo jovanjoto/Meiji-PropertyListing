@@ -20,109 +20,137 @@ import ResetPasswordPage from "./Pages/ResetPasswordPage.jsx";
 import PropertyListingManagementPage from "./Pages/PropertyListingManagementPage.jsx";
 import ViewPropertyListingPage from "./Pages/ViewPropertyListingPage.jsx";
 import PropertyListingMarketPage from "./Pages/PropertyListingMarketPage.jsx";
+import ViewRatingsPage from "./Pages/ViewRatingsPage.jsx";
+import ViewReviewsPage from "./Pages/ViewReviewsPage.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-	<AuthProvider>
-		<BrowserRouter>
-			<Routes>
-				{/* Unauthenticated Routes */}
-				<Route
-					path="/login"
-					element={
-						<UnauthenticatedRoute>
-							<LoginPage />
-						</UnauthenticatedRoute>
-					}
-				/>
-				<Route
-					path="/resetPassword"
-					element={
-						<UnauthenticatedRoute>
-							<ResetPasswordPage />
-						</UnauthenticatedRoute>
-					}
-				/>
-				{/* Admin Routes */}
-				<Route
-					path="/admin/viewAccounts"
-					element={
-						<PrivateRoute admin>
-							<NavBar />
-							<UserAccountManagementPage />
-						</PrivateRoute>
-					}
-				/>
-				<Route
-					path="/admin/viewProfiles"
-					element={
-						<PrivateRoute admin>
-							<NavBar />
-							<ProfileManagementPage />
-						</PrivateRoute>
-					}
-				/>
-				{/* Agent Routes */}
-				<Route
-					path="/agent/propertyListingManagementPage"
-					element={
-						<PrivateRoute listing>
-							<NavBar />
-							<PropertyListingManagementPage/>
-						</PrivateRoute>
-					}
-				/>
+  <AuthProvider>
+    <BrowserRouter>
+      <Routes>
+        {/* Unauthenticated Routes */}
+        <Route
+          path="/login"
+          element={
+            <UnauthenticatedRoute>
+              <LoginPage />
+            </UnauthenticatedRoute>
+          }
+        />
+        <Route
+          path="/resetPassword"
+          element={
+            <UnauthenticatedRoute>
+              <ResetPasswordPage />
+            </UnauthenticatedRoute>
+          }
+        />
+        {/* Admin Routes */}
+        <Route
+          path="/admin/viewAccounts"
+          element={
+            <PrivateRoute admin>
+              <NavBar />
+              <UserAccountManagementPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/admin/viewProfiles"
+          element={
+            <PrivateRoute admin>
+              <NavBar />
+              <ProfileManagementPage />
+            </PrivateRoute>
+          }
+        />
+        {/* Agent Routes */}
+        <Route
+          path="/agent/propertyListingManagementPage"
+          element={
+            <PrivateRoute listing>
+              <NavBar />
+              <PropertyListingManagementPage />
+            </PrivateRoute>
+          }
+        />
 
-				<Route 
-					path="/agent/viewPropertyListingPage/:id"
-					element={
-						<PrivateRoute listing>
-							<NavBar />
-							<ViewPropertyListingPage editable={true}/>
-						</PrivateRoute>
-					}
-				/>
-				{/* Buying Routes */}
-				<Route
-					path="/"
-					element={
-						<PrivateRoute buying>
-							<NavBar />
-							<PropertyListingMarketPage/>
-						</PrivateRoute>
-					}
-				/>
-				<Route 
-					path="/buyer/viewPropertyListingPage/:id"
-					element={
-						<PrivateRoute buying>
-							<NavBar />
-							<ViewPropertyListingPage editable={false}/>
-						</PrivateRoute>
-					}
-				/>
-				{/* Seller Routes */}
-				<Route
-					path="/seller"
-					element={
-						<PrivateRoute selling>
-							<NavBar />
-							You are a seller!
-						</PrivateRoute>
-					}
-				/>
-				{/* Others */}
-				<Route path="/test" element={<TestPage />} />
-				<Route path="/modalTest" element={<ModalTestPage />} />
-				<Route
-					path="/suspended"
-					element={
-						<PrivateRoute>
-							<NavBar />
-							<SuspendedPage />
-						</PrivateRoute>
-					}
-				/>
-			</Routes>
-		</BrowserRouter>
-	</AuthProvider>
+        <Route
+          path="/agent/viewPropertyListingPage/:id"
+          element={
+            <PrivateRoute listing>
+              <NavBar />
+              <ViewPropertyListingPage editable={true} />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/agent/viewCustomerRatingPage"
+          element={
+            <PrivateRoute listing>
+              <NavBar />
+							<ViewRatingsPage />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/agent/viewCustomerReviewPage"
+          element={
+            <PrivateRoute listing>
+              <NavBar />
+              <ViewReviewsPage/>
+            </PrivateRoute>
+          }
+        />
+        {/* Buying Routes */}
+        <Route
+          path="/"
+          element={
+            <PrivateRoute buying>
+              <NavBar />
+              <PropertyListingMarketPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/buyer/viewPropertyListingPage/:id"
+          element={
+            <PrivateRoute buying>
+              <NavBar />
+              <ViewPropertyListingPage editable={false} />
+            </PrivateRoute>
+          }
+        />
+        {/* Seller Routes */}
+        <Route
+          path="/seller"
+          element={
+            <PrivateRoute selling>
+              <NavBar />
+              You are a seller!
+            </PrivateRoute>
+          }
+        />
+        {/* Others */}
+        <Route
+          path="/test"
+          element={
+            <>
+              <TestPage/>
+            </>
+          }
+        />
+        <Route
+          path="/suspended"
+          element={
+            <PrivateRoute>
+              <NavBar />
+              <SuspendedPage />
+            </PrivateRoute>
+          }
+        />
+      </Routes>
+    </BrowserRouter>
+  </AuthProvider>
 );

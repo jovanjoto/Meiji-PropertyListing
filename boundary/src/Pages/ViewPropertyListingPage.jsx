@@ -77,9 +77,6 @@ export default function ViewPropertyListingPage() {
 			/>
 		);
 	}
-
-	
-
 	
 
 	const displayPL = (data) => {
@@ -110,13 +107,13 @@ export default function ViewPropertyListingPage() {
 		);
 	};
 
-	if (isLoading || !property) {
-		return displayLoading();
-	}
+  if (isLoading || !property) {
+    return displayLoading();
+  }
 
-	return (
-		<div className="my-24 justify-center items-center align-middle">
-			{displayPL(property)}
-		</div>
-	);
+  return (
+    <div className="my-24 justify-center items-center align-middle">
+      {displayPL(property)}
+    </div>
+  );
 }
