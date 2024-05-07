@@ -10,59 +10,36 @@ import {
 
 import { AuthContext } from "../Components/Authentication/AuthContext";
 import CustomerRatingCard from "../Components/Agent/CustomerReviewCard";
+import axios from 'axios';
 
-function ViewReviewsPage({}) {
-  const customer = {
-    firstName: "John",
-    lastName: "Doe",
-    email: "johndoe@mail.com",
-    phone_num: "12345678",
-    review:
-      "Mike was amazing! He found us the perfect home and made everything easy. Highly recommend him!",
-  };
+function ViewReviewsPage({ agentEmail }) {
 
-  const reviews = [
-    {
-      firstName: "John",
-      lastName: "Doe",
-      email: "johndoe1@mail.com",
-      phone_num: "123456789",
-      review: "Great service! I'm very satisfied with my purchase."
-    },
-    {
-      firstName: "Jane",
-      lastName: "Doe",
-      email: "janedoe2@mail.com",
-      phone_num: "123456790",
-      review: "The property was in excellent condition. Highly recommend!"
-    },
-    {
-      firstName: "Bob",
-      lastName: "Smith",
-      email: "bobsmith3@mail.com",
-      phone_num: "123456791",
-      review: "The agent was very helpful and responsive."
-    },
-    {
-      firstName: "Alice",
-      lastName: "Johnson",
-      email: "alicejohnson4@mail.com",
-      phone_num: "123456792",
-      review: "Smooth transaction and quick response time."
-    },
-    {
-      firstName: "Charlie",
-      lastName: "Brown",
-      email: "charliebrown5@mail.com",
-      phone_num: "123456793",
-      review: "Very professional and easy to work with."
-    }
-  ];
+  const { token } = useContext(AuthContext);
+  const [customerReviews, setCustomerReviews] = useState([]);
+
+  useEffect(() => {
+
+		axios
+			.get("/api/review/view_reviews", {
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			})
+			.then((response) => {
+				// console.log("response : ", response.data);
+        setCustomerReviews(response.data.reviews);
+			})
+			.catch((error) => {
+				console.error("error : ", error);
+			});
+	}, []);
+
+
 
   return (
     <>
       <div className="flex flex-col gap-7">
-      {reviews.map((review) => (
+      {customerReviews.map((review) => (
         <CustomerRatingCard
           firstName={review.firstName}
           lastName={review.lastName}
