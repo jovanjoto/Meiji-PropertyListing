@@ -2,8 +2,9 @@ import { Card, Button } from "flowbite-react";
 
 import { GoDotFill } from "react-icons/go";
 import { LuBath } from "react-icons/lu";
-import { FaBed } from "react-icons/fa";
+import { FaBed, FaHeart } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { CiHeart } from "react-icons/ci";
 
 export default function BuyerPropertyListingCard({
 	name,
@@ -17,6 +18,7 @@ export default function BuyerPropertyListingCard({
 	area,
 	is_sold,
 	image_url,
+	is_shortlisted,
 }) {
 	const navigate = useNavigate();
 	const redirectToPage = (id) => {
@@ -31,7 +33,6 @@ export default function BuyerPropertyListingCard({
 	return (
 		<Card
 			className="max-w-sm"
-			size
 			imgAlt="Meaningful alt text for an image that is not purely decorative"
 			imgSrc={image_url}
 			onClick={() => redirectToPage(id)}
@@ -59,23 +60,30 @@ export default function BuyerPropertyListingCard({
 				</div>
 				<span className="text-gray-500">{address}</span>
 				<span className="text-gray-500">{district}</span>
-				<div className="mt-1 flex flex-row gap-1">
-					<span
-						className={`px-4 py-1 w-fit ${
-							is_sold ? "bg-gray-400" : "bg-custom_purple2"
-						} text-white text-xs rounded-full`}
-					>
-						{property_type}
-					</span>
-					{is_sold && (
+				<div className="mt-1 flex flex-row gap-1 justify-between">
+					<div className="flex flex-row gap-1">
 						<span
-							className={
-								"px-4 py-1 w-fit bg-gray-400 text-white text-xs rounded-full"
-							}
+							className={`px-4 py-1 w-fit ${
+								is_sold ? "bg-gray-400" : "bg-custom_purple2"
+							} text-white text-xs rounded-full`}
 						>
-							SOLD
+							{property_type}
 						</span>
-					)}
+						{is_sold && (
+							<span
+								className={
+									"px-4 py-1 w-fit bg-gray-400 text-white text-xs rounded-full"
+								}
+							>
+								SOLD
+							</span>
+						)}
+					</div>
+					{is_shortlisted ? 
+						<FaHeart size={24} color="red"/> :
+						<CiHeart size={24}/>
+					}
+					
 				</div>
 			</div>
 		</Card>

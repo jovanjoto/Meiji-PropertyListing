@@ -63,15 +63,15 @@ class Shortlist(db.Model):
 		returns bool.
 		"""
 		# Shortlist doesn't exist
-		shortlist = cls.query.filter_by(id=propertyId).one_or_none()
-		if not shortlist:
-			return False
-		
-		# Delete shortlist
 		with current_app.app_context():
-			shortlist.delete()
+			shortlist = cls.query.filter_by(propertyListingId=propertyId).one_or_none()
+			if not shortlist:
+				return False
+			
+			# Delete shortlist
+			cls.query.filter_by(propertyListingId=propertyId).delete()
 			db.session.commit()
-		return True
+			return True
 
 	@classmethod
 	def checkIfShortlisted(cls, listing:PropertyListing, email:str) -> bool:

@@ -22,10 +22,31 @@ export default function ViewPropertyListingPage() {
 	const [showAgentReviewModal, setShowAgentReviewModal] = useState(false);
 	const navigate = useNavigate();
 	const user = jwtDecode(token);
-	console.log(user.email);
 	useEffect(() => {
 		setIsLoading(true);
-		axios
+		if (user.has_buying_permission){
+			axios
+			.get(`/api/property_listing/view_buyer_property_listing?id=${id}`, {
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			})
+			.then((res) => {
+				if (res.data.success) {
+					setProperty(() => ({
+						...res.data.data,
+						editable: user.email === res.data.data.agent.email,
+					}));
+				} else {
+					navigate("/");
+				}
+			})
+			.catch((error) => {
+				navigate("/");
+			})
+			.then(() => setIsLoading(false));
+		} else {
+			axios
 			.get(`/api/property_listing/view_property_listing?id=${id}`, {
 				headers: {
 					Authorization: `Bearer ${token}`,
@@ -45,8 +66,9 @@ export default function ViewPropertyListingPage() {
 				navigate("/");
 			})
 			.then(() => setIsLoading(false));
+		}
+		
 	}, [id]);
-	console.log(property);
 	const displayLoading = () => {
 		return (
 			<div className="text-center text-8xl">
@@ -103,6 +125,7 @@ export default function ViewPropertyListingPage() {
 				setShowUpdateModalState={setShowUpdateModal}
 				openUpdatePLFunc={openUpdatePL}
 				displayUpdatePLPageFunc={displayUpdatePLPage}
+				is_shortlisted={property.is_shortlisted}
 			/>
 		);
 	};

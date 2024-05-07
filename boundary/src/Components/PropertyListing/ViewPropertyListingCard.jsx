@@ -6,10 +6,16 @@ import { MdOutlineKingBed } from "react-icons/md";
 import { PiBathtubBold, PiHouseLine } from "react-icons/pi";
 import { MdOutlineCropSquare } from "react-icons/md";
 import { GrLocationPin } from "react-icons/gr";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import UpdatePropertyModal from "../Agent/UpdatePropertyModal";
 import RateAgentModal from "./RateAgentModal";
 import ReviewAgentModal from "./ReviewAgentModal";
+import { CiHeart } from "react-icons/ci";
+import { FaHeart } from "react-icons/fa";
+import { AuthContext } from "../Authentication/AuthContext";
+import ConfirmationModal from "../ConfirmationModal";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function ViewPropertyListingCard({
 	id,
@@ -32,15 +38,19 @@ function ViewPropertyListingCard({
 	setShowUpdateModalState,
 	openUpdatePLFunc,
 	displayUpdatePLPageFunc,
+	is_shortlisted,
 
 }) {
 	const SGDollar = new Intl.NumberFormat("en-US", {
 		style: "currency",
 		currency: "SGD",
 	});
-
+	const { token } = useContext(AuthContext);
+	const navigate = useNavigate();
 	const [showAgentRatingModal, setShowAgentRatingModal] = useState(false);
 	const [showAgentReviewModal, setShowAgentReviewModal] = useState(false);
+	const [shortListed, setShortlisted] = useState(is_shortlisted);
+	const [confirmationOpen, setConfirmationOpen] = useState(false);
 	const rate = (agent_email) => {
 		setShowAgentRatingModal(true);
 		console.log(agent_email);
@@ -80,8 +90,58 @@ function ViewPropertyListingCard({
 		)
 	}
 
+	const shortlist = () => {
+		axios.post("/api/shortlist/shortlist_property",
+		{
+			propertyId : id,
+		},
+		{
+			headers: {
+				Authorization: `Bearer ${token}`,
+			}
+		}
+		)
+		.then((res) => {
+			if (res.data.success === true){
+				setShortlisted(true);
+			}
+		})
+		.catch((err) => {
+			console.log(err);
+			navigate("/")
+		});
+	}
+
+	const clickRemoveIcon = () => {
+		setConfirmationOpen(true);
+	}
+
+	const clickYes = () => {
+		axios.delete("/api/shortlist/remove_shortlist_property", {
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+			data: {
+				propertyId: id
+			}
+		})
+	.then((res) => {
+		if (res.data.success === true){
+			setShortlisted(false);
+			setConfirmationOpen(false);
+		}
+	})
+	.catch((err) => {
+		console.log(err);
+		navigate("/");
+	})
+	}
+
 	return (
 		<>
+			<ConfirmationModal state={confirmationOpen} setState={setConfirmationOpen} action={clickYes}>
+				Are you sure to remove this shortlist?
+			</ConfirmationModal>
 			{showAgentRatingModal && promptRating()}
 			{showAgentReviewModal && promptReview()}
 			{displayUpdatePLPageFunc(showUpdateModalState, setShowUpdateModalState)}
@@ -139,10 +199,14 @@ function ViewPropertyListingCard({
 
 						<header className="flex border-b border-black">
 							{/* Price */}
-							<section className="w-full border-black py-5">
+							<section className="w-full border-black py-5 flex flex-row justify-between">
 								<h1 className="text-4xl font-semibold">
 									{SGDollar.format(price)}
 								</h1>
+								{shortListed ?
+									<FaHeart size={42} color="red" onClick={clickRemoveIcon}/> :
+									<CiHeart size={42} onClick={shortlist}/>
+								}
 							</section>
 							{/* Logo - More Information */}
 						</header>
