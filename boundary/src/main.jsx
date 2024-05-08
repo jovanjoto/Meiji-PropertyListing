@@ -22,7 +22,7 @@ import ViewPropertyListingPage from "./Pages/ViewPropertyListingPage.jsx";
 import PropertyListingMarketPage from "./Pages/PropertyListingMarketPage.jsx";
 import ViewRatingsPage from "./Pages/ViewRatingsPage.jsx";
 import ViewReviewsPage from "./Pages/ViewReviewsPage.jsx";
-import SellerViewPropertyListingPage from "./Pages/SellerViewPropertyListingPage.jsx";
+import SellerPropertyListingPage from "./Pages/SellerPropertyListingPage.jsx";
 import AgentDashboardPage from "./Pages/AgentDashboardPage.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
@@ -129,7 +129,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           element={
             <PrivateRoute buying>
               <NavBar />
-              <ViewPropertyListingPage editable={false} />
+              <ViewPropertyListingPage />
             </PrivateRoute>
           }
         />
@@ -139,11 +139,21 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           element={
             <PrivateRoute selling>
               <NavBar />
-              <SellerViewPropertyListingPage />
+              <SellerPropertyListingPage />
             </PrivateRoute>
           }
         />
-        
+
+        <Route
+          path="/seller/viewPropertyListingPage/:id"
+          element={
+            <PrivateRoute selling>
+              <NavBar />
+              <ViewPropertyListingPage />
+            </PrivateRoute>
+          }
+         />
+
         {/* Others */}
         <Route
           path="/test"

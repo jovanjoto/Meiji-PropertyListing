@@ -38,7 +38,8 @@ export default function NavBar({}) {
 			"User Profile Management": "/admin/viewProfiles",
 		},
 		listing: {
-			"Property Listing": "/agent/propertyListingManagementPage"
+			"Property Listing": "/agent/propertyListingManagementPage",
+			"Dashboard": "/agent/dashboard"
 		},
 		buying: {
 			"Property Listing": "/"
