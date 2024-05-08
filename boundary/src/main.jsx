@@ -23,6 +23,7 @@ import PropertyListingMarketPage from "./Pages/PropertyListingMarketPage.jsx";
 import ViewRatingsPage from "./Pages/ViewRatingsPage.jsx";
 import ViewReviewsPage from "./Pages/ViewReviewsPage.jsx";
 import SellerPropertyListingPage from "./Pages/SellerPropertyListingPage.jsx";
+import AgentDashboardPage from "./Pages/AgentDashboardPage.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <AuthProvider>
@@ -104,6 +105,15 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             </PrivateRoute>
           }
         />
+        <Route
+          path="/agent/dashboard"
+          element={
+            <PrivateRoute listing>
+              <NavBar />
+              <AgentDashboardPage />
+            </PrivateRoute>
+          }
+        />
         {/* Buying Routes */}
         <Route
           path="/"
@@ -143,6 +153,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             </PrivateRoute>
           }
          />
+
         {/* Others */}
         <Route
           path="/test"
