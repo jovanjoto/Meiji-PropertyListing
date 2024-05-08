@@ -87,7 +87,7 @@ export default function SellerPropertyListingPage({ }) {
             if (!soldChecked) {
                 axios
                     .get(
-                        "/api/property_listing//search_owned_property_listings",
+                        "/api/property_listing/search_owned_property_listings",
                         {
                             headers: { Authorization: `Bearer ${token}` },
                         }

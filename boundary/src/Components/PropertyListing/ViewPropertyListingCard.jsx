@@ -17,9 +17,6 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 
-import ShortlistCountModal from "../Seller/ShortlistCountModal";
-import ViewCountModal from "../Seller/ViewCountModal";
-
 function ViewPropertyListingCard({
 	id,
 	price,
@@ -54,8 +51,6 @@ function ViewPropertyListingCard({
 	const [showAgentReviewModal, setShowAgentReviewModal] = useState(false);
 	const [shortListed, setShortlisted] = useState(is_shortlisted);
 	const [confirmationOpen, setConfirmationOpen] = useState(false);
-	const [showViewStatsModal, setShowViewStatsModal] = useState(false);
-	const [showShortlistsModal, setShowShortlistsModal] = useState(false);
 	const rate = (agent_email) => {
 		setShowAgentRatingModal(true);
 		console.log(agent_email);
@@ -74,14 +69,6 @@ function ViewPropertyListingCard({
 			</>
 		);
 	};
-
-	const viewViewsData = (propertyId) => {
-		setShowViewStatsModal(true);
-	}
-
-	const viewShortlistCount = (propertyId) => {
-		setShowShortlistsModal(true);
-	}
 
 	const review = (agent_email) => {
 		setShowAgentReviewModal(true);
@@ -153,18 +140,6 @@ function ViewPropertyListingCard({
 
 	return (
 		<>
-			<ViewCountModal
-				state={showViewStatsModal}
-				setState={setShowViewStatsModal}
-			>
-			</ViewCountModal>
-
-			<ShortlistCountModal
-				state={showShortlistsModal}
-				setState={setShowShortlistsModal}
-			>
-				
-			</ShortlistCountModal>
 			<ConfirmationModal
 				state={confirmationOpen}
 				setState={setConfirmationOpen}
@@ -185,8 +160,9 @@ function ViewPropertyListingCard({
 					</div>
 				)}
 				<div
-					className={`flex flex-col lg:flex-row justify-between gap-12 ${is_sold && "text-gray-400"
-						}`}
+					className={`flex flex-col lg:flex-row justify-between gap-12 ${
+						is_sold && "text-gray-400"
+					}`}
 				>
 					<img src={image_url} className="lg:w-1/2 rounded shadow" />
 
@@ -218,15 +194,15 @@ function ViewPropertyListingCard({
 
 								<div className="flex flex-row gap-2">
 									<span
-										className={`px-4 py-1 ${is_sold ? "bg-gray-400" : "bg-custom_purple2"
-											} text-white text-xs rounded-full mb-2 mt`}
+										className={`px-4 py-1 ${
+											is_sold ? "bg-gray-400" : "bg-custom_purple2"
+										} text-white text-xs rounded-full mb-2 mt`}
 									>
 										{type}
 									</span>
 									<span className="text-custom_purple3">
 										Listed on {listing_date}
 									</span>
-
 								</div>
 							</section>
 						</header>
@@ -234,33 +210,9 @@ function ViewPropertyListingCard({
 						<header className="flex border-b border-black">
 							{/* Price */}
 							<section className="w-full border-black py-5 flex flex-row justify-between">
-								<div
-									className="flex flex-col"
-								>
-									<h1 className="text-4xl font-semibold">
-										{SGDollar.format(price)}
-									</h1>
-									{user.has_selling_permission &&
-										<div className="flex flex-row">
-											<Button
-												value={id}
-												className="mx-1 bg-custom_purple1 my-2"
-												color="purple"
-												onClick={(event) => viewShortlistCount(event.target.value)}
-											>Shortlists
-											</Button>
-											<Button
-												value={id}
-												className="mx-1 bg-custom_purple1 my-2"
-												color="purple"
-												onClick={(event) => viewViewsData(event.target.value)}
-											>Views
-											</Button>
-										</div>
-									}
-
-								</div>
-
+								<h1 className="text-4xl font-semibold">
+									{SGDollar.format(price)}
+								</h1>
 								{user.has_buying_permission ? shortListed ? (
 									<FaHeart
 										size={42}
@@ -269,7 +221,7 @@ function ViewPropertyListingCard({
 									/>
 								) : (
 									<CiHeart size={42} onClick={shortlist} />
-								) : <></>}
+								):<></>}
 							</section>
 							{/* Logo - More Information */}
 						</header>
@@ -332,7 +284,7 @@ function ViewPropertyListingCard({
 											value={agent.email}
 										/>
 									</section>
-									{(user.has_buying_permission || user.has_selling_permission) && (
+									{user.has_buying_permission && (
 										<section className="flex flex-row justify-around">
 											<Button
 												color="purple"
@@ -356,8 +308,9 @@ function ViewPropertyListingCard({
 					</div>
 				</div>
 				<div
-					className={`flex flex-col p-6 bg-white border border-gray-200 rounded-lg shadow justify-between gap-1 mt-2 ${is_sold && "text-gray-400"
-						}`}
+					className={`flex flex-col p-6 bg-white border border-gray-200 rounded-lg shadow justify-between gap-1 mt-2 ${
+						is_sold && "text-gray-400"
+					}`}
 				>
 					<h3 className="text-2xl font-bold tracking-tight">
 						About This Property
