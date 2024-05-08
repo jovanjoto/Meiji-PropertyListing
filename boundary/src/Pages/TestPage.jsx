@@ -1,11 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect, useContext } from "react";
 import UpdatePropertyModal from "../Components/Agent/UpdatePropertyModal";
 import { Button } from "flowbite-react";
 import ViewCountModal from "../Components/Seller/ViewCountModal";
 import ShortlistCountModal from '../Components/Seller/ShortlistCountModal';
+import { AuthContext } from "../Components/Authentication/AuthContext";
 
 import BuyerPropertyListingCard from "../Components/Buyer/BuyerPropertyListingCard";
 import SellerPropertyListingCard from '../Components/Seller/SellerPropertyListingCard';
+import axios from 'axios';
 
 import { useNavigate } from "react-router-dom";
 ;
@@ -14,6 +16,8 @@ function TestPage({}) {
 
 	const [showViewCountModal, setViewCountModal] = useState(false);
 	const [showShortlistCountModal, setShortlistCountModal] = useState(false);
+
+	const { token } = useContext(AuthContext);
 
 	const [viewCountDataset, setViewCountDataset] = useState({});
 	const [shortlistCountDataset, setShortlistCountDataset] = useState({});
@@ -25,6 +29,23 @@ function TestPage({}) {
 
 		//axios call to get view count
 		// setViewCountDataset(response.data)
+		axios.get("/api/views/find_property_views",
+			{
+				params : {
+					'propertyID' : `${property_id}`
+				},
+				headers: {
+					'Authorization': `Bearer ${token}`
+				}
+			}
+
+		).then((response) => {
+			console.log(response.data)
+			setViewCountDataset(response.data)
+		}
+		).catch((error) => {
+			console.log(error)
+		})
 	}
 
 	const handleShortlistCountModal = (property_id) => {	
