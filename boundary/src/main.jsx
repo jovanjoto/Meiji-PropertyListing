@@ -22,6 +22,7 @@ import ViewPropertyListingPage from "./Pages/ViewPropertyListingPage.jsx";
 import PropertyListingMarketPage from "./Pages/PropertyListingMarketPage.jsx";
 import ViewRatingsPage from "./Pages/ViewRatingsPage.jsx";
 import ViewReviewsPage from "./Pages/ViewReviewsPage.jsx";
+import SellerViewPropertyListingPage from "./Pages/SellerViewPropertyListingPage.jsx";
 import AgentDashboardPage from "./Pages/AgentDashboardPage.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
@@ -138,10 +139,11 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           element={
             <PrivateRoute selling>
               <NavBar />
-              You are a seller!
+              <SellerViewPropertyListingPage />
             </PrivateRoute>
           }
         />
+        
         {/* Others */}
         <Route
           path="/test"
