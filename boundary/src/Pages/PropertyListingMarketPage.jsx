@@ -127,8 +127,6 @@ export default function PropertyListingMarketPage({}) {
 		}
 	}, [soldChecked]);
 
-	const propertyType = ["all", "HDB", "CONDO", "LANDED"];
-
 	const displayLoading = () => {
 		return (
 			<div className="text-center text-8xl">

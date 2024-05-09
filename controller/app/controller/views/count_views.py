@@ -12,7 +12,7 @@ class CountViewsController(Blueprint):
 		super().__init__(*args, **kwargs)
 		self.add_url_rule("/find_property_views", view_func=self.findPropertyViews, methods=["GET"])
 		
-	@permissions_required("has_seller_permission")
+	@permissions_required("has_selling_permission")
 	@jwt_required()
 	def findPropertyViews(self) -> dict[str,list[dict[str,int]]]:
 		propertyId = request.args["propertyId"]
