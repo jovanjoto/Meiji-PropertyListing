@@ -11,9 +11,6 @@ import { FaSearch } from "react-icons/fa";
 import { BsArrowDownShort } from "react-icons/bs";
 import axios from "axios";
 import { AuthContext } from "../Components/Authentication/AuthContext";
-
-import PropertyListingCard from "../Components/Agent/PropertyListingCard";
-import CreateNewPropertyModal from "../Components/Agent/CreateNewPropertyModal";
 import SellerPropertyListingCard from "../Components/Seller/SellerPropertyListingCard";
 
 export default function SellerPropertyListingPage({ }) {
@@ -113,8 +110,7 @@ export default function SellerPropertyListingPage({ }) {
         }
     }, [soldChecked]);
 
-    const propertyType = ["all", "HDB", "CONDO", "LANDED"];
-
+	console.log(propertyList)
     const displayLoading = () => {
         return (
             <div className="text-center text-8xl">
@@ -165,13 +161,13 @@ export default function SellerPropertyListingPage({ }) {
                         area={propertyJson.area}
                         is_sold={propertyJson.is_sold}
                         image_url={propertyJson.image_url}
-                        is_shortlisted={propertyJson.is_shortlisted}
                     />
                 );
             }
         });
         return filtered_list;
     };
+
     const displayList = () => {
         return searchFilter();
     };

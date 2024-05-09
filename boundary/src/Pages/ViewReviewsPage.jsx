@@ -1,24 +1,22 @@
 import { useContext, useEffect, useState } from "react";
 import {
-  TextInput,
-  Button,
-  Spinner,
-  Dropdown,
-  Label,
-  Checkbox,
+	TextInput,
+	Button,
+	Spinner,
+	Dropdown,
+	Label,
+	Checkbox,
 } from "flowbite-react";
 
 import { AuthContext } from "../Components/Authentication/AuthContext";
 import CustomerRatingCard from "../Components/Agent/CustomerReviewCard";
-import axios from 'axios';
+import axios from "axios";
 
 function ViewReviewsPage({ agentEmail }) {
+	const { token } = useContext(AuthContext);
+	const [customerReviews, setCustomerReviews] = useState([]);
 
-  const { token } = useContext(AuthContext);
-  const [customerReviews, setCustomerReviews] = useState([]);
-
-  useEffect(() => {
-
+	useEffect(() => {
 		axios
 			.get("/api/review/view_reviews", {
 				headers: {
@@ -34,10 +32,8 @@ function ViewReviewsPage({ agentEmail }) {
 			});
 	}, []);
 
-
   return (
     <>
-    {console.log("cust reviews : ", customerReviews)}
       <div className="flex flex-col gap-7">
       {customerReviews.map((review) => (
         <CustomerRatingCard
