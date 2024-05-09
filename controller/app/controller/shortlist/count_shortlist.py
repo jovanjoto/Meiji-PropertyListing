@@ -11,7 +11,7 @@ class CountShortlistController(Blueprint):
 		super().__init__(*args, **kwargs)
 		self.add_url_rule("/count_shortlist", view_func=self.countPropertyShortlists, methods=["GET"])
 		
-	@permissions_required("has_seller_permission")
+	@permissions_required("has_selling_permission")
 	@jwt_required()
 	def countPropertyShortlists(self) -> dict[str,int]:
 		propertyId = request.args["propertyId"]
