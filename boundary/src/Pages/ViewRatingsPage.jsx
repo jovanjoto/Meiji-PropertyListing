@@ -31,11 +31,11 @@ import axios from 'axios';
       <div className="flex flex-col gap-5">
         {customerRatings.map((rating) => (
           <CustomerRatingCard
-            firstName={rating.firstName}
-            lastName={rating.lastName}
-            email={rating.email}
-            phone_num={rating.phone_num}
-            rate={rating.rate}
+            firstName={rating.userFirstName}
+            lastName={rating.userLastName}
+            email={rating.userEmail}
+            phone_num={rating.userPhone}
+            rate={rating.rating}
           />
         ))}
       </div>
