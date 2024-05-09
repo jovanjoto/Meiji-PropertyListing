@@ -28,7 +28,7 @@ function LoginCard() {
 			if (user.has_admin_permission) {
 				return navigate("/admin/viewaccounts");
 			} else if (user.has_listing_permission) {
-				return navigate("/agent/propertyListingManagementPage");
+				return navigate("/agent");
 			} else if (user.has_selling_permission) {
 				return navigate("/seller");
 			} else if (user.has_selling_permission) {

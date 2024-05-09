@@ -106,7 +106,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           }
         />
         <Route
-          path="/agent/dashboard"
+          path="/agent"
           element={
             <PrivateRoute listing>
               <NavBar />

@@ -38,8 +38,8 @@ export default function NavBar({}) {
 			"User Profile Management": "/admin/viewProfiles",
 		},
 		listing: {
+			"Dashboard": "/agent",
 			"Property Listing": "/agent/propertyListingManagementPage",
-			"Dashboard": "/agent/dashboard",
 			"Ratings": "/agent/viewCustomerRatingPage",
 			"Reviews": "/agent/viewCustomerReviewPage"
 		},
@@ -47,7 +47,7 @@ export default function NavBar({}) {
 			"Property Listing": "/"
 		},
 		selling: {
-			"Property Listing": "/seller/viewPropertyListing"
+			"Property Listing": "/seller"
 		},
 	};
 
