@@ -26,7 +26,7 @@ function ViewReviewsPage({ agentEmail }) {
 				},
 			})
 			.then((response) => {
-				// console.log("response : ", response.data);
+				// console.log("response : ", response.data.reviews);
         setCustomerReviews(response.data.reviews);
 			})
 			.catch((error) => {
@@ -37,13 +37,14 @@ function ViewReviewsPage({ agentEmail }) {
 
   return (
     <>
+    {console.log("cust reviews : ", customerReviews)}
       <div className="flex flex-col gap-7">
       {customerReviews.map((review) => (
         <CustomerRatingCard
-          firstName={review.firstName}
-          lastName={review.lastName}
-          email={review.email}
-          phone_num={review.phone_num}
+          firstName={review.userFirstName}
+          lastName={review.userLastName}
+          email={review.userEmail}
+          phone_num={review.userPhone}
           review={review.review}
         />
       ))}
