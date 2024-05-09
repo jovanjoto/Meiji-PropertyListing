@@ -8,6 +8,7 @@ import { CiHeart } from "react-icons/ci";
 import ShortlistCountModal from "./ShortlistCountModal";
 import { useState } from "react";
 import ViewCountModal from "./ViewCountModal";
+import NumShortlistModal from "./NumShortlistModal";
 
 function SellerPropertyListingCard({
 	name,
@@ -37,7 +38,12 @@ function SellerPropertyListingCard({
 	return (
 		<>
 			<ViewCountModal state={showViews} setState={setShowViews} id={id} />
-			{/* <ShortlistCountModal state /> */}
+			<NumShortlistModal
+				state={showShortlist}
+				setState={setShowShortlist}
+				propertyName={name}
+				propertyId={id}
+			/>
 			<Card
 				className="max-w-sm"
 				imgAlt="Meaningful alt text for an image that is not purely decorative"
@@ -104,7 +110,11 @@ function SellerPropertyListingCard({
 							>
 								Views Stats
 							</Button>
-							<Button color="purple" className="bg-custom_purple1 w-1/2">
+							<Button
+								color="purple"
+								className="bg-custom_purple1 w-1/2"
+								onClick={() => setShowShortlist(true)}
+							>
 								Shortlist Count
 							</Button>
 						</div>
