@@ -39,7 +39,9 @@ export default function NavBar({}) {
 		},
 		listing: {
 			"Property Listing": "/agent/propertyListingManagementPage",
-			"Dashboard": "/agent/dashboard"
+			"Dashboard": "/agent/dashboard",
+			"Ratings": "/agent/viewCustomerRatingPage",
+			"Reviews": "/agent/viewCustomerReviewPage"
 		},
 		buying: {
 			"Property Listing": "/"

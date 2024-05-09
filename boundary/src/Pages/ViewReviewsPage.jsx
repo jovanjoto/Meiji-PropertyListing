@@ -24,29 +24,29 @@ function ViewReviewsPage({ agentEmail }) {
 				},
 			})
 			.then((response) => {
-				// console.log("response : ", response.data);
-				setCustomerReviews(response.data.reviews);
+				// console.log("response : ", response.data.reviews);
+        setCustomerReviews(response.data.reviews);
 			})
 			.catch((error) => {
 				console.error("error : ", error);
 			});
 	}, []);
 
-	return (
-		<>
-			<div className="flex flex-col gap-7">
-				{customerReviews.map((review) => (
-					<CustomerRatingCard
-						firstName={review.firstName}
-						lastName={review.lastName}
-						email={review.email}
-						phone_num={review.phone_num}
-						review={review.review}
-					/>
-				))}
-			</div>
-		</>
-	);
+  return (
+    <>
+      <div className="flex flex-col gap-7">
+      {customerReviews.map((review) => (
+        <CustomerRatingCard
+          firstName={review.userFirstName}
+          lastName={review.userLastName}
+          email={review.userEmail}
+          phone_num={review.userPhone}
+          review={review.review}
+        />
+      ))}
+      </div>
+    </>
+  );
 }
 
 export default ViewReviewsPage;
