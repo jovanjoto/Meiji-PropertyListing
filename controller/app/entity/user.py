@@ -177,4 +177,9 @@ class User(db.Model):
 		Queries all REA:
 		returns an list of User instance (that are REA).
 		"""
-		return cls.query.filter_by(profile="Real Estate Agent").all()
+		agents = []
+		profiles = UserProfile.query.filter_by(has_listing_permission=True).all()
+		for profile in profiles:
+			for agent in cls.query.filter_by(profile=profile.name).all():
+				agents.append(agent)
+		return agents
