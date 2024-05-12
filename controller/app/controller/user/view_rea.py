@@ -13,8 +13,8 @@ class ViewREAController(Blueprint):
         self.add_url_rule("/view_rea", view_func=self.viewREA, methods=["GET"])
 
     @permissions_required("has_buying_permission", "has_selling_permission")
-    @jwt_required()
-    def viewREA(self) -> dict[str, dict[str, str] | bool]:
+    # @jwt_required()
+    def viewREA(self) -> dict[str, dict[str, str | None | bool]]:
         email:str = request.args["email"]
         user = User.queryUserAccount(email=email)
         ratings_list = []
@@ -72,6 +72,6 @@ class ViewREAController(Blueprint):
             "reviews": reviews_list,
             "properties": listings_list
         }
-        
+
         return {"success": True, "results": results}
     
