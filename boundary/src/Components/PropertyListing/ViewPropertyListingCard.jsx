@@ -284,7 +284,7 @@ function ViewPropertyListingCard({
 											value={agent.email}
 										/>
 									</section>
-									{user.has_buying_permission && (
+									{(user.has_buying_permission || user.has_selling_permission) && (
 										<section className="flex flex-row justify-around">
 											<Button
 												color="purple"
