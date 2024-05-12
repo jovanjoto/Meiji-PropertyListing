@@ -8,8 +8,8 @@ class CalculateMortgageController(Blueprint):
 		super().__init__(*args, **kwargs)
 		self.add_url_rule("/calculate_mortgage", view_func=self.calculate_mortgage, methods=["GET"])
 
-	# @permissions_required("has_buying_permission")
-	# @jwt_required()
+	@permissions_required("has_buying_permission")
+	@jwt_required()
 	def calculate_mortgage(self) -> dict[str, str | bool | dict[str, float]]:
 		json = request.get_json()
 		pl = PropertyListing.queryPL(json["propId"])
