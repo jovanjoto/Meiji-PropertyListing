@@ -83,6 +83,7 @@ flask_app.register_blueprint(search_new_pl_controller, url_prefix='/api/property
 flask_app.register_blueprint(search_sold_pl_controller, url_prefix='/api/property_listing')
 flask_app.register_blueprint(search_owned_pl_controller, url_prefix='/api/property_listing')
 flask_app.register_blueprint(view_stats_controller, url_prefix='/api/property_listing')
+flask_app.register_blueprint(calculate_mortgage_controller, url_prefix='/api/property_listing')
 
 # Shortlist
 flask_app.register_blueprint(shortlist_property_controller, url_prefix='/api/shortlist')
