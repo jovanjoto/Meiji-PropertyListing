@@ -66,3 +66,12 @@ class Rating(db.Model):
 			db.session.add(newRating)
 			db.session.commit()
 		return True
+
+	@classmethod
+	def viewUserRatings(cls, email:str) -> list[Self]:
+		"""
+		Queries an REA's ratings by passing arguments:
+			- email:str, 
+		returns array of Rating instance.
+		"""
+		return cls.query.filter_by(agentEmail=email).all()

@@ -170,3 +170,11 @@ class User(db.Model):
 			user.password = newPassword
 			db.session.commit()
 		return True
+	
+	@classmethod
+	def queryAllREA(cls) -> list[Self]:
+		"""
+		Queries all REA:
+		returns an list of User instance (that are REA).
+		"""
+		return cls.query.filter_by(profile="Real Estate Agent").all()
