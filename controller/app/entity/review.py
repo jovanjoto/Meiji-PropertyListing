@@ -65,3 +65,12 @@ class Review(db.Model):
 			db.session.add(newReview)
 			db.session.commit()
 		return True
+	
+	@classmethod
+	def viewUserReviews(cls, email:str) -> list[Self]:
+		"""
+		Queries an REA's reviews by passing arguments:
+			- email:str, 
+		returns array of Review instance.
+		"""
+		return cls.query.filter_by(agentEmail=email).all()

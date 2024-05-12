@@ -1,6 +1,7 @@
 # Libraries
 from flask import current_app
 from typing_extensions import Self # type: ignore
+from sqlalchemy.sql import func
 
 # Local dependencies
 from .sqlalchemy import db
@@ -66,3 +67,22 @@ class Rating(db.Model):
 			db.session.add(newRating)
 			db.session.commit()
 		return True
+
+	@classmethod
+	def viewUserRatings(cls, email:str) -> list[Self]:
+		"""
+		Queries an REA's ratings by passing arguments:
+			- email:str, 
+		returns array of Rating instance.
+		"""
+		return cls.query.filter_by(agentEmail=email).all()
+
+	@classmethod
+	def getAvgRating(cls, agentEmail:str) -> float:
+		"""
+		Gets average rating for a specified agent, takes in arguments:
+			- agentEmail:str, 
+		returns a float.
+		"""
+		averageRating = cls.query.filter_by(agentEmail=agentEmail).with_entities(func.avg(cls.rating)).scalar()
+		return round(averageRating, 2)

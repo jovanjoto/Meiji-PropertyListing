@@ -12,7 +12,7 @@ class Views(db.Model):
 	# attributes
 	month = db.Column(db.Integer(), nullable=False, primary_key=True)
 	year = db.Column(db.Integer(), nullable=False, primary_key=True)
-	views = db.Column(db.Integer(), nullable=False, primary_key=True)
+	views = db.Column(db.Integer(), nullable=False)
 
 	# Part of composite key (qualifier)
 	propertyListingId = db.Column(db.String(250), db.ForeignKey("PropertyListing.id"), nullable=False, primary_key=True)
