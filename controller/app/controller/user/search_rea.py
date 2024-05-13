@@ -3,7 +3,7 @@ from flask import Blueprint, request
 from flask_jwt_extended import jwt_required
 
 # Local dependencies
-from app.entity import User, Suspension, UserProfile
+from app.entity import User, Suspension, UserProfile, Rating
 from app.controller.authentication import permissions_required
 
 class SearchREAController(Blueprint):
@@ -16,32 +16,23 @@ class SearchREAController(Blueprint):
   def searchREA(self):
     list_of_reas = list()
     
-    for agent in User.queryAllREA():
-      profile = UserProfile.queryUP(agent.profile)
-      if not profile.has_listing_permission:
-        continue
-      suspension = Suspension.getOngoingSuspension(agent)
-      if not suspension:
-        list_of_reas.append({
-          "email": agent.email, 
-          "phone": agent.phone, 
-          "first_name": agent.first_name, 
-          "last_name": agent.last_name, 
-          "profile": agent.profile,
-          "suspended": False
-        })
-      else:
-        list_of_reas.append({
-          "email": agent.email, 
-          "phone": agent.phone, 
-          "first_name": agent.first_name, 
-          "last_name": agent.last_name, 
-          "profile": agent.profile,
-          "suspended": True,
-          "suspension_end": None if not suspension.end else suspension.end.strftime("%m/%d/%Y")
-        })
+    agents = User.queryREA()
+    
+    for agent in agents:
+      avgRating = Rating.getAvgRating(agent.email)
+      
+      rea = {
+        "email" : agent.email,
+        "phone" : agent.phone, 
+        "first_name" : agent.first_name,
+        "last_name" : agent.last_name,
+        "profile" : agent.profile,
+        "avg_rating" : avgRating
+      }
+      
+      list_of_reas.append(rea)
 
-    return {"agents" : list_of_reas}
+    return {"success" : True, "results" : list_of_reas}
     
     
     
