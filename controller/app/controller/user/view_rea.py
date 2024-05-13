@@ -14,9 +14,12 @@ class ViewREAController(Blueprint):
 
     @permissions_required("has_buying_permission", "has_selling_permission")
     # @jwt_required()
-    def viewREA(self) -> dict[str, dict[str, str | None | bool]]:
+    def viewREA(self) -> dict[str, bool | dict[str, str | None | bool]]:
         email:str = request.args["email"]
         user = User.queryUserAccount(email=email)
+        if not user:
+            return {"success": False}
+        
         ratings_list = []
         reviews_list = []
         listings_list = []
@@ -24,7 +27,7 @@ class ViewREAController(Blueprint):
         for rating in Rating.queryAllREARating(email):
             ratings_list.append({
                 "rating": rating.rating,
-                "raterEmail": rating.agentEmail 
+                "raterEmail": rating.raterEmail 
             })
         
         for review in Review.queryAllReview(email):
