@@ -44,10 +44,12 @@ export default function NavBar({}) {
 			"Reviews": "/agent/viewCustomerReviewPage"
 		},
 		buying: {
-			"Property Listing": "/"
+			"Property Listing": "/",
+			"Real Estate Agents" : "/buyer/REAPage"
 		},
 		selling: {
-			"Property Listing": "/seller"
+			"Property Listing": "/seller",
+			"Real Estate Agents" : "/seller/REAPage"
 		},
 	};
 
