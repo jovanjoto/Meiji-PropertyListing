@@ -4,7 +4,7 @@ from flask_jwt_extended import jwt_required
 # Local dependencies
 from app.entity import User
 
-class ViewUserController(Blueprint):
+class ViewAccountController(Blueprint):
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
 		self.add_url_rule("/view_user_account", view_func=self.viewUserAccount, methods=["GET"])
