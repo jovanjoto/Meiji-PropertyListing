@@ -25,6 +25,7 @@ import ViewReviewsPage from "./Pages/ViewReviewsPage.jsx";
 import SellerPropertyListingPage from "./Pages/SellerPropertyListingPage.jsx";
 import AgentDashboardPage from "./Pages/AgentDashboardPage.jsx";
 import REAProfilePage from "./Pages/REAProfilePage.jsx";
+import REAPage from "./Pages/REAPage.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <AuthProvider>
@@ -143,6 +144,15 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             </PrivateRoute>
           }
         />
+        <Route
+          path="/buyer/REAPage"
+          element={
+            <PrivateRoute buying>
+              <NavBar />
+              <REAPage />
+            </PrivateRoute>
+          }
+         />
         {/* Seller Routes */}
         <Route
           path="/seller"
@@ -173,6 +183,15 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             </PrivateRoute>
           }
         />
+         <Route
+          path="/seller/REAPage"
+          element={
+            <PrivateRoute selling>
+              <NavBar />
+              <REAPage />
+            </PrivateRoute>
+          }
+         />
 
         {/* Others */}
         <Route
