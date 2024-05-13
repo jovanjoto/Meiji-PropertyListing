@@ -6,7 +6,7 @@ from flask_jwt_extended import jwt_required
 from app.entity import User
 from app.controller.authentication import permissions_required, bcrypt
 
-class CreateUserController(Blueprint):
+class CreateAccountController(Blueprint):
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
 		self.add_url_rule("/create_user_account", view_func=self.createAccount, methods=["PUT"])

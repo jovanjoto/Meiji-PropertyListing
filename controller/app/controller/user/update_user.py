@@ -7,7 +7,7 @@ from app.entity import User
 from app.controller.authentication import permissions_required, bcrypt
 
 
-class UpdateUserController(Blueprint):
+class UpdateAccountController(Blueprint):
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
 		self.add_url_rule("/update_user_account", view_func=self.updateAccDetails, methods=["PATCH"])

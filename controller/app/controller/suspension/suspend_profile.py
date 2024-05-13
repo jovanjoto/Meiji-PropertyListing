@@ -8,7 +8,7 @@ from app.entity import Suspension
 from app.controller.authentication import permissions_required
 
 # SuspendUserProfile Controller
-class SuspendUserProfileController(Blueprint):
+class SuspendProfileController(Blueprint):
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
 		self.add_url_rule("/suspend_user_profile", view_func=self.suspendProfileCnt, methods=["PUT"])
