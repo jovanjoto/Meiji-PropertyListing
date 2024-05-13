@@ -9,7 +9,7 @@ from app.controller.authentication import permissions_required
 class SearchREAController(Blueprint):
   def __init__(self, *args, **kwargs):
     super().__init__(*args, **kwargs)
-    self.add_url_rule("/search_rea", view_func=self.searchREA, methods=["GET"])
+    self.add_url_rule("/search_all_rea", view_func=self.searchAllREA, methods=["GET"])
   
   @permissions_required("has_buying_permission", "has_selling_permission")
   @jwt_required()
