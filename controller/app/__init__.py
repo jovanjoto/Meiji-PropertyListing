@@ -65,6 +65,7 @@ flask_app.register_blueprint(view_user_controller, url_prefix='/api/user')
 flask_app.register_blueprint(update_user_controller, url_prefix='/api/user')
 flask_app.register_blueprint(search_user_controller, url_prefix='/api/user')
 flask_app.register_blueprint(view_rea_controller, url_prefix='/api/user')
+flask_app.register_blueprint(search_rea_controller, url_prefix='/api/user')
 
 # User Profile
 flask_app.register_blueprint(create_profile_controller, url_prefix='/api/profile')
