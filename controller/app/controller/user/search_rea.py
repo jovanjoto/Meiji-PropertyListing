@@ -13,10 +13,10 @@ class SearchREAController(Blueprint):
   
   @permissions_required("has_buying_permission", "has_selling_permission")
   @jwt_required()
-  def searchREA(self):
+  def searchAllREA(self):
     list_of_reas = list()
     
-    agents = User.queryREA()
+    agents = User.queryAllREA()
     
     for agent in agents:
       avgRating = Rating.getAvgRating(agent.email)
