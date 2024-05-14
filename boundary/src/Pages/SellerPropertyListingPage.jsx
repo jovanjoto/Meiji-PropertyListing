@@ -176,10 +176,6 @@ export default function SellerPropertyListingPage({ }) {
         return <span>No Listings Available</span>;
     };
 
-    if (isLoading) {
-        displayLoading();
-    }
-
     return (
         <div className="flex flex-col justify-center mx-10 my-4">
             <div className="flex w-full justify-between flex-wrap items-center gap-5">
@@ -542,9 +538,10 @@ export default function SellerPropertyListingPage({ }) {
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 mt-5">
-                {displayList()}
+                {!isLoading && displayList()}
             </div>
-            {searchFilter().length == 0 && displayEmptyList()}
+            {isLoading && displayLoading()}
+            {!isLoading && searchFilter().length == 0 && displayEmptyList()}
         </div>
     );
 }

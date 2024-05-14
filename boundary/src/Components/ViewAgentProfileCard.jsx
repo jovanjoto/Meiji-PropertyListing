@@ -17,6 +17,8 @@ export default function ViewAgentProfileCard({
 }) {
 	var avg_rating = 0;
 
+	console.log(properties)
+
 	if (ratings.length > 0) {
 		avg_rating =
 			ratings.reduce((sum, rating) => {
@@ -103,11 +105,11 @@ export default function ViewAgentProfileCard({
 						name={p.name}
 						id={p.id}
 						address={p.address}
-						num_bedrooms={p.num_bedrooms}
-						num_bathrooms={p.num_bathrooms}
+						num_bedrooms={p.num_of_bedrooms}
+						num_bathrooms={p.num_of_bathrooms}
 						district={p.district}
 						price={p.price}
-						property_type={p.property_type}
+						property_type={p.type}
 						area={p.area}
 						is_sold={p.is_sold}
 						image_url={p.image_url}

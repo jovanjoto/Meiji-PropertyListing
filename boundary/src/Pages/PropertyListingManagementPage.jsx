@@ -173,10 +173,6 @@ export default function PropertyListingManagementPage({}) {
     return <span>No Listings Available</span>;
   };
 
-  if (isLoading) {
-    displayLoading();
-  }
-
   return (
     <div className="flex flex-col justify-center mx-10 my-4">
       <CreateNewPropertyModal
@@ -531,8 +527,8 @@ export default function PropertyListingManagementPage({}) {
       </div>
 
       <div>
-        {displayList()}
-        {searchFilter().length == 0 && displayEmptyList()}
+        {isLoading ? displayLoading() : displayList()}
+        {!isLoading && searchFilter().length == 0 && displayEmptyList()}
       </div>
     </div>
   );

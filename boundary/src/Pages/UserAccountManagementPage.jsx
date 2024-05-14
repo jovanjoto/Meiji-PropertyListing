@@ -125,10 +125,6 @@ export default function UserAccountManagementPage() {
 		return <span>No matching accounts found.</span>;
 	};
 
-	if (isLoading) {
-		return displayLoading();
-	}
-
 	return (
 		<div className="flex flex-col justify-center mx-10 my-4">
 			<CreateNewUserAccountModal state={userPageOpen} setState={setUserPageOpen} />
@@ -185,8 +181,8 @@ export default function UserAccountManagementPage() {
 			</div>
 
 			<div className="flex flex-col justify-start items-center gap-5 my-6">
-				{displayList()}
-				{searchFilter().length == 0 && displayEmptyList()}
+				{isLoading ? displayLoading() : displayList()}
+				{!isLoading && searchFilter().length == 0 && displayEmptyList()}
 			</div>
 		</div>
 	);
