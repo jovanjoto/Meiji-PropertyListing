@@ -134,7 +134,7 @@ if (loading) {
             <div className="relative mb-6 top-[-7px]">
               <input
                 onChange={(e) => {
-                  const value = parseInt(e.target.value);
+                  const value = parseFloat(e.target.value);
                   if (value < filter.maxRate) {
                     setFilter({
                       ...filter,
@@ -147,11 +147,12 @@ if (loading) {
                 id="medium-range"
                 type="range"
                 value={filter.minRate}
+                step={0.1}
                 className="absolute w-full h-2 bg-gray-200 bg-transparent rounded-lg appearance-none dark:bg-gray-700 pointer-events-none"
               ></input>
               <input
                 onChange={(e) => {
-                  const value = parseInt(e.target.value);
+                  const value = parseFloat(e.target.value);
                   if (value > filter.minRate) {
                     setFilter({
                       ...filter,
@@ -164,6 +165,7 @@ if (loading) {
                 id="medium-range"
                 type="range"
                 value={filter.maxRate}
+                step={0.1}
                 className="absolute w-full h-2 bg-gray-200 bg-transparent rounded-lg appearance-none dark:bg-gray-700 pointer-events-none"
               ></input>
               <style>
