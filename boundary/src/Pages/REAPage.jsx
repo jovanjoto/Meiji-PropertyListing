@@ -1,10 +1,15 @@
-import { TextInput, Dropdown, Button, Label } from "flowbite-react";
+import { TextInput, Dropdown, Button, Label, Spinner } from "flowbite-react";
 import { FaSearch } from "react-icons/fa";
 import { BsArrowDownShort } from "react-icons/bs";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import AgentCard from "../Components/Agent/AgentCard";
+import { AuthContext } from "../Components/Authentication/AuthContext";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function REAPage() {
+  const { token } = useContext(AuthContext);
+  const navigate = useNavigate();
   const [agent, setAgent] = useState([
     {
         email: "agent@agent.com",
@@ -14,9 +19,28 @@ function REAPage() {
         avg_rating: 2.403
     }
   ]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState({ minRate: 0, maxRate: 5 });
+
+  useEffect(() => {
+    if (token) {
+      axios
+                    .get(
+                        "/api/user/search_rea",
+                        {
+                            headers: { Authorization: `Bearer ${token}` },
+                        }
+                    )
+                    .then((res) => {
+                      if (res.status === 200) {
+                        setAgent(res.data.results);
+                      }
+                    })
+                    .catch((err) => {navigate("/login")})
+                    .then(() => setLoading(false))
+    }
+  }, [])
 
   const displayLoading = () => {
     return (
@@ -67,6 +91,9 @@ const searchFilter = (agents) => {
 const displayEmptyList = () => {
     return <span>No matching accounts found.</span>;
 };
+if (loading) {
+  displayLoading();
+}
 
   return (
     <div className="mx-10 my-6">

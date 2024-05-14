@@ -1,10 +1,19 @@
 import { Card, Label } from "flowbite-react";
+import { useContext } from "react";
 import { BsFillPersonFill } from "react-icons/bs";
 import StarRatings from "react-star-ratings";
+import { AuthContext } from "../Authentication/AuthContext";
+import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
 
 function AgentCard({name, email, rating, firstName, lastName, phone}) {
+  const { token } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const user = jwtDecode(token);
+  const url = user.has_buying_permission ? `/buyer/viewREA/${email}` : `/seller/viewREA/${email}`
   return (
     <Card
+    onClick={()=> {navigate(url)}}
       variant="outline"
       direction={{ base: "column", sm: "row" }}
       className="w-full"
