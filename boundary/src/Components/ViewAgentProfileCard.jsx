@@ -15,10 +15,14 @@ export default function ViewAgentProfileCard({
 	reviews,
 	properties,
 }) {
-	const avg_rating =
-		ratings.reduce((sum, rating) => {
-			return sum + rating.rating;
-		}, 0) / ratings.length;
+	var avg_rating = 0;
+
+	if (ratings.length > 0) {
+		avg_rating =
+			ratings.reduce((sum, rating) => {
+				return sum + rating.rating;
+			}, 0) / ratings.length;
+	}
 
 	return (
 		<div className="flex flex-col w-11/12 justify-center mx-auto">
@@ -38,7 +42,7 @@ export default function ViewAgentProfileCard({
 							</div>
 							<div className="flex flex-row text-lg gap-2 items-center mt-2">
 								<FaPhoneAlt size={22} />
-								<span className>{phone}</span>
+								<span>{phone}</span>
 							</div>
 						</header>
 						<section className="border-b border-black py-4">
@@ -53,7 +57,10 @@ export default function ViewAgentProfileCard({
 						<h2 className="text-xl font-semibold mt-1">Ratings:</h2>
 						<section className="flex flex-col overflow-auto h-48 gap-3">
 							{ratings.map((r) => (
-								<div className="flex flex-row gap-3 justify-center items-center w-full border border-custom_purple4 shadow-md p-4 rounded-2xl">
+								<div
+									key={r.raterEmail}
+									className="flex flex-row gap-3 justify-center items-center w-full border border-custom_purple4 shadow-md p-4 rounded-2xl"
+								>
 									<span className="font-medium">{r.raterEmail}</span>
 									<StarRatings
 										rating={r.rating}
@@ -64,13 +71,17 @@ export default function ViewAgentProfileCard({
 									/>
 								</div>
 							))}
+							{ratings.length == 0 && "No ratings yet."}
 						</section>
 					</div>
 					<div className="w-7/12 bg-white border shadow-md p-5 px-8 rounded-lg">
 						<h2 className="text-xl font-semibold mb-2">Reviews:</h2>
 						<section className="flex flex-col overflow-auto gap-3">
 							{reviews.map((r) => (
-								<div className="flex flex-col gap-2 w-full border border-custom_purple4 shadow-md px-8 py-4 rounded-2xl">
+								<div
+									key={r.reviewerEmail}
+									className="flex flex-col gap-2 w-full border border-custom_purple4 shadow-md px-8 py-4 rounded-2xl"
+								>
 									<span className="font-medium">
 										{r.reviewerEmail}
 									</span>
@@ -79,6 +90,7 @@ export default function ViewAgentProfileCard({
 									</p>
 								</div>
 							))}
+							{reviews.length == 0 && "No reviews yet."}
 						</section>
 					</div>
 				</div>
@@ -87,6 +99,7 @@ export default function ViewAgentProfileCard({
 			<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-10 gap-y-10 mt-5">
 				{properties.map((p) => (
 					<BuyerPropertyListingCard
+						key={p.id}
 						name={p.name}
 						id={p.id}
 						address={p.address}
@@ -101,6 +114,7 @@ export default function ViewAgentProfileCard({
 						is_shortlisted={p.is_shortlisted}
 					/>
 				))}
+				{properties.length == 0 && "No listings yet."}
 			</div>
 		</div>
 	);
