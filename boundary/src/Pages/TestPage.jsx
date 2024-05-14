@@ -8,7 +8,7 @@ function TestPage({}) {
 	return (
 		<>
 			<Button onClick={() => {setOpen(true)}}>Toggle modal</Button>
-			<MortgageCalculatorModal state={open} setState={setOpen}/>
+			<MortgageCalculatorModal state={open} setState={setOpen} propertyID={1}/>
 		</>
 	);
 }
