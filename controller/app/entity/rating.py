@@ -76,4 +76,6 @@ class Rating(db.Model):
 		returns a float.
 		"""
 		averageRating = cls.query.filter_by(agentEmail=agentEmail).with_entities(func.avg(cls.rating)).scalar()
+		if averageRating is None:
+			return 0.0
 		return round(averageRating, 2)
