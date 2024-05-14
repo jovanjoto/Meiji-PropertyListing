@@ -1,7 +1,6 @@
 import { Card, Label, Button } from "flowbite-react";
-import sampleImg from "../../assets/sample_img.jpg";
 import { IoLocationOutline } from "react-icons/io5";
-import { FaPencilAlt, FaLightbulb, FaUser, FaStar } from "react-icons/fa";
+import { FaPencilAlt, FaUser, FaCalculator } from "react-icons/fa";
 import { MdOutlineKingBed } from "react-icons/md";
 import { PiBathtubBold, PiHouseLine } from "react-icons/pi";
 import { MdOutlineCropSquare } from "react-icons/md";
@@ -16,6 +15,7 @@ import ConfirmationModal from "../ConfirmationModal";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
+import MortgageCalculatorModal from "../Buyer/MortgageCalculatorModal";
 
 function ViewPropertyListingCard({
 	id,
@@ -49,6 +49,7 @@ function ViewPropertyListingCard({
 	const navigate = useNavigate();
 	const [showAgentRatingModal, setShowAgentRatingModal] = useState(false);
 	const [showAgentReviewModal, setShowAgentReviewModal] = useState(false);
+	const [showMortgageModal, setShowMortgageModal] = useState(false);
 	const [shortListed, setShortlisted] = useState(is_shortlisted);
 	const [confirmationOpen, setConfirmationOpen] = useState(false);
 	const rate = (agent_email) => {
@@ -153,6 +154,11 @@ function ViewPropertyListingCard({
 				showUpdateModalState,
 				setShowUpdateModalState
 			)}
+			<MortgageCalculatorModal
+				state={showMortgageModal}
+				setState={setShowMortgageModal}
+				propertyID={id}
+			/>
 			<Card className={`w-5/6 2xl:w-10/12 mx-auto bg-gray-100`}>
 				{is_sold && (
 					<div className="flex w-full h-full justify-center items-center bg-custom_purple2 text-white font-bold rounded-lg">
@@ -213,15 +219,33 @@ function ViewPropertyListingCard({
 								<h1 className="text-4xl font-semibold">
 									{SGDollar.format(price)}
 								</h1>
-								{user.has_buying_permission ? shortListed ? (
-									<FaHeart
-										size={42}
-										color="red"
-										onClick={clickRemoveIcon}
-									/>
-								) : (
-									<CiHeart size={42} onClick={shortlist} />
-								):<></>}
+								<div className="flex flex-row gap-4 items-center justify-center">
+									{user.has_buying_permission && (
+										<FaCalculator
+											size={32}
+											onClick={() => setShowMortgageModal(true)}
+											className="hover:text-custom_purple2 "
+										/>
+									)}
+									{user.has_buying_permission ? (
+										shortListed ? (
+											<FaHeart
+												size={38}
+												// color="red"
+												onClick={clickRemoveIcon}
+												className="hover:text-red-500 text-red-600"
+											/>
+										) : (
+											<CiHeart
+												size={42}
+												onClick={shortlist}
+												className="hover:text-red-600"
+											/>
+										)
+									) : (
+										<></>
+									)}
+								</div>
 							</section>
 							{/* Logo - More Information */}
 						</header>
@@ -284,7 +308,8 @@ function ViewPropertyListingCard({
 											value={agent.email}
 										/>
 									</section>
-									{(user.has_buying_permission || user.has_selling_permission) && (
+									{(user.has_buying_permission ||
+										user.has_selling_permission) && (
 										<section className="flex flex-row justify-around">
 											<Button
 												color="purple"
