@@ -16,7 +16,7 @@ function AgentCard({name, email, rating, firstName, lastName, phone}) {
     onClick={()=> {navigate(url)}}
       variant="outline"
       direction={{ base: "column", sm: "row" }}
-      className="w-full"
+      className="w-full mb-6"
     >
       <div className="flex flex-wrap justify-center md:justify-between align-middle items-center gap-y-5">
         <div className="flex flex-row items-center gap-6 align-middle">
