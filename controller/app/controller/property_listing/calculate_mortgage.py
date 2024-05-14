@@ -6,7 +6,7 @@ from app.controller.authentication.utils import permissions_required
 class CalculateMortgageController(Blueprint):
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
-		self.add_url_rule("/calculate_mortgage", view_func=self.calculate_mortgage, methods=["GET"])
+		self.add_url_rule("/calculate_mortgage", view_func=self.calculate_mortgage, methods=["POST"])
 
 	@permissions_required("has_buying_permission")
 	@jwt_required()
