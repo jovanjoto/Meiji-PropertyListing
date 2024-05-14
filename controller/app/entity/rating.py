@@ -69,7 +69,7 @@ class Rating(db.Model):
 		return True
 
 	@classmethod
-	def getAvgRating(cls, agentEmail:str) -> float|None:
+	def getAvgRating(cls, agentEmail:str) -> float:
 		"""
 		Gets average rating for a specified agent, takes in arguments:
 			- agentEmail:str, 
@@ -77,5 +77,5 @@ class Rating(db.Model):
 		"""
 		averageRating = cls.query.filter_by(agentEmail=agentEmail).with_entities(func.avg(cls.rating)).scalar()
 		if averageRating is None:
-			return None
+			return 0.0
 		return round(averageRating, 2)
