@@ -132,12 +132,15 @@ function MortgageCalculatorModal({ state, setState, propertyID }) {
 								<>
 									<div className="flex flex-col gap-2 border mt-4 px-4 py-1">
 										<Label className="text-">Monthly Payment :</Label>
-										<div className="flex flex-row items-end">
+										<div className="flex flex-row items-center">
 											<span className="text-xl text-custom_purple1">
 												{SGDollar.format(result.monthly_payment)}
 											</span>
 											<span className="text-custom_purple2 ml-1">
 												/ month
+											</span>
+											<span className="text-custom_purple1 ml-2 text-xs">
+												for {loanTenureRef.current.value} years
 											</span>
 										</div>
 									</div>
