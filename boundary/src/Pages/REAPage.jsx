@@ -91,9 +91,6 @@ const searchFilter = (agents) => {
 const displayEmptyList = () => {
     return <span>No matching accounts found.</span>;
 };
-if (loading) {
-  displayLoading();
-}
 
   return (
     <div className="mx-10 my-6">
@@ -184,8 +181,8 @@ if (loading) {
         </Dropdown>
       </div>
       <div className="mt-8">
-        {displayList(agent)}
-        {searchFilter(agent).length == 0 && displayEmptyList()}
+        {loading ? displayLoading() : displayList(agent)}
+        {!loading && searchFilter(agent).length == 0 && displayEmptyList()}
       </div>
     </div>
   );

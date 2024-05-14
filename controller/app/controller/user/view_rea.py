@@ -1,5 +1,5 @@
 from flask import Blueprint, request
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt
 from PIL import Image
 import io
 from base64 import encodebytes # type: ignore
@@ -13,9 +13,10 @@ class ViewREAController(Blueprint):
         self.add_url_rule("/view_rea", view_func=self.viewREA, methods=["GET"])
 
     @permissions_required("has_buying_permission", "has_selling_permission")
-    # @jwt_required()
+    @jwt_required()
     def viewREA(self) -> dict[str, bool | dict[str, str | None | bool]]:
         email:str = request.args["email"]
+        buyerEmail = get_jwt()["email"]
         user = User.queryUserAccount(email=email)
         if not user:
             return {"success": False}
@@ -42,7 +43,7 @@ class ViewREAController(Blueprint):
             bytes_arr = io.BytesIO()
             img.save(bytes_arr, format="PNG")
             encoded_img = encodebytes(bytes_arr.getvalue()).decode('ascii')
-            is_shortlisted = Shortlist.checkIfShortlisted(pl, email)
+            is_shortlisted = Shortlist.checkIfShortlisted(pl, buyerEmail)
 
             listings_list.append({
 				"id" : pl.id,
