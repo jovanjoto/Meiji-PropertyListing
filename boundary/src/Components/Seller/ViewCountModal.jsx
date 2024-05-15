@@ -78,14 +78,15 @@ function ViewCountModal({ state, setState, id }) {
 	const process_data = (views) => {
 		const aggregatedData = {};
 		views.forEach((view) => {
-			const monthYear = `${view.month}/${view.year}`;
+			const monthYear = new Date(view.year, view.month - 1);
 			aggregatedData[monthYear] = view.views;
 		});
-		const months = Object.keys(aggregatedData).sort();
+		const months = Object.keys(aggregatedData).sort((b, a) => new Date(b.date) - new Date(a.date));
 		const viewsData = months.map((month) => aggregatedData[month]);
+		const viewsLabel = months.map((month) => `${getMonth(month)+1}/${getYear(month)}`);
 
 		return {
-			labels: months,
+			labels: viewsLabel,
 			data: viewsData,
 		};
 	};
