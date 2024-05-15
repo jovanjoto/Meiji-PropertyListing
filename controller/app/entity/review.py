@@ -4,8 +4,6 @@ from typing_extensions import Self # type: ignore
 
 # Local dependencies
 from .sqlalchemy import db
-from .user import User
-from .userprofile import UserProfile
 
 # Review Schema
 class Review(db.Model):
@@ -39,29 +37,16 @@ class Review(db.Model):
 		- review:str
 		returns bool.
 		"""
-		# Agent doesn't exist 
-		agent = User.queryUserAccount(email=agent_email)
-		if not agent:
+		try:
+			# Check if already rated
+			if cls.query.filter_by(agentEmail=agent_email, reviewerEmail=reviewer_email).one_or_none():
+				return False
+			# Initialize new review
+			newReview = cls(agentEmail=agent_email, reviewerEmail=reviewer_email, review=review) # type: ignore
+			# Commit to DB
+			with current_app.app_context():
+				db.session.add(newReview)
+				db.session.commit()
+			return True
+		except:
 			return False
-		# Email entered for agent isn't actually an agent
-		profile = UserProfile.queryUP(agent.profile)
-		if not profile or not profile.has_listing_permission:
-			return False
-		# Rater doesn't exist
-		reviewer = User.queryUserAccount(email=reviewer_email)
-		if not reviewer:
-			return False
-		# Email entered for rater isn't buyer or seller
-		reviewer_profile = UserProfile.queryUP(reviewer.profile)
-		if not reviewer_profile or not (reviewer_profile.has_buying_permission or reviewer_profile.has_selling_permission):
-			return False
-		# Check if already rated
-		if cls.query.filter_by(agentEmail=agent_email, reviewerEmail=reviewer_email).one_or_none():
-			return False
-		# Initialize new review
-		newReview = cls(agentEmail=agent_email, reviewerEmail=reviewer_email, review=review) # type: ignore
-		# Commit to DB
-		with current_app.app_context():
-			db.session.add(newReview)
-			db.session.commit()
-		return True

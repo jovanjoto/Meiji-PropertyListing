@@ -39,14 +39,14 @@ function CreateNewUserAccountModal({ state, setState }) {
 
 	useEffect(() => {
 		axios
-			.get("/api/profile/search_user_profile", {
+			.get("/api/user/get_list_of_user_profiles", {
 				headers: {
 					Authorization: `Bearer ${token}`,
 				},
 			})
 			.then((res) => {
 				if (res.status === 200) {
-					setProfiles(res.data.profiles.map((profile) => profile.name));
+					setProfiles(res.data.profiles);
 					setIsLoadingProfile(false);
 				} else {
 					logout();
@@ -160,7 +160,7 @@ function CreateNewUserAccountModal({ state, setState }) {
 								/>
 							</section>
 							<Label htmlFor="roleTitle" value="Role" />
-							<section className="flex flex-col gap-y-2 border ">
+							<section className="flex flex-col gap-y-2 border h-24 overflow-y-auto">
 								{isLoadingProfile ? (
 									<Spinner />
 								) : (

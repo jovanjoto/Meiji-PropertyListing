@@ -6,7 +6,6 @@ from typing_extensions import Self # type: ignore
 # Local dependencies
 from .sqlalchemy import db
 from .user import User
-from .userprofile import UserProfile
 
 # Suspension Schema
 class Suspension(db.Model):
@@ -31,47 +30,27 @@ class Suspension(db.Model):
 			- end:date=None
 		returns bool.
 		"""
+		try:
+			# Default value management
+			if not start:
+				start = date.today()
+			# Invalid Dates
+			if end and end < start:
+				return False
+			
+			# Check if suspension already exist
+			if cls.query.filter_by(user=email, start=start).one_or_none():
+				return False
+			# Initialize new suspension
+			new_suspension = cls(user=email, start=start, end=end, description=reason) # type: ignore
 
-  		# User does not exist
-		if not User.queryUserAccount(email=email):
+			# Commit to DB
+			with current_app.app_context():
+				db.session.add(new_suspension)
+				db.session.commit()
+			return True
+		except:
 			return False
-		# Default value management
-		if not start:
-			start = date.today()
-		# Invalid Dates
-		if end and end < start:
-			return False
-		
-		# Check if suspension already exist
-		if cls.query.filter_by(user=email, start=start).one_or_none():
-			return False
-		# Initialize new suspension
-		new_suspension = cls(user=email, start=start, end=end, description=reason)
-
-		# Commit to DB
-		with current_app.app_context():
-			db.session.add(new_suspension)
-			db.session.commit()
-		return True
-	
-	@classmethod
-	def createBulkSuspension(cls, profile:str, reason:str, start:date|None=None, end:date|None=None) -> bool:
-		"""
-		Creates suspensions for all users with a specified profile by passing arguments:
-			- profile:str, 
-			- reason:str, 
-			- start:date=None, 
-			- end:date=None
-		returns bool.
-		"""
-		if not UserProfile.queryUP(profile):
-			return False
-  
-		# Get all users within the profile
-		users = User.query.filter_by(profile=profile).all()
-		for u in users:
-			cls.createSuspension(u.email, reason, start, end)
-		return True
 	
 	@classmethod
 	def getOngoingSuspension(cls, user:User) -> Self|None:
