@@ -12,11 +12,11 @@ function REAPage() {
   const navigate = useNavigate();
   const [agent, setAgent] = useState([
     {
-        email: "agent@agent.com",
-        first_name: "name",
-        last_name: "last_name",
-        phone: "123",
-        avg_rating: 2.403
+      email: "agent@agent.com",
+      first_name: "name",
+      last_name: "last_name",
+      phone: "123",
+      avg_rating: 2.403
     }
   ]);
   const [loading, setLoading] = useState(true);
@@ -26,19 +26,19 @@ function REAPage() {
   useEffect(() => {
     if (token) {
       axios
-                    .get(
-                        "/api/user/search_rea",
-                        {
-                            headers: { Authorization: `Bearer ${token}` },
-                        }
-                    )
-                    .then((res) => {
-                      if (res.status === 200) {
-                        setAgent(res.data.results);
-                      }
-                    })
-                    .catch((err) => {navigate("/login")})
-                    .then(() => setLoading(false))
+        .get(
+          "/api/user/search_rea",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        )
+        .then((res) => {
+          if (res.status === 200) {
+            setAgent(res.data.results);
+          }
+        })
+        .catch((err) => { navigate("/login") })
+        .then(() => setLoading(false))
     }
   }, [])
 
@@ -51,46 +51,46 @@ function REAPage() {
   };
 
   const checkSearchFilter = (agentJson) => {
-        let search_bool = agentJson.first_name
-			.toLowerCase()
-			.startsWith(search.toLowerCase());
-		let search_bool2 = agentJson.last_name
-			.toLowerCase()
-			.startsWith(search.toLowerCase());
-		let search_bool3 = agentJson.first_name
-			.concat(" ", agentJson.last_name)
-			.toLowerCase()
-			.startsWith(search.toLowerCase());
-        return (search_bool || search_bool2 || search_bool3) &&
-        (agentJson.avg_rating >= filter.minRate && agentJson.avg_rating <= filter.maxRate);
-};
+    let search_bool = agentJson.first_name
+      .toLowerCase()
+      .startsWith(search.toLowerCase());
+    let search_bool2 = agentJson.last_name
+      .toLowerCase()
+      .startsWith(search.toLowerCase());
+    let search_bool3 = agentJson.first_name
+      .concat(" ", agentJson.last_name)
+      .toLowerCase()
+      .startsWith(search.toLowerCase());
+    return (search_bool || search_bool2 || search_bool3) &&
+      (agentJson.avg_rating >= filter.minRate && agentJson.avg_rating <= filter.maxRate);
+  };
 
-const searchFilter = (agents) => {
+  const searchFilter = (agents) => {
     let filtered_list = [];
     agents.forEach((agentJson) => {
-        if (checkSearchFilter(agentJson)) {
-            filtered_list.push(
-                <AgentCard
-                    key={agentJson.email}
-                    firstName={agentJson.first_name}
-                    lastName={agentJson.last_name}
-                    email={agentJson.email}
-                    phone={agentJson.phone}
-                    rating={agentJson.avg_rating}
-                />
-            );
-        }
+      if (checkSearchFilter(agentJson)) {
+        filtered_list.push(
+          <AgentCard
+            key={agentJson.email}
+            firstName={agentJson.first_name}
+            lastName={agentJson.last_name}
+            email={agentJson.email}
+            phone={agentJson.phone}
+            rating={agentJson.avg_rating}
+          />
+        );
+      }
     });
     return filtered_list;
-};
+  };
 
   const displayList = (agents) => {
     return searchFilter(agents);
-};
+  };
 
-const displayEmptyList = () => {
+  const displayEmptyList = () => {
     return <span>No matching accounts found.</span>;
-};
+  };
 
   return (
     <div className="mx-10 my-6">
@@ -124,7 +124,7 @@ const displayEmptyList = () => {
                 className="bg-indigo-300 h-1.5 rounded-full absolute"
                 style={{
                   left: `${(filter.minRate / 5) * 100}%`,
-                  right: `${100 - (filter.maxRate/ 5) * 100}%`,
+                  right: `${100 - (filter.maxRate / 5) * 100}%`,
                 }}
               ></div>
             </div>
