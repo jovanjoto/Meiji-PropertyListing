@@ -3,6 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { AuthContext } from "../Components/Authentication/AuthContext";
 import { Line } from "react-chartjs-2";
+import { getMonth, getYear } from "date-fns";
 
 const theme = {
   root: {
@@ -14,21 +15,19 @@ const displayViz = (listing) => {
   const aggregatedData = {};
   listing.forEach((property) => {
     const transactionDate = new Date(property.transaction_date);
-    const monthYear = `${
-      transactionDate.getMonth() + 1
-    }/${transactionDate.getFullYear()}`;
-    if (aggregatedData[monthYear]) {
-      aggregatedData[monthYear] += property.price;
+    if (aggregatedData[transactionDate]) {
+      aggregatedData[transactionDate] += property.price;
     } else {
-      aggregatedData[monthYear] = property.price;
+      aggregatedData[transactionDate] = property.price;
     }
   });
   console.log(aggregatedData);
-  const months = Object.keys(aggregatedData).sort();
+  const months = Object.keys(aggregatedData).sort((b, a) => new Date(b.date) - new Date(a.date))
   const salesData = months.map((month) => aggregatedData[month]);
+  const salesLabel = months.map((month) => `${getMonth(month)+1}/${getYear(month)}`);
 
   const data = {
-    labels: months,
+    labels: salesLabel,
     datasets: [
       {
         label: "Sales",
