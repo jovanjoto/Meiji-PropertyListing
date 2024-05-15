@@ -31,7 +31,7 @@ export default function ProfileManagementPage({}) {
 		setProfilePageOpen(true);
 	}
 
-	useEffect(() => {
+	const searchAllProfile = () => { 
 		setIsLoading(true);
 		if (token) {
 			axios
@@ -50,6 +50,9 @@ export default function ProfileManagementPage({}) {
 				})
 				.then(() => setIsLoading(false));
 		}
+	}
+	useEffect(() => {
+		searchAllProfile();
 	}, []);
 
 	// For search and filtering

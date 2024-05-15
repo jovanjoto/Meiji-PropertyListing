@@ -7,8 +7,6 @@ from enum import Enum # type: ignore
 
 # Local dependencies
 from .sqlalchemy import db
-from .user import User
-from .userprofile import UserProfile
 
 # Enum for PropertyListing.type
 class PropertyType(str, Enum):
@@ -126,29 +124,16 @@ class PropertyListing(db.Model):
 				- seller_email:str
 		returns bool.
 		"""
-		# Check agent exist, and has a profile with listing permissions
-		agent = User.queryUserAccount(email=str(details["agent_email"]))
-		if not agent:
+		try:
+			# Initialize new PropertyListing
+			new_pl = cls(**details)
+			# Commit to DB
+			with current_app.app_context():
+				db.session.add(new_pl)
+				db.session.commit()
+			return True
+		except:
 			return False
-		agent_profile = UserProfile.queryUP(agent.profile)
-		if not (agent_profile and agent_profile.has_listing_permission):
-			return False
-		
-		# Check seller exist, and has a profile with selling permissions
-		seller = User.queryUserAccount(email=str(details["seller_email"]))
-		if not seller:
-			return False
-		seller_profile = UserProfile.queryUP(seller.profile)
-		if not (seller_profile and seller_profile.has_selling_permission):
-			return False
-
-		# Initialize new PropertyListing
-		new_pl = cls(**details)
-		# Commit to DB
-		with current_app.app_context():
-			db.session.add(new_pl)
-			db.session.commit()
-		return True
 	
 	@classmethod
 	def removePropertyListing(cls, listing_id:str) -> bool:
@@ -185,49 +170,43 @@ class PropertyListing(db.Model):
 				- seller_email:str,
 		returns bool.
 		"""
-		# Check seller exist, and has a profile with selling permissions
-		if details.get("seller_email"):
-			seller = User.queryUserAccount(email=str(details["seller_email"]))
-			if not seller:
-				return False
-			seller_profile = UserProfile.queryUP(seller.profile)
-			if not (seller_profile and seller_profile.has_selling_permission):
-				return False
-			
-		with current_app.app_context():
-			property_listing = cls.queryPL(str(details["id"]))
-			# property listing does not exist
-			if not property_listing:
-				return False
+		try:
+			with current_app.app_context():
+				property_listing = cls.queryPL(str(details["id"]))
+				# property listing does not exist
+				if not property_listing:
+					return False
 
-			# Update information
-			if details.get("price"):
-				print(details.get("price"), type(details.get("price")))
-				property_listing.price = details.get("price")
-			if details.get("name"):
-				property_listing.name = details.get("name")
-			if details.get("type"):
-				property_listing.type = details.get("type")
-			if details.get("address"):
-				property_listing.address = details.get("address")			
-			if details.get("district"):
-				property_listing.district = details.get("district")		
-			if details.get("description"):
-				property_listing.description = details.get("description")		
-			if details.get("num_of_bedrooms"):
-				property_listing.num_of_bedrooms = details.get("num_of_bedrooms")		
-			if details.get("num_of_bathrooms"):
-				property_listing.num_of_bathrooms = details.get("num_of_bathrooms")		
-			if details.get("area"):
-				property_listing.area = details.get("area")		
-			if details.get("image_url"):
-				property_listing.image_url = details.get("image_url")			
-			if details.get("listing_date"):
-				property_listing.listing_date = details.get("listing_date")			
-			if details.get("seller_email"):
-				property_listing.seller_email = details.get("seller_email")		
-			db.session.commit()
-		return True
+				# Update information
+				if details.get("price"):
+					print(details.get("price"), type(details.get("price")))
+					property_listing.price = details.get("price")
+				if details.get("name"):
+					property_listing.name = details.get("name")
+				if details.get("type"):
+					property_listing.type = details.get("type")
+				if details.get("address"):
+					property_listing.address = details.get("address")			
+				if details.get("district"):
+					property_listing.district = details.get("district")		
+				if details.get("description"):
+					property_listing.description = details.get("description")		
+				if details.get("num_of_bedrooms"):
+					property_listing.num_of_bedrooms = details.get("num_of_bedrooms")		
+				if details.get("num_of_bathrooms"):
+					property_listing.num_of_bathrooms = details.get("num_of_bathrooms")		
+				if details.get("area"):
+					property_listing.area = details.get("area")		
+				if details.get("image_url"):
+					property_listing.image_url = details.get("image_url")			
+				if details.get("listing_date"):
+					property_listing.listing_date = details.get("listing_date")			
+				if details.get("seller_email"):
+					property_listing.seller_email = details.get("seller_email")		
+				db.session.commit()
+			return True
+		except:
+			return False
 	
 	@classmethod
 	def markPLAsSold(cls, details:dict[str,str|float|date]) -> bool:
