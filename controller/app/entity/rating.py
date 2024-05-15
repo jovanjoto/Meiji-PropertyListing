@@ -5,8 +5,6 @@ from sqlalchemy.sql import func
 
 # Local dependencies
 from .sqlalchemy import db
-from .user import User
-from .userprofile import UserProfile
 
 # Review Schema
 class Rating(db.Model):
@@ -40,33 +38,20 @@ class Rating(db.Model):
 		- rating:float
 		returns bool.
 		"""
-		# Agent doesn't exist 
-		agent = User.queryUserAccount(email=agent_email)
-		if not agent:
+		try:
+			# Check if already rated
+			if cls.query.filter_by(agentEmail=agent_email, raterEmail=rater_email).one_or_none():
+				return False
+			
+			# Initialize new rating
+			newRating = cls(agentEmail=agent_email, raterEmail=rater_email, rating=rating) # type: ignore
+			# Commit to DB
+			with current_app.app_context():
+				db.session.add(newRating)
+				db.session.commit()
+			return True
+		except:
 			return False
-		# Email entered for agent isn't actually an agent
-		profile = UserProfile.queryUP(agent.profile)
-		if not profile or not profile.has_listing_permission:
-			return False
-		# Rater doesn't exist
-		rater = User.queryUserAccount(email=rater_email)
-		if not rater:
-			return False
-		# Email entered for rater isn't buyer or seller
-		rater_profile = UserProfile.queryUP(rater.profile)
-		if not rater_profile or not (rater_profile.has_buying_permission or rater_profile.has_selling_permission):
-			return False
-		# Check if already rated
-		if cls.query.filter_by(agentEmail=agent_email, raterEmail=rater_email).one_or_none():
-			return False
-		
-		# Initialize new rating
-		newRating = cls(agentEmail=agent_email, raterEmail=rater_email, rating=rating) # type: ignore
-		# Commit to DB
-		with current_app.app_context():
-			db.session.add(newRating)
-			db.session.commit()
-		return True
 
 	@classmethod
 	def getAvgRating(cls, agentEmail:str) -> float:

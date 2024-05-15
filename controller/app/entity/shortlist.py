@@ -5,7 +5,6 @@ from typing_extensions import Self # type: ignore
 # Local dependencies
 from .sqlalchemy import db
 from .propertylisting import PropertyListing
-from .user import User
 
 # Shortlist Schema
 class Shortlist(db.Model):
@@ -35,23 +34,16 @@ class Shortlist(db.Model):
 		- buyerEmail:str
 		returns bool.
 		"""
-		# Property doesn't exist
-		propertyListing = PropertyListing.queryPL(propertyId)
-		if not propertyListing:
+		try:
+			# Initialize new shortlist
+			newShortlist = cls(propertyListingId=propertyId, userEmail=buyerEmail) # type: ignore
+			# Commit to DB
+			with current_app.app_context():
+				db.session.add(newShortlist)
+				db.session.commit()
+			return True
+		except:
 			return False
-
-		# Buyer doesn't exist
-		buyer = User.queryUserAccount(buyerEmail)
-		if not buyer:
-			return False
-		
-		# Initialize new shortlist
-		newShortlist = cls(propertyListingId=propertyId, userEmail=buyerEmail) # type: ignore
-		# Commit to DB
-		with current_app.app_context():
-			db.session.add(newShortlist)
-			db.session.commit()
-		return True
 
 
 	@classmethod
