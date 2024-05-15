@@ -125,6 +125,10 @@ export default function UserAccountManagementPage() {
 		return <span>No matching accounts found.</span>;
 	};
 
+	const displayCreateAccountPage = () => {
+		setUserPageOpen(true)
+	}
+
 	return (
 		<div className="flex flex-col justify-center mx-10 my-4">
 			<CreateNewUserAccountModal state={userPageOpen} setState={setUserPageOpen} />
@@ -173,7 +177,7 @@ export default function UserAccountManagementPage() {
 						className="bg-custom_purple1 flex flex-row justify-center align-middle items-center"
 						color={"purple"}
 						size="lg"
-						onClick={() => {setUserPageOpen(true)}}
+						onClick={() => {displayCreateAccountPage()}}
 					>
 						Create new account
 					</Button>

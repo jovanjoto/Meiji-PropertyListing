@@ -6,6 +6,7 @@ import {
 	Textarea,
 	Checkbox,
 	TextInput,
+	Spinner
 } from "flowbite-react";
 import { FaPencilAlt, FaTimes, FaUser } from "react-icons/fa";
 import { useState, useRef, useEffect, useContext } from "react";
@@ -21,6 +22,7 @@ function UserAccountModal({ state, setState, primaryKey }) {
 	const [fullName, setFullName] = useState("");
 	const [phoneChanged, setPhoneChanged] = useState(false);
 	const { token } = useContext(AuthContext);
+	const [isLoading, setIsLoading] = useState(true);
 
 	// primaryKey = 'admin@admin.com'
 	useEffect(() => {
@@ -50,7 +52,8 @@ function UserAccountModal({ state, setState, primaryKey }) {
 			})
 			.catch((error) => {
 				console.error("error : ", error);
-			});
+			})
+			.then(() => setIsLoading(false));
 	}, []);
 
 	const handleChange = (event) => {
@@ -159,8 +162,17 @@ function UserAccountModal({ state, setState, primaryKey }) {
 		window.location.reload();
 	};
 	console.log(editedAccount);
-	return (
-		<>
+
+	const displayLoadingPage = () => {
+		return (
+			<div className="text-center text-8xl">
+				<Spinner aria-label="Extra large spinner example" size="xl" />
+			</div>
+		);
+	};
+
+	const displayUserAcc = () => {
+		return <>
 			<MessageModal state={messageModal} setState={onCloseModal}>
 				{message}
 			</MessageModal>
@@ -264,6 +276,14 @@ function UserAccountModal({ state, setState, primaryKey }) {
 				</Card>
 			</Modal>
 		</>
+	}
+
+	if (isLoading) {
+		return displayLoadingPage();
+	} 
+
+	return (
+		displayUserAcc()
 	);
 }
 export default UserAccountModal;
