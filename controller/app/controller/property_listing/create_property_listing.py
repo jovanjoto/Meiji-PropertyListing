@@ -36,15 +36,6 @@ class CreatePropertyListingController(Blueprint):
 		file = request.files["file"]
 		if file.filename == "" or file.filename == None:
 			return {"success": False}
-		
-		# Check agent exist, and has a profile with listing permissions
-		agent = User.queryUserAccount(email=claims["email"])
-		if not agent:
-			return {"success": False}
-		
-		agent_profile = UserProfile.queryUP(agent.profile)
-		if not (agent_profile and agent_profile.has_listing_permission):
-			return {"success": False}
 				
 		# Check seller exist, and has a profile with selling permissions
 		seller = User.queryUserAccount(email=request.form["seller_email"])
