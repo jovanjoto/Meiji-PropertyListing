@@ -36,6 +36,7 @@ export default function UserProfileCard({ profileJson }) {
 		);
 	}
 
+
 	return (
 		<>
 			<SuspendProfileModal state={showSuspendModal} setState={setShowSuspendModal} profile={profileJson.name} />
