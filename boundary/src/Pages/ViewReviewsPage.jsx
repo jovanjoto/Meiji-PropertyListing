@@ -15,8 +15,34 @@ import axios from "axios";
 function ViewReviewsPage({ agentEmail }) {
 	const { token } = useContext(AuthContext);
 	const [customerReviews, setCustomerReviews] = useState([]);
+	const [loading, setLoading] = useState(true);
+
+	const displayLoading = () => {
+		return (
+		  <div className="text-center text-8xl">
+			<Spinner aria-label="Extra large spinner example" size="xl" />
+		  </div>
+		);
+	  };
+
+	const displayList = (reviews) => {
+		return reviews.map((review) => (
+			<CustomerRatingCard
+			  firstName={review.userFirstName}
+			  lastName={review.userLastName}
+			  email={review.userEmail}
+			  phone_num={review.userPhone}
+			  review={review.review}
+			/>
+		  ))
+	}
+
+	const displayEmptyList = () => {
+		return <span>No Reviews available</span>;
+	};
 
 	useEffect(() => {
+		setLoading(true);
 		axios
 			.get("/api/review/view_reviews", {
 				headers: {
@@ -29,21 +55,16 @@ function ViewReviewsPage({ agentEmail }) {
 			})
 			.catch((error) => {
 				console.error("error : ", error);
-			});
+			})
+			.then(()=> {setLoading(false)});
 	}, []);
 
   return (
     <>
       <div className="flex flex-col gap-7">
-      {customerReviews.map((review) => (
-        <CustomerRatingCard
-          firstName={review.userFirstName}
-          lastName={review.userLastName}
-          email={review.userEmail}
-          phone_num={review.userPhone}
-          review={review.review}
-        />
-      ))}
+      {loading && displayLoading()}
+		{!loading && customerReviews.length > 0 && displayList(customerReviews)}
+		{!loading && customerReviews.length === 0 && displayEmptyList()}
       </div>
     </>
   );
