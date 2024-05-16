@@ -1,4 +1,5 @@
 import {
+
 	Button,
 	Modal,
 	Card,
@@ -6,6 +7,8 @@ import {
 	Textarea,
 	Checkbox,
 	TextInput,
+	Spinner
+
 } from "flowbite-react";
 import { FaPencilAlt, FaTimes, FaUser } from "react-icons/fa";
 import { useState, useRef, useEffect, useContext } from "react";
@@ -21,6 +24,7 @@ function UserAccountModal({ state, setState, primaryKey }) {
 	const [fullName, setFullName] = useState("");
 	const [phoneChanged, setPhoneChanged] = useState(false);
 	const { token } = useContext(AuthContext);
+	const [isLoading, setIsLoading] = useState(true);
 
 	// primaryKey = 'admin@admin.com'
 	useEffect(() => {
@@ -50,133 +54,134 @@ function UserAccountModal({ state, setState, primaryKey }) {
 			})
 			.catch((error) => {
 				console.error("error : ", error);
-			});
+			})
+			.then(() => setIsLoading(false));
 	}, []);
 
-	const handleChange = (event) => {
-		if (event.target.id === "phone") {
-			setPhoneChanged(true);
-		}
 
-		setEditedAccount({
-			...editedAccount,
-			[event.target.id]: event.target.value,
-		});
-	};
+  const handleChange = (event) => {
+    if (event.target.id === "phone") {
+      setPhoneChanged(true);
+    }
 
-	const handleConfirmButton = (event) => {
-		event.preventDefault();
-		setIsEditable(false);
-		if (fullName.trim() === "") {
-			setMessage(`Name cannot be empty! please try again.`);
-			setMessageModal(true);
-			return;
-		}
+    setEditedAccount({
+      ...editedAccount,
+      [event.target.id]: event.target.value,
+    });
+  };
 
-		const names = fullName.split(" ");
-		const first_name = names[0];
-		const last_name = names.slice(1).join(" ");
+  const confirm = (event) => {
+    event.preventDefault();
+    setIsEditable(false);
+    if (fullName.trim() === "") {
+      setMessage(`Name cannot be empty! please try again.`);
+      setMessageModal(true);
+      return;
+    }
 
-		if (phoneChanged) {
-			axios
-				.patch(
-					"/api/user/update_user_account",
-					{
-						email: `${primaryKey}`,
-						first_name: `${first_name}`,
-						last_name: `${last_name}`,
-						phone: `${editedAccount.phone}`,
-					},
-					{
-						headers: {
-							Authorization: `Bearer ${token}`,
-						},
-					}
-				)
-				.then((res) => {
-					if (res.data.success) {
-						setMessage(`${fullName} successfully updated.`);
-					} else {
-						setMessage(`Failed to update, please try again.`);
-					}
-				})
-				.catch((error) => {
-					console.error("error : ", error);
-					setMessage(`Failed to update, please try again.`);
-				})
-				.then(() => {
-					setMessageModal(true);
-				});
-		} else {
-			axios
-				.patch(
-					"/api/user/update_user_account",
-					{
-						email: `${primaryKey}`,
-						first_name: `${first_name}`,
-						last_name: `${last_name}`,
-					},
-					{
-						headers: {
-							Authorization: `Bearer ${token}`,
-						},
-					}
-				)
-				.then((res) => {
-					if (res.data.success) {
-						setMessage(`${fullName} successfully updated.`);
-					} else {
-						setMessage(`Failed to update, please try again.`);
-					}
-				})
-				.catch((error) => {
-					console.error("error : ", error);
-					setMessage(`Failed to update, please try again.`);
-				})
-				.then(() => {
-					setMessageModal(true);
-				});
-		}
-	};
+    const names = fullName.split(" ");
+    const first_name = names[0];
+    const last_name = names.slice(1).join(" ");
 
-	const handleCancelButton = () => {
-		// setEditedAccount(account);
-		setIsEditable(false);
-	};
+    if (phoneChanged) {
+      axios
+        .patch(
+          "/api/user/update_user_account",
+          {
+            email: `${primaryKey}`,
+            first_name: `${first_name}`,
+            last_name: `${last_name}`,
+            phone: `${editedAccount.phone}`,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+        .then((res) => {
+          if (res.data.success) {
+						displaySuccessMsg();
+          } else {
+            displayErrorMsg();
+          }
+        })
+        .catch((error) => {
+          console.error("error : ", error);
+					displayErrorMsg();
+        })
+        .then(() => {
+          setMessageModal(true);
+        });
+    } else {
+      axios
+        .patch(
+          "/api/user/update_user_account",
+          {
+            email: `${primaryKey}`,
+            first_name: `${first_name}`,
+            last_name: `${last_name}`,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+        .then((res) => {
+          if (res.data.success)  { // isUpdated == True
+            displaySuccessMsg();
+          } else { 					// isUpdated == False
+            displayErrorMsg();
+          }
+        })
+        .catch((error) => { // isUpdated == False
+          console.error("error : ", error);
+          displayErrorMsg();
+        })
+        .then(() => {
+          setMessageModal(true);
+        });
+    }
+  };
 
-	const handleNameChange = (event) => {
-		setEditedAccount((prev) => ({
-			...prev,
-			fullName: event.target.value,
-		}));
+  const displaySuccessMsg = () => {
+    setMessage(`${fullName} successfully updated.`);
+  };
 
-		setFullName(event.target.value);
-		console.log(fullName);
-	};
+  const displayErrorMsg = () => {
+    setMessage(`Failed to update, please try again.`);
+  };
+
+  const handleCancelButton = () => {
+    // setEditedAccount(account);
+    setIsEditable(false);
+  };
+
 
 	const onCloseModal = (x) => {
 		setMessageModal(x);
 		window.location.reload();
 	};
 	console.log(editedAccount);
-	return (
-		<>
+
+	const displayLoadingPage = () => {
+		return (
+			<div className="text-center text-8xl">
+				<Spinner aria-label="Extra large spinner example" size="xl" />
+			</div>
+		);
+	};
+
+	const displayUserAcc = () => {
+		return <>
 			<MessageModal state={messageModal} setState={onCloseModal}>
 				{message}
 			</MessageModal>
 
-			<Modal
-				className=""
-				show={state}
-				onClose={() => setState(false)}
-				size="sm"
-			>
-				{!isEditable && (
-					<FaTimes
-						className="absolute top-0 left-0 m-2 rounded-md w-5 h-5 cursor-pointer" // Added absolute positioning
-						onClick={() => setState(false)}
-					/>
-				)}
+
+    setFullName(event.target.value);
+  };
 
 				{!isEditable && (
 					<FaPencilAlt
@@ -264,16 +269,15 @@ function UserAccountModal({ state, setState, primaryKey }) {
 				</Card>
 			</Modal>
 		</>
+	}
+
+	if (isLoading) {
+		return displayLoadingPage();
+	} 
+
+	return (
+		displayUserAcc()
 	);
+
 }
 export default UserAccountModal;
-
-// <h5
-// id="fullName"
-// className="text-xl font-medium text-gray-900 dark:text-white"
-// contentEditable={isEditable}
-// onChange={handleNameChange}
-// >
-// {/* {editedAccount.first_name} {editedAccount.last_name} */}{" "}
-// {firstName} {lastName}
-// </h5>

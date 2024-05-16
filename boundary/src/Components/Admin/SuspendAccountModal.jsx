@@ -14,13 +14,18 @@ function SuspendAccountModal({ state, setState, email, firstName, lastName }) {
 	const [messageModal, setMessageModal] = useState(false);
 	const [confirmationModal, setConfirmationModal] = useState(false);
 	const { token } = useContext(AuthContext);
+	const [reasonDuration, enterReasonDuration] = useState({"reason": "", "duration": 1})
 
 	const onCloseModal = (x) => {
 		setMessageModal(x);
 		window.location.reload();
 	};
 
-	const handleSubmit = () => {
+	const displayConfirmationModal = () => {
+		setMessageModal(true)
+	}
+
+	const confirm = () => {
 		const final_duration =
 			durationUnit === "Days"
 				? duration
@@ -43,7 +48,7 @@ function SuspendAccountModal({ state, setState, email, firstName, lastName }) {
 			.then((res) => {
 				if (res.data.success) {
 					setState(false);
-					setMessageModal(true);
+					displayConfirmationModal();
 				} else {
 					alert("Failed to suspend, please try again...");
 				}
@@ -53,26 +58,12 @@ function SuspendAccountModal({ state, setState, email, firstName, lastName }) {
 			});
 	};
 
-	return (
-		<>
-			<MessageModal
-				id="suspend-status"
-				state={messageModal}
-				setState={onCloseModal}
-			>{`${firstName} ${lastName} successfully suspended.`}</MessageModal>
-			<ConfirmationModal
-				state={confirmationModal}
-				setState={setConfirmationModal}
-				action={handleSubmit}
-			>Confirm suspension on {email}</ConfirmationModal>
-			<Modal
-				className=""
-				show={state}
-				onClose={() => setState(false)}
-				size="md"
-				popup
-			>
-				<Card className=" ">
+	const promptConfirmation = () => {
+		setConfirmationModal(true);
+	}
+
+	const promptReasonDuration = () => {
+		return <Card className=" ">
 					<div className="flex flex-col items-center">
 						<h5
 							className="text-2xl font-medium text-gray-900 dark:text-white"
@@ -90,7 +81,7 @@ function SuspendAccountModal({ state, setState, email, firstName, lastName }) {
 								<textarea
 									className="resize-none h-28 w-full rounded-lg"
 									value={reason}
-									onChange={(ev) => setReason(ev.target.value)}
+									onChange={(event) => enterReasonDuration((prev) => ({...prev, reason:event.target.value}))}
 								/>
 							</section>
 							<section className="flex flex-col">
@@ -101,9 +92,7 @@ function SuspendAccountModal({ state, setState, email, firstName, lastName }) {
 										className="border rounded-lg rounded-r-none border-black w-20"
 										min={1}
 										value={duration}
-										onChange={(ev) =>
-											setDuration(ev.target.valueAsNumber)
-										}
+										onChange={(event) => enterReasonDuration((prev) => ({...prev, duration:event.target.valueAsNumber}))}
 									/>
 									<Dropdown
 										size=""
@@ -148,7 +137,7 @@ function SuspendAccountModal({ state, setState, email, firstName, lastName }) {
 								</Button>
 								<Button
 									className="w-1/2 bg-custom_purple1 text-white"
-									onClick={() => setConfirmationModal(true)}
+									onClick={() => promptConfirmation()}
 								>
 									Confirm
 								</Button>
@@ -156,6 +145,28 @@ function SuspendAccountModal({ state, setState, email, firstName, lastName }) {
 						</div>
 					</div>
 				</Card>
+	}
+
+	return (
+		<>
+			<MessageModal
+				id="suspend-status"
+				state={messageModal}
+				setState={onCloseModal}
+			>{`${firstName} ${lastName} successfully suspended.`}</MessageModal>
+			<ConfirmationModal
+				state={confirmationModal}
+				setState={setConfirmationModal}
+				action={confirm}
+			>Confirm suspension on {email}</ConfirmationModal>
+			<Modal
+				className=""
+				show={state}
+				onClose={() => setState(false)}
+				size="md"
+				popup
+			>
+			{promptReasonDuration()}
 			</Modal>
 		</>
 	);

@@ -42,8 +42,8 @@ def permissions_required(*required_permissions:str):
 				return {'status_code': 401, 'message' : 'User suspended'}
 			# Check if has permission
 			for perm in set(required_permissions):
-				if not claims.get(perm):
-					return {'status_code': 401, 'message' : 'Insufficient permission'}
-			return fn(*args, **kwargs)
+				if claims.get(perm):
+					return fn(*args, **kwargs)
+			return {'status_code': 401, 'message' : 'Insufficient permission'}
 		return decorator
 	return wrapper

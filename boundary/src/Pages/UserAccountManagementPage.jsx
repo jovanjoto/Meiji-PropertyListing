@@ -125,8 +125,8 @@ export default function UserAccountManagementPage() {
 		return <span>No matching accounts found.</span>;
 	};
 
-	if (isLoading) {
-		return displayLoading();
+	const displayCreateAccountPage = () => {
+		setUserPageOpen(true)
 	}
 
 	return (
@@ -180,9 +180,7 @@ export default function UserAccountManagementPage() {
 						className="bg-custom_purple1 flex flex-row justify-center align-middle items-center"
 						color={"purple"}
 						size="lg"
-						onClick={() => {
-							setUserPageOpen(true);
-						}}
+						onClick={() => {displayCreateAccountPage()}}
 					>
 						Create new account
 					</Button>
@@ -190,8 +188,8 @@ export default function UserAccountManagementPage() {
 			</div>
 
 			<div className="flex flex-col justify-start items-center gap-5 my-6">
-				{displayList()}
-				{searchFilter().length == 0 && displayEmptyList()}
+				{isLoading ? displayLoading() : displayList()}
+				{!isLoading && searchFilter().length == 0 && displayEmptyList()}
 			</div>
 		</div>
 	);

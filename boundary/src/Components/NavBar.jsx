@@ -38,27 +38,39 @@ export default function NavBar({}) {
 			"User Profile Management": "/admin/viewProfiles",
 		},
 		listing: {
-			"Property Listing": "/agent/propertyListingManagementPage"
+			"Dashboard": "/agent",
+			"Property Listing": "/agent/propertyListingManagementPage",
+			"Ratings": "/agent/viewCustomerRatingPage",
+			"Reviews": "/agent/viewCustomerReviewPage"
 		},
 		buying: {
-			"Property Listing": "/"
+			"Property Listing": "/",
+			"Real Estate Agents" : "/buyer/REAPage"
 		},
 		selling: {
-			"Property Listing": "/seller/viewPropertyListing"
+			"Property Listing": "/seller",
+			"Real Estate Agents" : "/seller/REAPage"
 		},
 	};
 
-	const handleLogout = () => {
-		logout();
+	const redirectToLogin = () => {
 		navigate("/login");
+	}
+
+	const clearToken = () => {
+		logout();
 	};
+
+	const displayConfirmModal = () => {
+		setConfirmationModal(true);
+	}
 
 	return (
 		<>
 			<ConfirmationModal
 				state={confirmationModal}
 				setState={setConfirmationModal}
-				action={handleLogout}
+				action={() => {clearToken();redirectToLogin();}}
 			>
 				Are you sure you want to logout?
 			</ConfirmationModal>
@@ -98,20 +110,18 @@ export default function NavBar({}) {
 					arrowIcon={false}
 					inline
 					label={
-						// <Avatar img="https://flowbite.com/docs/images/people/profile-picture-5.jpg" rounded />
 						<IconContext.Provider value={{ size: "2em" }}>
 							<BsFillPersonFill className="hover:text-gray-500 align-middle mr-5" />
 						</IconContext.Provider>
 					}
 				>
 					<Dropdown.Item
-						onClick={() => {
-							setConfirmationModal(true);
+						onClick={clickLogoutButton => {
+							displayConfirmModal();
 						}}
 					>
 						Log Out
 					</Dropdown.Item>
-					{/* <Dropdown.Item>View User Account</Dropdown.Item> */}
 				</Dropdown>
 			</Navbar>
 		</>

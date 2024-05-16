@@ -64,7 +64,7 @@ export default function PrivateRoute({
 		} else if (user.has_admin_permission) {
 			return <Navigate to="/admin/viewaccounts" />;
 		} else if (user.has_listing_permission) {
-			return <Navigate to="/agent/propertyListingManagementPage" />;
+			return <Navigate to="/agent" />;
 		} else if (user.has_selling_permission) {
 			return <Navigate to="/seller" />;
 		} else if (user.has_selling_permission) {

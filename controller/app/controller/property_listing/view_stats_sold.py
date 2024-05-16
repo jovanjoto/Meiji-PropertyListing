@@ -6,7 +6,7 @@ from base64 import encodebytes # type: ignore
 from app.entity import PropertyListing
 from app.controller.authentication import permissions_required
 
-class ViewStatsVizOfSoldPlController(Blueprint):
+class ViewStatsVizOfSoldPLController(Blueprint):
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
 		self.add_url_rule("/search_managed_sold", view_func=self.searchManagedSold, methods=["GET"])

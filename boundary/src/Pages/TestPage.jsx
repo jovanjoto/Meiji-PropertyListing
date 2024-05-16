@@ -1,37 +1,14 @@
 import { useState } from "react";
-import UpdatePropertyModal from "../Components/Agent/UpdatePropertyModal";
+import NumShortlistModal from "../Components/Seller/NumShortlistModal";
 import { Button } from "flowbite-react";
-import ViewCountModal from "../Components/Seller/ViewCountModal";
-import ShortlistCountModal from '../Components/Seller/ShortlistCountModal';
+import MortgageCalculatorModal from "../Components/Buyer/MortgageCalculatorModal";
 
 function TestPage({}) {
-	const [showViewModal, setShowViewModal] = useState(false);
-
-	const handleShowViewModal = () => {
-		setShowViewModal(!showViewModal);
-	}
-
-	const [showShortlistModal, setShowShortlistModal] = useState(false);
-
-	const handleShowShortlistModal = () => {
-		setShowShortlistModal(!showShortlistModal);
-	}
-
-
+	const [open, setOpen] = useState(false);
 	return (
 		<>
-			<h1>Test Page</h1>
-			<Button onClick={handleShowViewModal}>Show View Modal</Button>
-			<ViewCountModal 
-				state={showViewModal}
-				setState={setShowViewModal}
-			/>
-
-			<Button onClick={handleShowShortlistModal}>Show Shortlist Modal</Button>
-			<ShortlistCountModal 
-				state={showShortlistModal}
-				setState={setShowShortlistModal}
-			/>
+			<Button onClick={() => {setOpen(true)}}>Toggle modal</Button>
+			<MortgageCalculatorModal state={open} setState={setOpen} propertyID={1}/>
 		</>
 	);
 }

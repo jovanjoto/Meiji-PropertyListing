@@ -22,6 +22,10 @@ import ViewPropertyListingPage from "./Pages/ViewPropertyListingPage.jsx";
 import PropertyListingMarketPage from "./Pages/PropertyListingMarketPage.jsx";
 import ViewRatingsPage from "./Pages/ViewRatingsPage.jsx";
 import ViewReviewsPage from "./Pages/ViewReviewsPage.jsx";
+import SellerPropertyListingPage from "./Pages/SellerPropertyListingPage.jsx";
+import AgentDashboardPage from "./Pages/AgentDashboardPage.jsx";
+import REAProfilePage from "./Pages/REAProfilePage.jsx";
+import REAPage from "./Pages/REAPage.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <AuthProvider>
@@ -103,6 +107,15 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             </PrivateRoute>
           }
         />
+        <Route
+          path="/agent"
+          element={
+            <PrivateRoute listing>
+              <NavBar />
+              <AgentDashboardPage />
+            </PrivateRoute>
+          }
+        />
         {/* Buying Routes */}
         <Route
           path="/"
@@ -118,20 +131,68 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           element={
             <PrivateRoute buying>
               <NavBar />
-              <ViewPropertyListingPage editable={false} />
+              <ViewPropertyListingPage />
             </PrivateRoute>
           }
         />
+		<Route
+          path="/buyer/viewREA/:email"
+          element={
+            <PrivateRoute buying>
+              <NavBar />
+              <REAProfilePage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/buyer/REAPage"
+          element={
+            <PrivateRoute buying>
+              <NavBar />
+              <REAPage />
+            </PrivateRoute>
+          }
+         />
         {/* Seller Routes */}
         <Route
           path="/seller"
           element={
             <PrivateRoute selling>
               <NavBar />
-              You are a seller!
+              <SellerPropertyListingPage />
             </PrivateRoute>
           }
         />
+
+        <Route
+          path="/seller/viewPropertyListingPage/:id"
+          element={
+            <PrivateRoute selling>
+              <NavBar />
+              <ViewPropertyListingPage />
+            </PrivateRoute>
+          }
+         />
+
+		 <Route
+          path="/seller/viewREA/:email"
+          element={
+            <PrivateRoute selling>
+              <NavBar />
+              <REAProfilePage />
+            </PrivateRoute>
+          }
+        />
+         <Route
+          path="/seller/REAPage"
+          element={
+            <PrivateRoute selling>
+              <NavBar />
+              <REAPage />
+            </PrivateRoute>
+          }
+         />
+
         {/* Others */}
         <Route
           path="/test"

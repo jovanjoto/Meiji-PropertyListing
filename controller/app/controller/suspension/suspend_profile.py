@@ -4,11 +4,11 @@ from flask_jwt_extended import jwt_required
 import datetime # type: ignore
 
 # Local dependencies
-from app.entity import Suspension
+from app.entity import Suspension, UserProfile, User
 from app.controller.authentication import permissions_required
 
 # SuspendUserProfile Controller
-class SuspendUserProfileController(Blueprint):
+class SuspendProfileController(Blueprint):
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
 		self.add_url_rule("/suspend_user_profile", view_func=self.suspendProfileCnt, methods=["PUT"])
@@ -22,5 +22,12 @@ class SuspendUserProfileController(Blueprint):
 		duration=int(json["duration"])
 		start_date = datetime.date.today()
 		end_date = start_date + datetime.timedelta(days=duration)
-		result = Suspension.createBulkSuspension(profile=profile, reason=reason, start=start_date, end=end_date)
-		return {"success": result}
+		if not UserProfile.queryUP(profile):
+			return {"success": False} 
+		# Get all users within the profile
+		users = User.query.filter_by(profile=profile).all()
+		for u in users:
+			success = Suspension.createSuspension(email=u.email, reason=reason, start=start_date, end=end_date)
+			if not success:
+				return {"success": False} 
+		return {"success": True}

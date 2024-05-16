@@ -31,7 +31,7 @@ export default function ProfileManagementPage({}) {
 		setProfilePageOpen(true);
 	}
 
-	useEffect(() => {
+	const searchAllProfile = () => { 
 		setIsLoading(true);
 		if (token) {
 			axios
@@ -50,6 +50,9 @@ export default function ProfileManagementPage({}) {
 				})
 				.then(() => setIsLoading(false));
 		}
+	}
+	useEffect(() => {
+		searchAllProfile();
 	}, []);
 
 	// For search and filtering
@@ -116,10 +119,6 @@ export default function ProfileManagementPage({}) {
 	const displayEmptyList = () => {
 		return <span>No matching profiles found.</span>;
 	};
-
-	if (isLoading) {
-		return displayLoading();
-	}
 
 	return (
 		<div className="flex flex-col justify-center mx-10 my-4">
@@ -207,8 +206,8 @@ export default function ProfileManagementPage({}) {
 				</div>
 			</div>
 			<div className="flex flex-col justify-start items-center gap-5 my-6">
-				{displayList()}
-				{searchFilter().length == 0 && displayEmptyList()}
+				{isLoading ? displayLoading() : displayList()}
+				{!isLoading && searchFilter().length == 0 && displayEmptyList()}
 			</div>
 		</div>
 	);

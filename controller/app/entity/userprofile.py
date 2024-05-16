@@ -92,3 +92,9 @@ class UserProfile(db.Model):
 				profile.has_selling_permission = new_details.get("has_selling_permission")			
 			db.session.commit()
 		return True
+	
+	@classmethod
+	def queryAllListingProfiles(cls) -> list[Self]:
+		return cls.query.filter_by(has_listing_permission=True).all()
+	
+	

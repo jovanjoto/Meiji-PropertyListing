@@ -12,7 +12,7 @@ class Views(db.Model):
 	# attributes
 	month = db.Column(db.Integer(), nullable=False, primary_key=True)
 	year = db.Column(db.Integer(), nullable=False, primary_key=True)
-	views = db.Column(db.Integer(), nullable=False, primary_key=True)
+	views = db.Column(db.Integer(), nullable=False)
 
 	# Part of composite key (qualifier)
 	propertyListingId = db.Column(db.String(250), db.ForeignKey("PropertyListing.id"), nullable=False, primary_key=True)
@@ -30,12 +30,12 @@ class Views(db.Model):
 
 	@classmethod
 	def incrementViews(cls, id:str) -> bool:
-		today = date.today()
-		views = Views.query.filter_by(propertyListingId=id, month=today.month, year=today.year).one_or_none()
-		# if views for a property at a certain time doesn't exist, create new views record
 		with current_app.app_context():
+			today = date.today()
+			views = Views.query.filter_by(propertyListingId=id, month=today.month, year=today.year).one_or_none()
+			# if views for a property at a certain time doesn't exist, create new views record
 			if not views:
-				newViews = cls(propertyListingId=id, month=today.month, year=today.year, views=1)
+				newViews = cls(propertyListingId=id, month=today.month, year=today.year, views=1) # type: ignore
 				db.session.add(newViews)
 			# else increment views by 1
 			else:

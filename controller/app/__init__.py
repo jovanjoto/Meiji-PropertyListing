@@ -4,14 +4,15 @@ from flask import Flask
 # Local dependencies
 from config import Config
 from app.entity import db, User, UserProfile, PropertyListing
-from .controller.user import view_user_controller, search_user_controller, update_user_controller, create_user_controller
+from .controller.user import *
 from .controller.suspension import get_suspension_controller, suspend_user_controller, suspend_profile_controller
 from .controller.profile import view_profile_controller, search_profile_controller, update_profile_controller, create_profile_controller
 from .controller.authentication import jwt, bcrypt, mail, login_controller, reset_password_controller
 from .controller.property_listing import *
 from .controller.shortlist import *
 from .controller.views import *
-# from .controller.rating import view_rating_controller
+from .controller.rating import view_rating_controller, rate_agent_controller
+from .controller.review import view_review_controller, review_agent_controller
 
 # Initialize Flask App
 flask_app = Flask(__name__)
@@ -63,6 +64,8 @@ flask_app.register_blueprint(create_user_controller, url_prefix='/api/user')
 flask_app.register_blueprint(view_user_controller, url_prefix='/api/user')
 flask_app.register_blueprint(update_user_controller, url_prefix='/api/user')
 flask_app.register_blueprint(search_user_controller, url_prefix='/api/user')
+flask_app.register_blueprint(view_rea_controller, url_prefix='/api/user')
+flask_app.register_blueprint(search_rea_controller, url_prefix='/api/user')
 
 # User Profile
 flask_app.register_blueprint(create_profile_controller, url_prefix='/api/profile')
@@ -82,6 +85,7 @@ flask_app.register_blueprint(search_new_pl_controller, url_prefix='/api/property
 flask_app.register_blueprint(search_sold_pl_controller, url_prefix='/api/property_listing')
 flask_app.register_blueprint(search_owned_pl_controller, url_prefix='/api/property_listing')
 flask_app.register_blueprint(view_stats_controller, url_prefix='/api/property_listing')
+flask_app.register_blueprint(calculate_mortgage_controller, url_prefix='/api/property_listing')
 
 # Shortlist
 flask_app.register_blueprint(shortlist_property_controller, url_prefix='/api/shortlist')
@@ -92,4 +96,9 @@ flask_app.register_blueprint(count_shortlist_controller, url_prefix='/api/shortl
 flask_app.register_blueprint(count_views_controller, url_prefix='/api/views')
 
 # Ratings
-# flask_app.register_blueprint(view_rating_controller, url_prefix='/api/rating')
+flask_app.register_blueprint(view_rating_controller, url_prefix='/api/rating')
+flask_app.register_blueprint(rate_agent_controller, url_prefix='/api/rating')
+
+# Reviews
+flask_app.register_blueprint(view_review_controller, url_prefix='/api/review')
+flask_app.register_blueprint(review_agent_controller, url_prefix='/api/review')

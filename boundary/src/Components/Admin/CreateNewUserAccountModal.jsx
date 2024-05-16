@@ -30,7 +30,7 @@ function CreateNewUserAccountModal({ state, setState }) {
 		password: "",
 		phone: "",
 	});
-	const handleChange = (event) => {
+	const enterDetails = (event) => {
 		setAccount({
 			...account,
 			[event.target.id]: event.target.value,
@@ -39,14 +39,14 @@ function CreateNewUserAccountModal({ state, setState }) {
 
 	useEffect(() => {
 		axios
-			.get("/api/profile/search_user_profile", {
+			.get("/api/user/get_list_of_user_profiles", {
 				headers: {
 					Authorization: `Bearer ${token}`,
 				},
 			})
 			.then((res) => {
 				if (res.status === 200) {
-					setProfiles(res.data.profiles.map((profile) => profile.name));
+					setProfiles(res.data.profiles);
 					setIsLoadingProfile(false);
 				} else {
 					logout();
@@ -88,11 +88,17 @@ function CreateNewUserAccountModal({ state, setState }) {
 	const onCloseModal = (x) => {
 		window.location.reload();
 	};
+	const displaySuccessMessage = () => {
+		return <>Success</>
+	}
+	const displayErrorMessage = () => {
+		return <>Error</>
+	}
 	return (
 		<>
 			<MessageModal state={messageModalOpen} setState={onCloseModal}>
-				{isSuccess && <>Success</>}
-				{!isSuccess && <>Error</>}
+				{isSuccess && displaySuccessMessage()}
+				{!isSuccess && displayErrorMessage()}
 			</MessageModal>
 			<Modal
 				className=""
@@ -117,7 +123,7 @@ function CreateNewUserAccountModal({ state, setState }) {
 								<TextInput
 									value={account.first_name}
 									id="first_name"
-									onChange={handleChange}
+									onChange={enterDetails}
 									required
 								/>
 							</section>
@@ -126,7 +132,7 @@ function CreateNewUserAccountModal({ state, setState }) {
 								<TextInput
 									value={account.last_name}
 									id="last_name"
-									onChange={handleChange}
+									onChange={enterDetails}
 									required
 								/>
 							</section>
@@ -136,7 +142,7 @@ function CreateNewUserAccountModal({ state, setState }) {
 									value={account.email}
 									type="email"
 									id="email"
-									onChange={handleChange}
+									onChange={enterDetails}
 									required
 								/>
 							</section>
@@ -145,7 +151,7 @@ function CreateNewUserAccountModal({ state, setState }) {
 								<TextInput
 									id="password"
 									type="password"
-									onChange={handleChange}
+									onChange={enterDetails}
 									value={account.password}
 									required
 								/>
@@ -155,12 +161,12 @@ function CreateNewUserAccountModal({ state, setState }) {
 								<TextInput
 									value={account.phone}
 									id="phone"
-									onChange={handleChange}
+									onChange={enterDetails}
 									required
 								/>
 							</section>
 							<Label htmlFor="roleTitle" value="Role" />
-							<section className="flex flex-col gap-y-2 border ">
+							<section className="flex flex-col gap-y-2 border h-24 overflow-y-auto">
 								{isLoadingProfile ? (
 									<Spinner />
 								) : (

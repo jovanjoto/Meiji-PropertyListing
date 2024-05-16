@@ -7,7 +7,7 @@ from app.entity import UserProfile
 from app.controller.authentication import permissions_required
 
 
-class UpdateUserProfileController(Blueprint):
+class UpdateProfileController(Blueprint):
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
 		self.add_url_rule("/update_user_profile", view_func=self.updateProfileCnt, methods=["PATCH"])

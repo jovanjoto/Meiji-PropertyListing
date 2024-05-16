@@ -4,7 +4,6 @@ from typing_extensions import Self # type: ignore
 
 # Local dependencies
 from .sqlalchemy import db
-from .userprofile import UserProfile
 
 # User Schema
 class User(db.Model):
@@ -75,28 +74,24 @@ class User(db.Model):
 				- profile:str
 		returns bool.
 		"""
-		# Profile does not exist
-		profile = UserProfile.queryUP(details["profile"])
-		if not profile:
+		try:
+			phone = cls.query.filter_by(phone=details["phone"]).one_or_none()
+			# Phone exist
+			if phone:
+				return False
+			# User already exist
+			if cls.queryUserAccount(details["email"]):
+				return False
+			
+			# Initialize new user
+			new_user = cls(**details)
+			# Commit to DB
+			with current_app.app_context():
+				db.session.add(new_user)
+				db.session.commit()
+			return True
+		except:
 			return False
-		# Unauthorized request to make a user with admin permissions
-		if profile.has_admin_permission:
-			return False
-		phone = cls.query.filter_by(phone=details["phone"]).one_or_none()
-		# Phone exist
-		if phone:
-			return False
-		# User already exist
-		if cls.queryUserAccount(details["email"]):
-			return False
-		
-		# Initialize new user
-		new_user = cls(**details)
-		# Commit to DB
-		with current_app.app_context():
-			db.session.add(new_user)
-			db.session.commit()
-		return True
 	
 	@classmethod
 	def updateAccount(cls, details:dict[str,str]) -> bool:
@@ -111,43 +106,32 @@ class User(db.Model):
 				- profile:str
 		returns bool.
 		"""
-		# Profile does not exist
-		if details.get("profile"):
-			new_profile = UserProfile.queryUP(details["profile"])
-			if not new_profile:
-				return False
-			# Unauthorized request to uodate a user's profile into admin.
-			if new_profile.has_admin_permission:
-				return False
-			
-		with current_app.app_context():
-			user = cls.queryUserAccount(details["email"])
-			if details.get("phone"):
-				phone = cls.query.filter_by(phone=details["phone"]).one_or_none()
-				# Phone exist
-				if phone:
+		try:
+			with current_app.app_context():
+				user = cls.queryUserAccount(details["email"])
+				if details.get("phone"):
+					phone = cls.query.filter_by(phone=details["phone"]).one_or_none()
+					# Phone exist
+					if phone:
+						return False
+				# User does not exist
+				if not user:
 					return False
-			# User does not exist
-			if not user:
-				return False
-			# Trying to update an admin's information
-			profile = UserProfile.queryUP(user.profile)
-			if profile and profile.has_admin_permission:
-				return False
-			
-			# Update information
-			if details.get("phone"):
-				user.phone = details.get("phone")
-			if details.get("password"):
-				user.password = details.get("password")
-			if details.get("first_name"):
-				user.first_name = details.get("first_name")
-			if details.get("last_name"):
-				user.last_name = details.get("last_name")			
-			if details.get("profile"):
-				user.profile = details.get("profile")			
-			db.session.commit()
-		return True
+				# Update information
+				if details.get("phone"):
+					user.phone = details.get("phone")
+				if details.get("password"):
+					user.password = details.get("password")
+				if details.get("first_name"):
+					user.first_name = details.get("first_name")
+				if details.get("last_name"):
+					user.last_name = details.get("last_name")			
+				if details.get("profile"):
+					user.profile = details.get("profile")			
+				db.session.commit()
+			return True
+		except:
+			return False
 	
 	@classmethod
 	def updatePassword(cls, newPassword:str|bytes, email:str) -> bool:
@@ -162,11 +146,15 @@ class User(db.Model):
 			# User does not exist
 			if not user:
 				return False
-			# Trying to update an admin's information
-			profile = UserProfile.queryUP(user.profile)
-			if profile and profile.has_admin_permission:
-				return False
 			# Update password
 			user.password = newPassword
 			db.session.commit()
 		return True
+	
+	@classmethod
+	def queryAllUserByProfile(cls, profile:str) -> list[Self]:
+		"""
+		Queries all users in a profile:
+		returns an list of User instance (that are of the profile).
+		"""
+		return cls.query.filter_by(profile=profile).all()

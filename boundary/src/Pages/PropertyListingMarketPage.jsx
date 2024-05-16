@@ -71,6 +71,7 @@ export default function PropertyListingMarketPage({}) {
 	});
 	const [propertyList, setPropertyList] = useState([]);
 	const [soldChecked, setSoldChecked] = useState(false);
+	const [shortListed, setShortListed] = useState(false);
 
 	const handleChange = (attribute, value) => {
 		setFilter((prev) => ({
@@ -78,7 +79,6 @@ export default function PropertyListingMarketPage({}) {
 			[attribute]: value,
 		}));
 	};
-
 	useEffect(() => {
 		setIsLoading(true);
 		if (token) {
@@ -127,8 +127,6 @@ export default function PropertyListingMarketPage({}) {
 		}
 	}, [soldChecked]);
 
-	const propertyType = ["all", "HDB", "CONDO", "LANDED"];
-
 	const displayLoading = () => {
 		return (
 			<div className="text-center text-8xl">
@@ -156,7 +154,8 @@ export default function PropertyListingMarketPage({}) {
 				(propertyJson.num_of_bathrooms > 5 && filter.bathroom[5])) &&
 			propertyJson.area < filter.maxFloorSize &&
 			propertyJson.area > filter.minFloorSize &&
-			propertyJson.name.toLowerCase().includes(search.toLowerCase())
+			propertyJson.name.toLowerCase().includes(search.toLowerCase()) &&
+			(!shortListed || propertyJson.is_shortlisted === shortListed)
 		);
 	};
 
@@ -178,6 +177,7 @@ export default function PropertyListingMarketPage({}) {
 						area={propertyJson.area}
 						is_sold={propertyJson.is_sold}
 						image_url={propertyJson.image_url}
+						is_shortlisted={propertyJson.is_shortlisted}
 					/>
 				);
 			}
@@ -191,10 +191,6 @@ export default function PropertyListingMarketPage({}) {
 	const displayEmptyList = () => {
 		return <span>No Listings Available</span>;
 	};
-
-	if (isLoading) {
-		displayLoading();
-	}
 
 	return (
 		<div className="flex flex-col justify-center mx-10 my-4">
@@ -555,25 +551,38 @@ export default function PropertyListingMarketPage({}) {
 						</div>
 					</Dropdown>
 					{/* Sold Checkbox */}
-					<span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
-						View Sold Property
+					<span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+						Sold Property only
 					</span>
-					<label class="inline-flex items-center cursor-pointer">
+					<label className="inline-flex items-center cursor-pointer">
 						<input
 							type="checkbox"
-							value=""
-							class="sr-only peer"
+							checked={soldChecked}
+							className="sr-only peer"
 							onChange={() => setSoldChecked(!soldChecked)}
 						/>
-						<div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:w-5 after:h-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+						<div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:w-5 after:h-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+					</label>
+					<span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+						Shortlisted only
+					</span>
+					<label className="inline-flex items-center cursor-pointer">
+						<input
+							type="checkbox"
+							checked={shortListed}
+							className="sr-only peer"
+							onChange={() => setShortListed(!shortListed)}
+						/>
+						<div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:w-5 after:h-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
 					</label>
 				</div>
 			</div>
 
 			<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 mt-5">
-				{displayList()}
+				{!isLoading && displayList()}
 			</div>
-			{searchFilter().length == 0 && displayEmptyList()}
+			{isLoading && displayLoading()}
+			{!isLoading && searchFilter().length == 0 && displayEmptyList()}
 		</div>
 	);
 }
