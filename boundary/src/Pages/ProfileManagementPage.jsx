@@ -29,9 +29,9 @@ export default function ProfileManagementPage({}) {
 
 	const displayCreateProfilePage = () => {
 		setProfilePageOpen(true);
-	}
+	};
 
-	const searchAllProfile = () => { 
+	const searchAllProfile = () => {
 		setIsLoading(true);
 		if (token) {
 			axios
@@ -50,7 +50,7 @@ export default function ProfileManagementPage({}) {
 				})
 				.then(() => setIsLoading(false));
 		}
-	}
+	};
 	useEffect(() => {
 		searchAllProfile();
 	}, []);
@@ -92,16 +92,35 @@ export default function ProfileManagementPage({}) {
 		let filtered_list = [];
 
 		profilesList.forEach((profileJson) => {
-			if (checkSearchFilter(profileJson)) {
-				filtered_list.push(
-					<UserProfileCard
-						key={profileJson.name}
-						profileJson={profileJson}
-					/>
-				);
+			let search_bool = profileJson.name
+				.toLowerCase()
+				.startsWith(search.toLowerCase());
+			let filter_bool_listing = logical_implication(
+				filter.has_listing_permission,
+				profileJson.has_listing_permission
+			);
+			let filter_bool_buying = logical_implication(
+				filter.has_buying_permission,
+				profileJson.has_buying_permission
+			);
+			let filter_bool_selling = logical_implication(
+				filter.has_selling_permission,
+				profileJson.has_selling_permission
+			);
+			if (
+				search_bool &&
+				filter_bool_listing &&
+				filter_bool_buying &&
+				filter_bool_selling
+			) {
+				filtered_list.push(profileJson);
 			}
 		});
-		return filtered_list;
+		if (filtered_list.length > 0) {
+			return displayList(filtered_list);
+		} else {
+			return displayEmptyList();
+		}
 	};
 
 	const displayLoading = () => {
@@ -112,8 +131,10 @@ export default function ProfileManagementPage({}) {
 		);
 	};
 
-	const displayList = () => {
-		return searchFilter();
+	const displayList = (filtered_profiles) => {
+		return filtered_profiles.map((profileJson) => (
+			<UserProfileCard key={profileJson.name} profileJson={profileJson} />
+		));
 	};
 
 	const displayEmptyList = () => {
@@ -122,7 +143,10 @@ export default function ProfileManagementPage({}) {
 
 	return (
 		<div className="flex flex-col justify-center mx-10 my-4">
-			<CreateNewUserProfileModal state={profilePageOpen} setState={setProfilePageOpen} />
+			<CreateNewUserProfileModal
+				state={profilePageOpen}
+				setState={setProfilePageOpen}
+			/>
 			<div className="flex w-full justify-between flex-wrap items-center gap-5">
 				<TextInput
 					id="Search"
@@ -200,14 +224,21 @@ export default function ProfileManagementPage({}) {
 						size="lg"
 						className="bg-custom_purple1 flex flex-row justify-center align-middle items-center"
 						color="purple"
-					onClick={displayCreateProfilePage}>
+						onClick={displayCreateProfilePage}
+					>
 						Create new profile
 					</Button>
 				</div>
 			</div>
 			<div className="flex flex-col justify-start items-center gap-5 my-6">
-				{isLoading ? displayLoading() : displayList()}
-				{!isLoading && searchFilter().length == 0 && displayEmptyList()}
+				{isLoading && displayLoading()}
+				{!isLoading &&
+				search == "" &&
+				Object.values(filter).every((x) => x == false)
+					? profilesList.length > 0
+						? displayList(profilesList)
+						: displayEmptyList()
+					: searchFilter(search, filter)}
 			</div>
 		</div>
 	);

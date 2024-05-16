@@ -66,21 +66,6 @@ export default function UserAccountManagementPage() {
 		}
 	}, []);
 
-	const checkSearchFilter = (profileJson) => {
-		let search_bool = profileJson.first_name
-			.toLowerCase()
-			.startsWith(search.toLowerCase());
-		let search_bool2 = profileJson.last_name
-			.toLowerCase()
-			.startsWith(search.toLowerCase());
-		let search_bool3 = profileJson.first_name
-			.concat(" ", profileJson.last_name)
-			.toLowerCase()
-			.startsWith(search.toLowerCase());
-		let filter_bool = filter[profileJson.profile];
-		return (search_bool || search_bool2 || search_bool3) && filter_bool;
-	};
-
 	const handleFilter = (key, value) => {
 		setFilter((prev) => ({
 			...prev,
@@ -88,25 +73,29 @@ export default function UserAccountManagementPage() {
 		}));
 	};
 
-	const searchFilter = () => {
+	const searchFilter = (keyword, filter) => {
 		let filtered_list = [];
 		accountList.forEach((accountJson) => {
-			if (checkSearchFilter(accountJson)) {
-				filtered_list.push(
-					<UserAccountCard
-						key={accountJson["email"]}
-						profile={accountJson.profile}
-						firstName={accountJson.first_name}
-						lastName={accountJson.last_name}
-						email={accountJson.email}
-						phone_num={accountJson.phone}
-						isSuspended={accountJson.suspended}
-						suspensionDate={accountJson.suspension_end}
-					/>
-				);
+			let search_bool = accountJson.first_name
+				.toLowerCase()
+				.startsWith(keyword.toLowerCase());
+			let search_bool2 = accountJson.last_name
+				.toLowerCase()
+				.startsWith(keyword.toLowerCase());
+			let search_bool3 = accountJson.first_name
+				.concat(" ", accountJson.last_name)
+				.toLowerCase()
+				.startsWith(keyword.toLowerCase());
+			let filter_bool = filter[accountJson.profile];
+			if ((search_bool || search_bool2 || search_bool3) && filter_bool) {
+				filtered_list.push(accountJson);
 			}
 		});
-		return filtered_list;
+		if (filtered_list.length > 0) {
+			return displayList(filtered_list);
+		} else {
+			return displayEmptyList();
+		}
 	};
 
 	const displayLoading = () => {
@@ -117,8 +106,21 @@ export default function UserAccountManagementPage() {
 		);
 	};
 
-	const displayList = () => {
-		return searchFilter();
+	const displayList = (filtered_accounts) => {
+		return filtered_accounts.map((accountJson) => {
+			return (
+				<UserAccountCard
+					key={accountJson["email"]}
+					profile={accountJson.profile}
+					firstName={accountJson.first_name}
+					lastName={accountJson.last_name}
+					email={accountJson.email}
+					phone_num={accountJson.phone}
+					isSuspended={accountJson.suspended}
+					suspensionDate={accountJson.suspension_end}
+				/>
+			);
+		});
 	};
 
 	const displayEmptyList = () => {
@@ -126,12 +128,15 @@ export default function UserAccountManagementPage() {
 	};
 
 	const displayCreateAccountPage = () => {
-		setUserPageOpen(true)
-	}
+		setUserPageOpen(true);
+	};
 
 	return (
 		<div className="flex flex-col justify-center mx-10 my-4">
-			<CreateNewUserAccountModal state={userPageOpen} setState={setUserPageOpen} />
+			<CreateNewUserAccountModal
+				state={userPageOpen}
+				setState={setUserPageOpen}
+			/>
 			<div className="flex w-full justify-between flex-wrap items-center gap-5">
 				<TextInput
 					id="Search"
@@ -177,7 +182,9 @@ export default function UserAccountManagementPage() {
 						className="bg-custom_purple1 flex flex-row justify-center align-middle items-center"
 						color={"purple"}
 						size="lg"
-						onClick={() => {displayCreateAccountPage()}}
+						onClick={() => {
+							displayCreateAccountPage();
+						}}
 					>
 						Create new account
 					</Button>
@@ -185,8 +192,14 @@ export default function UserAccountManagementPage() {
 			</div>
 
 			<div className="flex flex-col justify-start items-center gap-5 my-6">
-				{isLoading ? displayLoading() : displayList()}
-				{!isLoading && searchFilter().length == 0 && displayEmptyList()}
+				{isLoading && displayLoading()}
+				{!isLoading &&
+				search == "" &&
+				Object.values(filter).every((x) => x == true)
+					? accountList.length > 0
+						? displayList(accountList)
+						: displayEmptyList()
+					: searchFilter(search, filter)}
 			</div>
 		</div>
 	);
