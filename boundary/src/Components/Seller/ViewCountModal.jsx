@@ -24,7 +24,6 @@ function ViewCountModal({ state, setState, id }) {
 	// MAKE SURE TO PUT DATASET AS A PROP WITH THE SAME LENGTH
 	const { token } = useContext(AuthContext);
 	const [selectedChart, setSelectedChart] = useState("Bar");
-	const [isLoading, setIsLoading] = useState(false);
 	const [chartData, setChartData] = useState({
 		labels: [],
 		data: [],
@@ -50,8 +49,13 @@ function ViewCountModal({ state, setState, id }) {
 
 	const maxDate = endOfMonth(new Date());
 
+
+	// * Date Picker Stuff * //
+	function onCloseModal() {
+		setState(false);
+	}
+
 	useEffect(() => {
-		setIsLoading(true);
 		axios
 			.get("/api/views/find_property_views", {
 				params: { propertyId: id },
@@ -59,11 +63,22 @@ function ViewCountModal({ state, setState, id }) {
 			})
 			.then((res) => {
 				if (res.status === 200) {
-					const processed_data = process_data(res.data.view);
+					const aggregatedData = {};
+					views.forEach((view) => {
+						const monthYear = new Date(view.year, view.month - 1);
+						aggregatedData[monthYear] = view.views;
+					});
+					const months = Object.keys(aggregatedData).sort(
+						(b, a) => new Date(b.date) - new Date(a.date)
+					);
+					const viewsData = months.map((month) => aggregatedData[month]);
+					const viewsLabel = months.map(
+						(month) => `${getMonth(month) + 1}/${getYear(month)}`
+					);
 					setChartData((prev) => ({
 						...prev,
-						labels: processed_data.labels,
-						data: processed_data.data,
+						labels: viewsLabel,
+						data: viewsData,
 					}));
 				} else {
 					console.log(res.status);
@@ -71,27 +86,10 @@ function ViewCountModal({ state, setState, id }) {
 			})
 			.catch((error) => {
 				console.log(error);
-			})
-			.then(() => setIsLoading(false));
+			});
 	}, []);
 
-	const process_data = (views) => {
-		const aggregatedData = {};
-		views.forEach((view) => {
-			const monthYear = new Date(view.year, view.month - 1);
-			aggregatedData[monthYear] = view.views;
-		});
-		const months = Object.keys(aggregatedData).sort((b, a) => new Date(b.date) - new Date(a.date));
-		const viewsData = months.map((month) => aggregatedData[month]);
-		const viewsLabel = months.map((month) => `${getMonth(month)+1}/${getYear(month)}`);
-
-		return {
-			labels: viewsLabel,
-			data: viewsData,
-		};
-	};
-
-	const filter_date = () => {
+	const displayViewsModal = (viewData) => {
 		const data = {
 			labels: [],
 			datasets: [
@@ -110,37 +108,17 @@ function ViewCountModal({ state, setState, id }) {
 			selectedEndMonthData.month - 1
 		);
 
-		for (let index = 0; index < chartData.data.length; index++) {
-			const labels = chartData.labels[index].split("/");
+		for (let index = 0; index < viewData.data.length; index++) {
+			const labels = viewData.labels[index].split("/");
 			const dates = new Date(labels[1], labels[0] - 1);
 			if (start_date <= dates && dates <= end_date) {
 				console.log(dates);
-				data.labels.push(chartData.labels[index]);
-				data.datasets[0].data.push(chartData.data[index]);
+				data.labels.push(viewData.labels[index]);
+				data.datasets[0].data.push(viewData.data[index]);
 			}
 		}
-		return data;
-	};
 
-	// * Date Picker Stuff * //
-	function onCloseModal() {
-		setState(false);
-	}
-
-	const displayLoading = () => {
 		return (
-			<div className="text-center text-8xl">
-				<Spinner aria-label="Extra large spinner example" size="xl" />
-			</div>
-		);
-	};
-
-	if (isLoading) {
-		return displayLoading();
-	}
-
-	return (
-		<>
 			<Modal className="" show={state} onClose={onCloseModal} popup>
 				<FaTimes
 					className="absolute top-0 left-0 m-2 rounded-md w-5 h-5 cursor-pointer mb-5" // Added absolute positioning
@@ -213,16 +191,18 @@ function ViewCountModal({ state, setState, id }) {
 						</Dropdown>
 						<section className="flex justify-center">
 							{selectedChart === "Bar" ? (
-								<ViewCountBarChart chartData={filter_date()} />
+								<ViewCountBarChart chartData={data} />
 							) : (
-								<ViewCountLineChart chartData={filter_date()} />
+								<ViewCountLineChart chartData={data} />
 							)}
 						</section>
 					</div>
 				</Modal.Body>
 			</Modal>
-		</>
-	);
+		);
+	};
+
+	return displayViewsModal(chartData);
 }
 
 export default ViewCountModal;
