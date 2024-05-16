@@ -28,7 +28,7 @@ export default function UserAccountManagementPage() {
 		if (token) {
 			// Get all profiles
 			axios
-				.get("/api/profile/search_user_profile", {
+				.get("/api/user/get_all_profiles", {
 					headers: { Authorization: `Bearer ${token}` },
 				})
 				.then((res) => {
@@ -36,7 +36,7 @@ export default function UserAccountManagementPage() {
 						res.data.profiles.forEach((profile) => {
 							setFilter((prev) => ({
 								...prev,
-								[profile.name]: true,
+								[profile]: true,
 							}));
 						});
 					} else {
@@ -131,7 +131,10 @@ export default function UserAccountManagementPage() {
 
 	return (
 		<div className="flex flex-col justify-center mx-10 my-4">
-			<CreateNewUserAccountModal state={userPageOpen} setState={setUserPageOpen} />
+			<CreateNewUserAccountModal
+				state={userPageOpen}
+				setState={setUserPageOpen}
+			/>
 			<div className="flex w-full justify-between flex-wrap items-center gap-5">
 				<TextInput
 					id="Search"
@@ -177,7 +180,9 @@ export default function UserAccountManagementPage() {
 						className="bg-custom_purple1 flex flex-row justify-center align-middle items-center"
 						color={"purple"}
 						size="lg"
-						onClick={() => {setUserPageOpen(true)}}
+						onClick={() => {
+							setUserPageOpen(true);
+						}}
 					>
 						Create new account
 					</Button>
