@@ -4,7 +4,7 @@ import { useState, useRef, useContext } from "react";
 import axios from "axios";
 import { AuthContext } from "../Authentication/AuthContext";
 
-function MortgageCalculatorModal({ state, setState, propertyID }) {
+function MortgageCalculatorModal({ state, setState, propId }) {
 	const [showResult, setShowResult] = useState(false);
 	const [result, setResult] = useState({});
 
@@ -22,25 +22,17 @@ function MortgageCalculatorModal({ state, setState, propertyID }) {
 		setShowResult(false);
 	}
 
-
-
 	const SGDollar = new Intl.NumberFormat("en-US", {
 		style: "currency",
 		currency: "SGD",
 	});
 
-	const selectLoanDetails = async (event) => {
-		event.preventDefault();
-		const details = {
-			loan_tenure: loanTenureRef.current.value,
-			dp_percentage: downPaymentRef.current.value,
-			interest_rate: interestRateRef.current.value,
-		};
+	const selectLoanDetails = async (details) => {
 		try {
 			const res = await axios.post(
 				"/api/property_listing/calculate_mortgage",
 				{
-					propId: propertyID,
+					propId: propId,
 					details: details,
 				},
 				{
@@ -48,19 +40,17 @@ function MortgageCalculatorModal({ state, setState, propertyID }) {
 						Authorization: `Bearer ${token}`,
 					},
 				}
-			)
-			setResult(res.data.data)
-			displayMortgage()
+			);
+			setResult(res.data.data);
+			displayMortgage();
 		} catch (err) {
-			console.log(err)
+			console.log(err);
 		}
-
-
-	}
+	};
 
 	const displayMortgage = () => {
-		setShowResult(true)
-	}
+		setShowResult(true);
+	};
 
 	const promptDetails = () => {
 		return (
@@ -87,7 +77,15 @@ function MortgageCalculatorModal({ state, setState, propertyID }) {
 							{/* left */}
 							<form
 								className="flex flex-col gap-5 w-1/2 "
-								onSubmit={selectLoanDetails}
+								onSubmit={(ev) => {
+									ev.preventDefault();
+									const details = {
+										loan_tenure: loanTenureRef.current.value,
+										dp_percentage: downPaymentRef.current.value,
+										interest_rate: interestRateRef.current.value,
+									};
+									selectLoanDetails(details);
+								}}
 							>
 								<div className="flex flex-col">
 									<Label>Loan Tenure (years) : </Label>
@@ -139,7 +137,9 @@ function MortgageCalculatorModal({ state, setState, propertyID }) {
 								{showResult ? (
 									<>
 										<div className="flex flex-col gap-2 border mt-4 px-4 py-1">
-											<Label className="text-">Monthly Payment :</Label>
+											<Label className="text-">
+												Monthly Payment :
+											</Label>
 											<div className="flex flex-row items-center">
 												<span className="text-xl text-custom_purple1">
 													{SGDollar.format(result.monthly_payment)}
@@ -154,7 +154,9 @@ function MortgageCalculatorModal({ state, setState, propertyID }) {
 										</div>
 										<div className="flex flex-col border px-4 text-center py-6 gap-4">
 											<div className="flex flex-row justify-between">
-												<span className="text-sm">Mortgage Size </span>
+												<span className="text-sm">
+													Mortgage Size{" "}
+												</span>
 												<span className="font-bold">
 													{SGDollar.format(result.mortgage_size)}
 												</span>
@@ -164,7 +166,9 @@ function MortgageCalculatorModal({ state, setState, propertyID }) {
 													Mortgage Interest{" "}
 												</span>
 												<span className="font-bold">
-													{SGDollar.format(result.mortgage_interest)}
+													{SGDollar.format(
+														result.mortgage_interest
+													)}
 												</span>
 											</div>
 											<div className="border-t " />
@@ -186,15 +190,10 @@ function MortgageCalculatorModal({ state, setState, propertyID }) {
 					</Modal.Body>
 				</Modal>
 			</>
-		)
-	}
+		);
+	};
 
-	
-	return (
-		promptDetails()
-	)
-
-
+	return promptDetails();
 }
 
 export default MortgageCalculatorModal;
