@@ -3,6 +3,14 @@ import { FaTimes } from "react-icons/fa";
 
 function ConfirmationModal({ state, setState, action, children }) {
 	// !!! NEED CHILDREN FOR MESSAGE !!!
+
+	const clickYes = () => {
+		action()
+	}
+	const clickNo = () => {
+		setState(false)
+	}
+
 	function onCloseModal() {
 		setState(false);
 	}
@@ -21,8 +29,8 @@ function ConfirmationModal({ state, setState, action, children }) {
 						{children}
 					</h1>
 					<section className="flex justify-center gap-5 w-full mt-5">
-						<Button onClick={() => setState(false)} className="w-1/4" color="failure">Cancel</Button>
-						<Button onClick={() => action()} className="w-1/4 bg-custom_purple1">Confirm</Button>
+						<Button onClick={clickNo} className="w-1/4" color="failure">Cancel</Button>
+						<Button onClick={clickYes} className="w-1/4 bg-custom_purple1">Confirm</Button>
 					</section>
 				</Modal.Body>
 			</Modal>

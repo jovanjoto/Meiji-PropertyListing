@@ -6,45 +6,52 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 
 function LoginCard() {
-	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
 	const [invalidMsg, setInvalidMsg] = useState("");
 	const navigate = useNavigate();
 	const { login } = useContext(AuthContext);
+	const [details, enterDetails] = useState({"email": "", "password": ""});
 
-	const handleSubmit = async (event) => {
+	const redirectToHomePage = (token) => {
+		const user = jwtDecode(token);
+		if (user.has_admin_permission) {
+			return navigate("/admin/viewaccounts");
+		} else if (user.has_listing_permission) {
+			return navigate("/agent");
+		} else if (user.has_selling_permission) {
+			return navigate("/seller");
+		} else if (user.has_buying_permission) {
+			return navigate("/");
+		}
+	}
+
+	const displayIncorrectMessage = () => {
+		setInvalidMsg("email or password incorrect");
+	}
+
+	const clickSubmit = async (event) => {
 		event.preventDefault();
 		const response = await axios
 			.post("/api/authentication/login", {
-				email: email,
-				password: password,
+				email: details.email,
+				password: details.password,
 			})
 			.catch((error) => {
 				console.log(error);
 			});
 		if (response.data.access_token) {
 			login(response.data.access_token);
-			const user = jwtDecode(response.data.access_token);
-			if (user.has_admin_permission) {
-				return navigate("/admin/viewaccounts");
-			} else if (user.has_listing_permission) {
-				return navigate("/agent");
-			} else if (user.has_selling_permission) {
-				return navigate("/seller");
-			} else if (user.has_selling_permission) {
-				return navigate("/");
-			}
+			redirectToHomePage(response.data.access_token);
 		} else {
-			setInvalidMsg("email or password incorrect");
+			displayIncorrectMessage();
 		}
 	};
 
-	return (
-		<Card>
+	const displayFields = () => {
+		return <Card>
 			<div className="mb-2 text-center block w-96 mx-4">
 				<Label className="text-xl" value="Sign in to your account" />
 			</div>
-			<form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+			<form className="flex flex-col gap-4" onSubmit={clickSubmit}>
 				<div>
 					<div className="mb-2 block text-start">
 						<Label htmlFor="email" value="Email" />
@@ -54,7 +61,7 @@ function LoginCard() {
 						type="email"
 						placeholder="user@mail.com"
 						required={true}
-						onChange={(event) => setEmail(event.target.value)}
+						onChange={(event) => enterDetails((prev) => ({...prev, email:event.target.value}))}
 						color={invalidMsg === "" ? "gray" : "failure"}
 					/>
 				</div>
@@ -66,7 +73,7 @@ function LoginCard() {
 						id="password1"
 						type="password"
 						required={true}
-						onChange={(event) => setPassword(event.target.value)}
+						onChange={(event) => enterDetails((prev) => ({...prev, password:event.target.value}))}
 						color={invalidMsg === "" ? "gray" : "failure"}
 						helperText={
 							<React.Fragment>
@@ -93,6 +100,10 @@ function LoginCard() {
 				</div>
 			</form>
 		</Card>
+	}
+
+	return (
+		displayFields()
 	);
 }
 
