@@ -99,7 +99,7 @@ function AgentDashboardPage() {
                 <Table.Cell className="whitespace-nowrap font-medium text-gray-900">
                   {propertyJson.name}
                 </Table.Cell>
-                <Table.Cell>S${SGDollar.format(propertyJson.price)}</Table.Cell>
+                <Table.Cell>S{SGDollar.format(propertyJson.price)}</Table.Cell>
                 <Table.Cell>{propertyJson.transaction_date}</Table.Cell>
               </Table.Row>
             ))}

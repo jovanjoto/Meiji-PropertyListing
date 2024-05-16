@@ -69,7 +69,7 @@ export default function ViewPropertyListingPage() {
 		}
 		
 	}, [id]);
-	const displayLoading = () => {
+	const displayLoadingPage = () => {
 		return (
 			<div className="text-center text-8xl">
 				<Spinner aria-label="Extra large spinner example" size="xl" />
@@ -131,7 +131,7 @@ export default function ViewPropertyListingPage() {
 	};
 
   if (isLoading || !property) {
-    return displayLoading();
+    return displayLoadingPage();
   }
 
   return (

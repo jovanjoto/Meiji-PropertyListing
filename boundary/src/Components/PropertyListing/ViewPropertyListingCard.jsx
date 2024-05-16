@@ -126,7 +126,7 @@ function ViewPropertyListingCard({
 			});
 	};
 
-	const clickRemoveIcon = () => {
+	const promptConfirmation = () => {
 		setConfirmationOpen(true);
 	};
 
@@ -262,7 +262,7 @@ function ViewPropertyListingCard({
 											<FaHeart
 												size={38}
 												// color="red"
-												onClick={clickRemoveIcon}
+												onClick={promptConfirmation}
 												className="hover:text-red-500 text-red-600"
 											/>
 										) : (
