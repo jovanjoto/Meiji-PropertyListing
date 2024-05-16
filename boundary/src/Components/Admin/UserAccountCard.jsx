@@ -19,7 +19,7 @@ export default function UserAccountCard({
 
 	return (
 		<>
-			<UserAccountModal state={showViewModal} setState={setShowViewModal} primaryKey={email}/>
+			<UserAccountModal state={showViewModal} setState={setShowViewModal} email={email}/>
 			<SuspendAccountModal
 				state={showSuspendModal}
 				setState={setShowSuspendModal}
