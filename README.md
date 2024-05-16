@@ -175,7 +175,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 <!-- CONTACT -->
 ## Contact
 
-* Jovanjoto - [Linkedin](https://www.linkedin.com/in/jovan-n-a71620257/) - jovan_n@mail.com
+* Jovanjoto - [Linkedin](https://www.linkedin.com/in/jovanjoto/) - jovan_n@mail.com
 * Edkesuma - [Linkedin](https://www.linkedin.com/in/edrickkesuma/)
 
 Project Link: [https://github.com/jovanjoto/Meiji-PropertyListing](https://github.com/jovanjoto/Meiji-PropertyListing)
@@ -197,7 +197,7 @@ Project Link: [https://github.com/jovanjoto/Meiji-PropertyListing](https://githu
 [license-shield]: https://img.shields.io/github/license/jovanjoto/Meiji-PropertyListing.svg?style=for-the-badge
 [license-url]: https://github.com/jovanjoto/Meiji-PropertyListing/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/jovan-n-a71620257/
+[linkedin-url]: https://linkedin.com/in/jovanjoto/
 [product-screenshot]: images/screenshot.png
 [React.js]: https://img.shields.io/badge/React-61DAFB?style=flat&logo=react&logoColor=black
 [React-url]: https://reactjs.org/
