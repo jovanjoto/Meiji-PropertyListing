@@ -81,7 +81,6 @@ export default function CreateNewPropertyModal({ state, setState }) {
 	// };
 
 	const enterDetails = (details) => {
-		
 		if (
 			details.num_bathrooms > 0 &&
 			details.num_bathrooms <= 8 &&
@@ -117,13 +116,15 @@ export default function CreateNewPropertyModal({ state, setState }) {
 				})
 				.then((res) => {
 					if (res.data.success) {
-						setIsSuccess(true);
+						displaySuccessMsg();
+					} else {
+						displayErrorMsg();
 					}
 				})
 				.catch((error) => {
 					console.log(error);
-				})
-				.then(() => setMessageModalOpen(true));
+					displayErrorMsg();
+				});
 		} else {
 			alert("Invalid data");
 		}
@@ -136,10 +137,20 @@ export default function CreateNewPropertyModal({ state, setState }) {
 		}));
 	};
 
+	const displaySuccessMsg = () => {
+		setIsSuccess(true);
+		setMessageModalOpen(true);
+	};
+
+	const displayErrorMsg = () => {
+		setIsSuccess(false);
+		setMessageModalOpen(true);
+	};
+
 	const onCloseModal = (x) => {
 		window.location.reload();
 	};
-	
+
 	const displayModal = () => {
 		return (
 			<>
@@ -153,10 +164,12 @@ export default function CreateNewPropertyModal({ state, setState }) {
 						onClick={() => setState(false)}
 					/>
 					<Card>
-						<form onSubmit={(event) => {
-							event.preventDefault()
-							enterDetails(property)
-						}}>
+						<form
+							onSubmit={(event) => {
+								event.preventDefault();
+								enterDetails(property);
+							}}
+						>
 							<div className="flex flex-col gap-1">
 								<div className="flex flex-row justify-between">
 									<div className="flex flex-col mr-5 w-1/2 pb-1.5">
@@ -186,7 +199,10 @@ export default function CreateNewPropertyModal({ state, setState }) {
 												value={property.address}
 												id="address"
 												onChange={(event) =>
-													handleChange("address", event.target.value)
+													handleChange(
+														"address",
+														event.target.value
+													)
 												}
 												required
 											/>
@@ -223,7 +239,10 @@ export default function CreateNewPropertyModal({ state, setState }) {
 																: "hover:text-white bg-white text-black outline outline-1"
 														}
 														onClick={() =>
-															handleChange("property_type", "HDB")
+															handleChange(
+																"property_type",
+																"HDB"
+															)
 														}
 													>
 														HDB
@@ -237,7 +256,10 @@ export default function CreateNewPropertyModal({ state, setState }) {
 																: "hover:text-white bg-white text-black outline outline-1"
 														}
 														onClick={() =>
-															handleChange("property_type", "CONDO")
+															handleChange(
+																"property_type",
+																"CONDO"
+															)
 														}
 													>
 														Condominium
@@ -267,7 +289,10 @@ export default function CreateNewPropertyModal({ state, setState }) {
 
 								<div className="flex flex-row justify-between">
 									<div className="flex flex-col mr-5 w-1/2">
-										<Label htmlFor="description" value="Description" />
+										<Label
+											htmlFor="description"
+											value="Description"
+										/>
 										<Textarea
 											placeholder="Description about your property..."
 											onChange={(ev) =>
@@ -280,7 +305,10 @@ export default function CreateNewPropertyModal({ state, setState }) {
 
 									<div className="w-1/2 flex flex-col gap-1 justify-between">
 										<section className="flex flex-col">
-											<Label htmlFor="num_bedrooms" value="Bedrooms" />
+											<Label
+												htmlFor="num_bedrooms"
+												value="Bedrooms"
+											/>
 											<TextInput
 												id="num_bedrooms"
 												className="w-full"
@@ -401,7 +429,7 @@ export default function CreateNewPropertyModal({ state, setState }) {
 				</Modal>
 			</>
 		);
-	}
+	};
 
-	return displayModal()
+	return displayModal();
 }

@@ -17,7 +17,6 @@ export default function PropertyListingCard({
 	address,
 	num_bedrooms,
 	num_bathrooms,
-	district,
 	price,
 	property_type,
 	area,
@@ -39,8 +38,7 @@ export default function PropertyListingCard({
 		navigate(`/agent/viewPropertyListingPage/${id}`);
 	};
 
-	const removeListing = () => {
-		//enter function here when merging
+	const confirm = () => {
 		axios
 			.delete("/api/property_listing/remove_property_listing", {
 				headers: {
@@ -52,15 +50,33 @@ export default function PropertyListingCard({
 			})
 			.then((res) => {
 				if (res.data.success) {
-					setMessageModal(true);
-					setConfirmationModal(false);
+					displaySuccessMessage();
 				} else {
-					alert("Failed to remove property");
+					displayErrorMessage();
 				}
 			})
 			.catch((err) => {
 				console.log(err);
+				displayErrorMessage();
 			});
+	};
+
+	const promptConfirmation = () => {
+		setConfirmationModal(true);
+	};
+
+	const remove = (listing_id) => {
+		console.log(listing_id);
+		promptConfirmation();
+	};
+
+	const displaySuccessMessage = () => {
+		setMessageModal(true);
+		setConfirmationModal(false);
+	};
+
+	const displayErrorMessage = () => {
+		alert("Failed to remove property");
 	};
 
 	return (
@@ -80,7 +96,7 @@ export default function PropertyListingCard({
 			<ConfirmationModal
 				state={confirmationModal}
 				setState={setConfirmationModal}
-				action={removeListing}
+				action={confirm}
 			>
 				Remove {name}{" "}
 			</ConfirmationModal>
@@ -154,7 +170,7 @@ export default function PropertyListingCard({
 						<Button
 							color="purple"
 							onClick={() => {
-								setConfirmationModal(true);
+								remove(id);
 							}}
 							className="bg-custom_purple1 w-1/3 py-2"
 						>
