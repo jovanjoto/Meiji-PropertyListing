@@ -16,6 +16,14 @@ export default function ReviewAgentModal({
 	const [messageModalOpen, setMessageModalOpen] = useState(false);
 	const [isSuccess, setIsSuccess] = useState(false);
 
+	const displaySuccessMessage = () => {
+		setIsSuccess(true);
+	}
+
+	const displayErrorMessage = () => {
+		setIsSuccess(false);
+	}
+
 	const submitReview = (review) => {
 		//onSubmit function for button
 		if (review.trim() === "") {
@@ -36,9 +44,9 @@ export default function ReviewAgentModal({
 				)
 				.then((res) => {
 					if (res.data.success === true) {
-						setIsSuccess(true);
+						displaySuccessMessage();
 					} else {
-						console.log(res.data.message);
+						displayErrorMessage();
 					}
 				})
 				.catch((err) => {

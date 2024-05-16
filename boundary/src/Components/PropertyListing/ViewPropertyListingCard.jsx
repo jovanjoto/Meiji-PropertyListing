@@ -16,6 +16,7 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import MortgageCalculatorModal from "../Buyer/MortgageCalculatorModal";
+import MessageModal from "../MessageModal";
 
 function ViewPropertyListingCard({
 	id,
@@ -52,6 +53,8 @@ function ViewPropertyListingCard({
 	const [showMortgageModal, setShowMortgageModal] = useState(false);
 	const [shortListed, setShortlisted] = useState(is_shortlisted);
 	const [confirmationOpen, setConfirmationOpen] = useState(false);
+	const [shortlistFail, setShortlistFail] = useState(false);
+	const [shortlistSuccess, setShortlistSuccess] = useState(false);
 	const rate = (agent_email) => {
 		setShowAgentRatingModal(true);
 		console.log(agent_email);
@@ -89,12 +92,20 @@ function ViewPropertyListingCard({
 		);
 	};
 
-	const shortlist = () => {
+	const successShortlist = () => {
+		setShortlisted(true);
+	}
+	
+	const failShortlist = () => {
+		setShortlistFail(true);
+	}
+
+	const shortlist = (propertyId) => {
 		axios
 			.post(
 				"/api/shortlist/shortlist_property",
 				{
-					propertyId: id,
+					propertyId: propertyId,
 				},
 				{
 					headers: {
@@ -104,7 +115,9 @@ function ViewPropertyListingCard({
 			)
 			.then((res) => {
 				if (res.data.success === true) {
-					setShortlisted(true);
+					successShortlist();
+				} else if (!res.data.success){
+					failShortlist();
 				}
 			})
 			.catch((err) => {
@@ -116,6 +129,16 @@ function ViewPropertyListingCard({
 	const clickRemoveIcon = () => {
 		setConfirmationOpen(true);
 	};
+
+	const displaySuccess = () => {
+		setShortlisted(false);
+		setConfirmationOpen(false);
+		setShortlistSuccess(true);
+	}
+	const displayError = () => {
+		setConfirmationOpen(false);
+		setShortlistFail(true);
+	}
 
 	const clickYes = () => {
 		axios
@@ -129,8 +152,9 @@ function ViewPropertyListingCard({
 			})
 			.then((res) => {
 				if (res.data.success === true) {
-					setShortlisted(false);
-					setConfirmationOpen(false);
+					displaySuccess();
+				} else if (!res.data.success) {
+					displayError();
 				}
 			})
 			.catch((err) => {
@@ -148,6 +172,12 @@ function ViewPropertyListingCard({
 			>
 				Are you sure to remove this shortlist?
 			</ConfirmationModal>
+			<MessageModal state={shortlistFail} setState={setShortlistFail}>
+				Fails / Error
+			</MessageModal>
+			<MessageModal state={shortlistSuccess} setState={setShortlistSuccess}>
+				Success
+			</MessageModal>
 			{showAgentRatingModal && promptRating()}
 			{showAgentReviewModal && promptReview()}
 			{displayUpdatePLPageFunc(
@@ -238,7 +268,7 @@ function ViewPropertyListingCard({
 										) : (
 											<CiHeart
 												size={42}
-												onClick={shortlist}
+												onClick={()=> {shortlist(id)}}
 												className="hover:text-red-600"
 											/>
 										)
