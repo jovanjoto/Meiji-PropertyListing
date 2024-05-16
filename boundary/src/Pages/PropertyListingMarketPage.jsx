@@ -18,7 +18,7 @@ export default function PropertyListingMarketPage({}) {
 	const { token } = useContext(AuthContext);
 	const [isLoading, setIsLoading] = useState(false);
 	const [search, setSearch] = useState("");
-	const [filter, setFilter] = useState({
+	const initial_filter = {
 		district: {
 			"D01 Boat Quay / Raffles Place / Marina": true,
 			"D02 Chinatown / Tanjong Pagar": true,
@@ -68,7 +68,9 @@ export default function PropertyListingMarketPage({}) {
 		},
 		maxFloorSize: 5000,
 		minFloorSize: 0,
-	});
+	};
+
+	const [filter, setFilter] = useState(initial_filter);
 	const [propertyList, setPropertyList] = useState([]);
 	const [soldChecked, setSoldChecked] = useState(false);
 	const [shortListed, setShortListed] = useState(false);
@@ -79,6 +81,7 @@ export default function PropertyListingMarketPage({}) {
 			[attribute]: value,
 		}));
 	};
+
 	useEffect(() => {
 		setIsLoading(true);
 		if (token) {
@@ -115,6 +118,12 @@ export default function PropertyListingMarketPage({}) {
 					.then((res) => {
 						if (res.status === 200) {
 							setPropertyList(res.data.properties);
+							setFilter({
+								...filter,
+								maxPrice: res.data.properties.reduce((acc, value) => {
+									return (acc = acc > value.price ? acc : value.price);
+								}, 0),
+							});
 						} else {
 							console.log(res.status);
 						}
@@ -139,57 +148,61 @@ export default function PropertyListingMarketPage({}) {
 		return (acc = acc > value.price ? acc : value.price);
 	}, 0);
 
-	const checkSearchFilter = (propertyJson) => {
-		return (
-			filter.district[propertyJson.district] &&
-			propertyJson.price <= filter.maxPrice &&
-			propertyJson.price >= filter.minPrice &&
-			(filter.propertyType === "all" ||
-				propertyJson.type === filter.propertyType) &&
-			(Object.values(filter.bedroom).every((value) => value === false) ||
-				filter.bedroom[propertyJson.num_of_bedrooms] ||
-				(propertyJson.num_of_bedrooms > 5 && filter.bedroom[5])) &&
-			(Object.values(filter.bathroom).every((value) => value === false) ||
-				filter.bathroom[propertyJson.num_of_bathrooms] ||
-				(propertyJson.num_of_bathrooms > 5 && filter.bathroom[5])) &&
-			propertyJson.area < filter.maxFloorSize &&
-			propertyJson.area > filter.minFloorSize &&
-			propertyJson.name.toLowerCase().includes(search.toLowerCase()) &&
-			(!shortListed || propertyJson.is_shortlisted === shortListed)
-		);
-	};
-
-	const searchFilter = () => {
+	const searchFilter = (keyword, filter) => {
 		let filtered_list = [];
 		propertyList.forEach((propertyJson) => {
-			if (checkSearchFilter(propertyJson)) {
-				filtered_list.push(
-					<BuyerPropertyListingCard
-						key={propertyJson.id}
-						name={propertyJson.name}
-						id={propertyJson.id}
-						address={propertyJson.address}
-						num_bathrooms={propertyJson.num_of_bathrooms}
-						num_bedrooms={propertyJson.num_of_bedrooms}
-						district={propertyJson.district}
-						price={propertyJson.price}
-						property_type={propertyJson.type}
-						area={propertyJson.area}
-						is_sold={propertyJson.is_sold}
-						image_url={propertyJson.image_url}
-						is_shortlisted={propertyJson.is_shortlisted}
-					/>
-				);
+			const filter_cond =
+				filter.district[propertyJson.district] &&
+				propertyJson.price <= filter.maxPrice &&
+				propertyJson.price >= filter.minPrice &&
+				(filter.propertyType === "all" ||
+					propertyJson.type === filter.propertyType) &&
+				(Object.values(filter.bedroom).every((value) => value === false) ||
+					filter.bedroom[propertyJson.num_of_bedrooms] ||
+					(propertyJson.num_of_bedrooms > 5 && filter.bedroom[5])) &&
+				(Object.values(filter.bathroom).every((value) => value === false) ||
+					filter.bathroom[propertyJson.num_of_bathrooms] ||
+					(propertyJson.num_of_bathrooms > 5 && filter.bathroom[5])) &&
+				propertyJson.area < filter.maxFloorSize &&
+				propertyJson.area > filter.minFloorSize &&
+				propertyJson.name.toLowerCase().includes(keyword.toLowerCase());
+			if (filter_cond) {
+				filtered_list.push(propertyJson);
 			}
 		});
-		return filtered_list;
+		if (filtered_list.length > 0) {
+			return displayList(filtered_list);
+		} else {
+			return displayEmptyList();
+		}
 	};
-	const displayList = () => {
-		return searchFilter();
+
+	const displayList = (listings) => {
+		return listings.map((propertyJson) => (
+			<BuyerPropertyListingCard
+				key={propertyJson.id}
+				name={propertyJson.name}
+				id={propertyJson.id}
+				address={propertyJson.address}
+				num_bathrooms={propertyJson.num_of_bathrooms}
+				num_bedrooms={propertyJson.num_of_bedrooms}
+				district={propertyJson.district}
+				price={propertyJson.price}
+				property_type={propertyJson.type}
+				area={propertyJson.area}
+				is_sold={propertyJson.is_sold}
+				image_url={propertyJson.image_url}
+				is_shortlisted={propertyJson.is_shortlisted}
+			/>
+		));
 	};
 
 	const displayEmptyList = () => {
 		return <span>No Listings Available</span>;
+	};
+
+	const showSoldListings = () => {
+		setSoldChecked(!soldChecked);
 	};
 
 	return (
@@ -366,9 +379,12 @@ export default function PropertyListingMarketPage({}) {
 									<div
 										className="bg-indigo-300 h-1.5 rounded-full absolute"
 										style={{
-											left: `${(filter.minPrice / max_price_filter) * 100}%`,
+											left: `${
+												(filter.minPrice / max_price_filter) * 100
+											}%`,
 											right: `${
-												100 - (filter.maxPrice / max_price_filter) * 100
+												100 -
+												(filter.maxPrice / max_price_filter) * 100
 											}%`,
 										}}
 									></div>
@@ -559,7 +575,7 @@ export default function PropertyListingMarketPage({}) {
 							type="checkbox"
 							checked={soldChecked}
 							className="sr-only peer"
-							onChange={() => setSoldChecked(!soldChecked)}
+							onChange={showSoldListings}
 						/>
 						<div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:w-5 after:h-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
 					</label>
@@ -579,10 +595,14 @@ export default function PropertyListingMarketPage({}) {
 			</div>
 
 			<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 mt-5">
-				{!isLoading && displayList()}
+				{isLoading && displayLoading()}
+				{!isLoading &&
+					(search == "" && filter == initial_filter
+						? propertyList.length > 0
+							? displayList(propertyList)
+							: displayEmptyList()
+						: searchFilter(search, filter))}
 			</div>
-			{isLoading && displayLoading()}
-			{!isLoading && searchFilter().length == 0 && displayEmptyList()}
 		</div>
 	);
 }

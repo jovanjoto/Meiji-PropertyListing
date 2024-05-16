@@ -194,12 +194,11 @@ export default function UserAccountManagementPage() {
 			<div className="flex flex-col justify-start items-center gap-5 my-6">
 				{isLoading && displayLoading()}
 				{!isLoading &&
-				search == "" &&
-				Object.values(filter).every((x) => x == true)
-					? accountList.length > 0
-						? displayList(accountList)
-						: displayEmptyList()
-					: searchFilter(search, filter)}
+					(search == "" && Object.values(filter).every((x) => x == true)
+						? accountList.length > 0
+							? displayList(accountList)
+							: displayEmptyList()
+						: searchFilter(search, filter))}
 			</div>
 		</div>
 	);

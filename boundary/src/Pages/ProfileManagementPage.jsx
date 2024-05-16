@@ -88,13 +88,13 @@ export default function ProfileManagementPage({}) {
 		}));
 	};
 
-	const searchFilter = () => {
+	const searchFilter = (keyword, filter) => {
 		let filtered_list = [];
 
 		profilesList.forEach((profileJson) => {
 			let search_bool = profileJson.name
 				.toLowerCase()
-				.startsWith(search.toLowerCase());
+				.startsWith(keyword.toLowerCase());
 			let filter_bool_listing = logical_implication(
 				filter.has_listing_permission,
 				profileJson.has_listing_permission
@@ -233,12 +233,11 @@ export default function ProfileManagementPage({}) {
 			<div className="flex flex-col justify-start items-center gap-5 my-6">
 				{isLoading && displayLoading()}
 				{!isLoading &&
-				search == "" &&
-				Object.values(filter).every((x) => x == false)
-					? profilesList.length > 0
-						? displayList(profilesList)
-						: displayEmptyList()
-					: searchFilter(search, filter)}
+					(search == "" && Object.values(filter).every((x) => x == false)
+						? profilesList.length > 0
+							? displayList(profilesList)
+							: displayEmptyList()
+						: searchFilter(search, filter))}
 			</div>
 		</div>
 	);
