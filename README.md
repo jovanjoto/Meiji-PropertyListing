@@ -175,7 +175,8 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Jovanjoto - [Linkedin](https://www.linkedin.com/in/jovan-n-a71620257/) - jovan_n@mail.com
+* Jovanjoto - [Linkedin](https://www.linkedin.com/in/jovan-n-a71620257/) - jovan_n@mail.com
+* Edkesuma - [Linkedin](https://www.linkedin.com/in/edrickkesuma/)
 
 Project Link: [https://github.com/jovanjoto/Meiji-PropertyListing](https://github.com/jovanjoto/Meiji-PropertyListing)
 
