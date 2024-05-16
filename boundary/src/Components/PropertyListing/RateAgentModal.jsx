@@ -17,6 +17,14 @@ export default function RateAgentModal({
 	const [messageModalOpen, setMessageModalOpen] = useState(false);
 	const [isSuccess, setIsSuccess] = useState(false);
 
+	const displaySuccessMessage = () => {
+		setIsSuccess(true);
+	}
+
+	const displayErrorMessage = () => {
+		setIsSuccess(false);
+	}
+
 	const submitRating = (rating) => {
 		axios
 			.post(
@@ -33,9 +41,9 @@ export default function RateAgentModal({
 			)
 			.then((res) => {
 				if (res.data.success === true) {
-					setIsSuccess(true);
+					displaySuccessMessage();
 				} else {
-					console.log(res.data.message);
+					displayErrorMessage();
 				}
 			})
 			.catch((err) => {
