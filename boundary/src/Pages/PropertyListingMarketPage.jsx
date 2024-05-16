@@ -595,7 +595,6 @@ export default function PropertyListingMarketPage({}) {
 			</div>
 
 			<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 mt-5">
-				{isLoading && displayLoading()}
 				{!isLoading &&
 					(search == "" && filter == initial_filter
 						? propertyList.length > 0
@@ -603,6 +602,7 @@ export default function PropertyListingMarketPage({}) {
 							: displayEmptyList()
 						: searchFilter(search, filter))}
 			</div>
+			{isLoading && displayLoading()}
 		</div>
 	);
 }
