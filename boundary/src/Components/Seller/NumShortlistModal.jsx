@@ -8,6 +8,11 @@ function NumShortlistModal({ state, setState, propertyName, propertyId }) {
   const { token } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
   const [count, setCount] = useState(0);
+
+  const numShortlistModal = (shortlistCount) => {
+    setCount(shortlistCount);
+  }
+
   useEffect(() => {
     if (state) {
       setLoading(true);
@@ -22,7 +27,7 @@ function NumShortlistModal({ state, setState, propertyName, propertyId }) {
         )
         .then((res) => {
           if (res.status === 200) {
-            setCount(res.data.shortlistCount);
+            numShortlistModal(res.data.shortlistCount);
           }
         })
         .catch((err) => {})
