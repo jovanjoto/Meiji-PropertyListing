@@ -75,51 +75,50 @@ export default function UpdatePropertyModal({
 		description: description,
 	});
 
-	const handleSubmit = (event) => {
-		event.preventDefault();
+	const enterDetailsToUpdate = (details) => {
 		if (
-			property.num_of_bathrooms > 0 &&
-			property.num_of_bathrooms <= 8 &&
-			property.num_of_bedrooms > 0 &&
-			property.num_of_bedrooms <= 8 &&
-			property.area > 0 &&
-			property.price > 0 &&
-			property.name.trim() != "" &&
-			property.address.trim() != "" &&
-			property.description.trim() != ""
+			details.num_of_bathrooms > 0 &&
+			details.num_of_bathrooms <= 8 &&
+			details.num_of_bedrooms > 0 &&
+			details.num_of_bedrooms <= 8 &&
+			details.area > 0 &&
+			details.price > 0 &&
+			details.name.trim() != "" &&
+			details.address.trim() != "" &&
+			details.description.trim() != ""
 		) {
 			var formData = new FormData();
 			formData.append("id", id);
 
-			if (property.name != name) {
-				formData.append("name", property.name);
+			if (details.name != name) {
+				formData.append("name", details.name);
 			}
-			if (property.address != address) {
-				formData.append("address", property.address);
+			if (details.address != address) {
+				formData.append("address", details.address);
 			}
-			if (property.price != price) {
-				formData.append("price", property.price);
+			if (details.price != price) {
+				formData.append("price", details.price);
 			}
-			if (property.num_of_bedrooms != num_of_bedrooms) {
-				formData.append("num_of_bedrooms", property.num_of_bedrooms);
+			if (details.num_of_bedrooms != num_of_bedrooms) {
+				formData.append("num_of_bedrooms", details.num_of_bedrooms);
 			}
-			if (property.num_of_bathrooms != num_of_bathrooms) {
-				formData.append("num_of_bathrooms", property.num_of_bathrooms);
+			if (details.num_of_bathrooms != num_of_bathrooms) {
+				formData.append("num_of_bathrooms", details.num_of_bathrooms);
 			}
-			if (property.district != district) {
-				formData.append("district", property.district);
+			if (details.district != district) {
+				formData.append("district", details.district);
 			}
-			if (property.property_type != property_type) {
-				formData.append("type", property.property_type);
+			if (details.property_type != property_type) {
+				formData.append("type", details.property_type);
 			}
-			if (property.area != area) {
-				formData.append("area", property.area);
+			if (details.area != area) {
+				formData.append("area", details.area);
 			}
-			if (property.description != description) {
-				formData.append("description", property.description);
+			if (details.description != description) {
+				formData.append("description", details.description);
 			}
-			if (property.file != null) {
-				formData.append("file", property.file);
+			if (details.file != null) {
+				formData.append("file", details.file);
 			}
 
 			axios
@@ -131,13 +130,15 @@ export default function UpdatePropertyModal({
 				})
 				.then((res) => {
 					if (res.data.success) {
-						setIsSuccess(true);
+						displaySuccessMsg();
+					} else {
+						displayErrorMsg();
 					}
 				})
 				.catch((error) => {
 					console.log(error);
-				})
-				.then(() => setMessageModalOpen(true));
+					displayErrorMsg();
+				});
 		} else {
 			alert("Invalid data");
 		}
@@ -154,244 +155,278 @@ export default function UpdatePropertyModal({
 		window.location.reload();
 	};
 
-	return (
-		<>
-			<MessageModal state={messageModalOpen} setState={onCloseModal}>
-				{isSuccess && <>{name} has been successfully updated</>}
-				{!isSuccess && <>Error when updating, please try again.</>}
-			</MessageModal>
-			<Modal show={state} onClose={() => setState(false)}>
-				<FaTimes
-					className="absolute top-0 left-0 m-2 rounded-md w-5 h-5 cursor-pointer" // Added absolute positioning
-					onClick={() => setState(false)}
-				/>
-				<Card>
-					<form onSubmit={handleSubmit}>
-						<div className="flex flex-col gap-1">
-							<div className="flex flex-row justify-between">
-								<div className="flex flex-col mr-5 w-1/2 pb-1.5">
-									<Label htmlFor="image" value="Property Image" />
-									<DropImageInput
-										name="image"
-										show={state}
-										file={property.file}
-										setFile={(val) => handleChange("file", val)}
-									/>
+	const displaySuccessMsg = () => {
+		setIsSuccess(true);
+		setMessageModalOpen(true);
+	};
+
+	const displayErrorMsg = () => {
+		setIsSuccess(false);
+		setMessageModalOpen(true);
+	};
+
+	const displayUpdatePLPage = () => {
+		return (
+			<>
+				<MessageModal state={messageModalOpen} setState={onCloseModal}>
+					{isSuccess && <>{name} has been successfully updated</>}
+					{!isSuccess && <>Error when updating, please try again.</>}
+				</MessageModal>
+				<Modal show={state} onClose={() => setState(false)}>
+					<FaTimes
+						className="absolute top-0 left-0 m-2 rounded-md w-5 h-5 cursor-pointer" // Added absolute positioning
+						onClick={() => setState(false)}
+					/>
+					<Card>
+						<form
+							onSubmit={(ev) => {
+								ev.preventDefault();
+								enterDetailsToUpdate(property);
+							}}
+						>
+							<div className="flex flex-col gap-1">
+								<div className="flex flex-row justify-between">
+									<div className="flex flex-col mr-5 w-1/2 pb-1.5">
+										<Label htmlFor="image" value="Property Image" />
+										<DropImageInput
+											name="image"
+											show={state}
+											file={property.file}
+											setFile={(val) => handleChange("file", val)}
+										/>
+									</div>
+									<div className="w-1/2 flex flex-col gap-1 justify-between">
+										<section className="flex flex-col">
+											<Label htmlFor="name" value="Listing Name" />
+											<TextInput
+												value={property.name}
+												id="name"
+												onChange={(event) =>
+													handleChange("name", event.target.value)
+												}
+												required
+											/>
+										</section>
+										<section className="flex flex-col">
+											<Label htmlFor="address" value="Address" />
+											<TextInput
+												value={property.address}
+												id="address"
+												onChange={(event) =>
+													handleChange(
+														"address",
+														event.target.value
+													)
+												}
+												required
+											/>
+										</section>
+										<section className="flex flex-col">
+											<Label htmlFor="district" value="District" />
+											<Select
+												name="district"
+												required
+												onChange={(ev) =>
+													handleChange("district", ev.target.value)
+												}
+											>
+												{list_of_district.map((value, index) => (
+													<option key={index} value={value}>
+														{value}
+													</option>
+												))}
+											</Select>
+										</section>
+										<section className="flex flex-col">
+											<Label
+												htmlFor="property_type"
+												value="Property Type"
+											/>
+											<div className="flex flex-row my-2">
+												<Button.Group id="property_type">
+													<Button
+														value="HDB"
+														color={"purple"}
+														className={
+															property.property_type === "HDB"
+																? "hover:text-white bg-custom_purple2 outline outline-1"
+																: "hover:text-white bg-white text-black outline outline-1"
+														}
+														onClick={() =>
+															handleChange(
+																"property_type",
+																"HDB"
+															)
+														}
+													>
+														HDB
+													</Button>
+													<Button
+														value="CONDO"
+														color={"purple"}
+														className={
+															property.property_type === "CONDO"
+																? "hover:text-white bg-custom_purple2 outline"
+																: "hover:text-white bg-white text-black outline outline-1"
+														}
+														onClick={() =>
+															handleChange(
+																"property_type",
+																"CONDO"
+															)
+														}
+													>
+														Condominium
+													</Button>
+													<Button
+														value="LANDED"
+														color={"purple"}
+														className={
+															property.property_type === "LANDED"
+																? "hover:text-white bg-custom_purple2 outline"
+																: "hover:text-white bg-white text-black outline outline-1"
+														}
+														onClick={() =>
+															handleChange(
+																"property_type",
+																"LANDED"
+															)
+														}
+													>
+														Landed
+													</Button>
+												</Button.Group>
+											</div>
+										</section>
+									</div>
 								</div>
-								<div className="w-1/2 flex flex-col gap-1 justify-between">
-									<section className="flex flex-col">
-										<Label htmlFor="name" value="Listing Name" />
-										<TextInput
-											value={property.name}
-											id="name"
-											onChange={(event) =>
-												handleChange("name", event.target.value)
-											}
-											required
+
+								<div className="flex flex-row justify-between">
+									<div className="flex flex-col mr-5 w-1/2">
+										<Label
+											htmlFor="description"
+											value="Description"
 										/>
-									</section>
-									<section className="flex flex-col">
-										<Label htmlFor="address" value="Address" />
-										<TextInput
-											value={property.address}
-											id="address"
-											onChange={(event) =>
-												handleChange("address", event.target.value)
-											}
-											required
-										/>
-									</section>
-									<section className="flex flex-col">
-										<Label htmlFor="district" value="District" />
-										<Select
-											name="district"
-											required
+										<Textarea
+											value={property.description}
+											placeholder="Description about your property..."
 											onChange={(ev) =>
-												handleChange("district", ev.target.value)
+												handleChange("description", ev.target.value)
 											}
-										>
-											{list_of_district.map((value, index) => (
-												<option key={index} value={value}>
-													{value}
-												</option>
-											))}
-										</Select>
-									</section>
-									<section className="flex flex-col">
-										<Label
-											htmlFor="property_type"
-											value="Property Type"
+											required
+											className="h-full"
 										/>
-										<div className="flex flex-row my-2">
-											<Button.Group id="property_type">
-												<Button
-													value="HDB"
-													color={"purple"}
-													className={
-														property.property_type === "HDB"
-															? "hover:text-white bg-custom_purple2 outline outline-1"
-															: "hover:text-white bg-white text-black outline outline-1"
-													}
-													onClick={() =>
-														handleChange("property_type", "HDB")
-													}
-												>
-													HDB
-												</Button>
-												<Button
-													value="CONDO"
-													color={"purple"}
-													className={
-														property.property_type === "CONDO"
-															? "hover:text-white bg-custom_purple2 outline"
-															: "hover:text-white bg-white text-black outline outline-1"
-													}
-													onClick={() =>
-														handleChange("property_type", "CONDO")
-													}
-												>
-													Condominium
-												</Button>
-												<Button
-													value="LANDED"
-													color={"purple"}
-													className={
-														property.property_type === "LANDED"
-															? "hover:text-white bg-custom_purple2 outline"
-															: "hover:text-white bg-white text-black outline outline-1"
-													}
-													onClick={() =>
-														handleChange(
-															"property_type",
-															"LANDED"
-														)
-													}
-												>
-													Landed
-												</Button>
-											</Button.Group>
-										</div>
-									</section>
+									</div>
+
+									<div className="w-1/2 flex flex-col gap-1 justify-between">
+										<section className="flex flex-col">
+											<Label
+												htmlFor="num_of_bedrooms"
+												value="Bedrooms"
+											/>
+											<TextInput
+												id="num_of_bedrooms"
+												className="w-full"
+												color={
+													property.num_of_bedrooms > 8 ||
+													property.num_of_bedrooms < 1
+														? "failure"
+														: "success"
+												}
+												type="number"
+												value={property.num_of_bedrooms}
+												onChange={(event) =>
+													handleChange(
+														"num_of_bedrooms",
+														event.target.value
+													)
+												}
+												required
+											/>
+										</section>
+
+										<section className="flex flex-col">
+											<Label
+												htmlFor="num_of_bathrooms"
+												value="Bathrooms"
+											/>
+											<TextInput
+												id="num_of_bathrooms"
+												className="w-full"
+												color={
+													property.num_of_bathrooms > 8 ||
+													property.num_of_bathrooms < 1
+														? "failure"
+														: "success"
+												}
+												type="number"
+												value={property.num_of_bathrooms}
+												onChange={(event) =>
+													handleChange(
+														"num_of_bathrooms",
+														event.target.value
+													)
+												}
+												required
+											/>
+										</section>
+
+										<section className="flex flex-col">
+											<Label htmlFor="area" value="Floor Size" />
+											<TextInput
+												id="area"
+												className="w-full"
+												color={
+													property.area < 0 ? "failure" : "success"
+												}
+												type="number"
+												value={property.area}
+												onChange={(event) =>
+													handleChange("area", event.target.value)
+												}
+												required
+											/>
+										</section>
+
+										<section className="flex flex-col">
+											<Label
+												htmlFor="transaction_price"
+												value="Price"
+											/>
+											<TextInput
+												value={property.price}
+												id="transaction_price"
+												type="number"
+												onChange={(event) =>
+													handleChange("price", event.target.value)
+												}
+												required
+											/>
+										</section>
+									</div>
+								</div>
+								<div className="flex justify-center my-2 pt-3 gap-5">
+									<Button
+										color="failure"
+										className="w-1/2"
+										onClick={() => setState(false)}
+									>
+										Cancel
+									</Button>
+									<Button
+										type="submit"
+										className="bg-custom_purple1 w-1/2"
+									>
+										Submit
+									</Button>
 								</div>
 							</div>
+						</form>
+					</Card>
+				</Modal>
+			</>
+		);
+	};
 
-							<div className="flex flex-row justify-between">
-								<div className="flex flex-col mr-5 w-1/2">
-									<Label htmlFor="description" value="Description" />
-									<Textarea
-										value={property.description}
-										placeholder="Description about your property..."
-										onChange={(ev) =>
-											handleChange("description", ev.target.value)
-										}
-										required
-										className="h-full"
-									/>
-								</div>
-
-								<div className="w-1/2 flex flex-col gap-1 justify-between">
-									<section className="flex flex-col">
-										<Label htmlFor="num_of_bedrooms" value="Bedrooms" />
-										<TextInput
-											id="num_of_bedrooms"
-											className="w-full"
-											color={
-												property.num_of_bedrooms > 8 ||
-												property.num_of_bedrooms < 1
-													? "failure"
-													: "success"
-											}
-											type="number"
-											value={property.num_of_bedrooms}
-											onChange={(event) =>
-												handleChange(
-													"num_of_bedrooms",
-													event.target.value
-												)
-											}
-											required
-										/>
-									</section>
-
-									<section className="flex flex-col">
-										<Label
-											htmlFor="num_of_bathrooms"
-											value="Bathrooms"
-										/>
-										<TextInput
-											id="num_of_bathrooms"
-											className="w-full"
-											color={
-												property.num_of_bathrooms > 8 ||
-												property.num_of_bathrooms < 1
-													? "failure"
-													: "success"
-											}
-											type="number"
-											value={property.num_of_bathrooms}
-											onChange={(event) =>
-												handleChange(
-													"num_of_bathrooms",
-													event.target.value
-												)
-											}
-											required
-										/>
-									</section>
-
-									<section className="flex flex-col">
-										<Label htmlFor="area" value="Floor Size" />
-										<TextInput
-											id="area"
-											className="w-full"
-											color={
-												property.area < 0 ? "failure" : "success"
-											}
-											type="number"
-											value={property.area}
-											onChange={(event) =>
-												handleChange("area", event.target.value)
-											}
-											required
-										/>
-									</section>
-
-									<section className="flex flex-col">
-										<Label
-											htmlFor="transaction_price"
-											value="Price"
-										/>
-										<TextInput
-											value={property.price}
-											id="transaction_price"
-											type="number"
-											onChange={(event) =>
-												handleChange("price", event.target.value)
-											}
-											required
-										/>
-									</section>
-								</div>
-							</div>
-							<div className="flex justify-center my-2 pt-3 gap-5">
-								<Button
-									color="failure"
-									className="w-1/2"
-									onClick={() => setState(false)}
-								>
-									Cancel
-								</Button>
-								<Button
-									type="submit"
-									className="bg-custom_purple1 w-1/2"
-								>
-									Submit
-								</Button>
-							</div>
-						</div>
-					</form>
-				</Card>
-			</Modal>
-		</>
-	);
+	return displayUpdatePLPage();
 }
