@@ -3,9 +3,9 @@ import jwt
 import requests
 import json
 
-from app import flask_app
+from controller.app import flask_app
 from config import Config
-from test.sample_generation import _create_precondition_data, _delete_precondition_data
+from controller.test.sample_generation import _create_precondition_data, _delete_precondition_data
 
 @pytest.mark.valid_login_test
 def test_valid_login():

@@ -1,9 +1,9 @@
-from app import flask_app
+from controller.app import flask_app
 
-from app.entity.userprofile import UserProfile
-from app.entity.user import User
-from app.entity.suspension import Suspension
-from app.entity import db
+from entity.userprofile import UserProfile
+from entity.user import User
+from entity.suspension import Suspension
+from entity import db
 from flask_bcrypt import Bcrypt
 
 import json

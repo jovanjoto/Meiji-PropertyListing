@@ -17,6 +17,9 @@ class CreateAccountController(Blueprint):
 	def createAccount(self) -> dict[str, bool]:
 		details = request.get_json()
 		details["password"] = self.hashPassword(details["password"]) # type: ignore
+		profile = UserProfile.queryUP(details["profile"])
+		if not profile or profile.has_admin_permission:
+			return {"success" : False}
 		# Call entity method
 		return {"success" : User.createNewUserAccount(details=details)}
 	

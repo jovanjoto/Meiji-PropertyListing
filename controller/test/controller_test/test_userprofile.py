@@ -1,10 +1,10 @@
 import pytest
 
-from app import flask_app
-from app.entity.userprofile import UserProfile
-from app.entity import db
-from test.sample_generation import _create_precondition_data, _delete_precondition_data
-from test.controller_test.utils import getToken
+from controller.app import flask_app
+from entity.userprofile import UserProfile
+from entity import db
+from controller.test.sample_generation import _create_precondition_data, _delete_precondition_data
+from controller.test.controller_test.utils import getToken
 import requests
 import json
 

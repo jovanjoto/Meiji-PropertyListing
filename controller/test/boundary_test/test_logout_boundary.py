@@ -1,5 +1,5 @@
 import pytest
-from test.sample_generation import _create_precondition_data, _delete_precondition_data
+from controller.test.sample_generation import _create_precondition_data, _delete_precondition_data
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 

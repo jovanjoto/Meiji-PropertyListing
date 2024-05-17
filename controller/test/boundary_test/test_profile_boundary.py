@@ -1,8 +1,8 @@
 import pytest
 from .utils import valid_login_admin
-from app import flask_app
-from app.entity import UserProfile,db
-from test.sample_generation import _create_precondition_data, _delete_precondition_data
+from controller.app import flask_app
+from entity import UserProfile,db
+from controller.test.sample_generation import _create_precondition_data, _delete_precondition_data
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
@@ -97,7 +97,9 @@ def test_update_profile_boundary(driver, webdriverwait):
 
     confirm = webdriverwait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[2]/div/div/div/div/div/div/div/section[3]/button[2]')))
     confirm.click()
-    msg = webdriverwait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[3]/div/div/div/div/h1')))
+    confirm_click = webdriverwait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[3]/div/div/div/div/section/button[2]')))
+    confirm_click.click()
+    msg = webdriverwait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[4]/div/div/div/div/h1')))
     assert "successfully updated" in msg.text
     _delete_precondition_data()
 

@@ -1,8 +1,8 @@
 import pytest
 from .utils import valid_login_admin
-from app import flask_app
-from app.entity import User,db
-from test.sample_generation import _create_precondition_data, _delete_precondition_data
+from controller.app import flask_app
+from entity import User,db
+from controller.test.sample_generation import _create_precondition_data, _delete_precondition_data
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import StaleElementReferenceException

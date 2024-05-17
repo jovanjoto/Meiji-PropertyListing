@@ -2,7 +2,7 @@ import jwt
 import requests
 import json
 
-from app import flask_app
+from controller.app import flask_app
 
 def getToken():
     login_details = {"email" : "admin@admin.com", "password" : "admin"}

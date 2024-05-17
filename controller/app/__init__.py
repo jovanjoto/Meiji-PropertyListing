@@ -1,5 +1,6 @@
 # Libraries
 from flask import Flask
+from sqlalchemy import event
 
 # Local dependencies
 from config import Config
@@ -24,10 +25,14 @@ bcrypt.init_app(flask_app)
 # Mail
 mail.init_app(flask_app)
 
+def _fk_pragma_on_connect(dbapi_con, con_record):  # noqa
+	dbapi_con.execute('pragma foreign_keys=ON')
+
 # SQLAlchemy
 db.init_app(flask_app)
 with flask_app.app_context():
 	db.create_all()
+	event.listen(db.engine, 'connect', _fk_pragma_on_connect)
 	# Create admin profile
 	if not UserProfile.queryUP("Admin"):
 		profile = UserProfile(
