@@ -23,12 +23,12 @@ class UpdateAccountController(Blueprint):
 		if not user:
 			return {"success" : False}
 		profile = UserProfile.queryUP(user.profile)
-		if profile and profile.has_admin_permission:
+		if not profile or profile.has_admin_permission:
 			return {"success" : False}
 		# Trying to give user admin previleges
 		if new_details.get("profile"):
 			new_profile = UserProfile.queryUP(new_details["profile"])
-			if new_profile and new_profile.has_admin_permission:
+			if not new_profile or new_profile.has_admin_permission:
 				return {"success" : False}
 			
 		return {"success" : User.updateAccount(details=new_details)}
