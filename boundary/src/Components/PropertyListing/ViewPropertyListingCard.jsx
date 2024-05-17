@@ -187,7 +187,7 @@ function ViewPropertyListingCard({
 			<MortgageCalculatorModal
 				state={showMortgageModal}
 				setState={setShowMortgageModal}
-				propertyID={id}
+				propId={id}
 			/>
 			<Card className={`w-5/6 2xl:w-10/12 mx-auto bg-gray-100`}>
 				{is_sold && (

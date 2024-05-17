@@ -91,7 +91,7 @@ export default function ResetPasswordCard() {
 										<span className="pl-3">Loading...</span>
 									</div>
 								) : (
-									"ResetPassword"
+									"Reset Password"
 								)}
 							</Button>
 						</form>
