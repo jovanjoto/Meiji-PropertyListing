@@ -165,7 +165,8 @@ export default function PropertyListingMarketPage({}) {
 					(propertyJson.num_of_bathrooms > 5 && filter.bathroom[5])) &&
 				propertyJson.area < filter.maxFloorSize &&
 				propertyJson.area > filter.minFloorSize &&
-				propertyJson.name.toLowerCase().includes(keyword.toLowerCase());
+				propertyJson.name.toLowerCase().includes(keyword.toLowerCase()) &&
+				(!shortListed || propertyJson.is_shortlisted);
 			if (filter_cond) {
 				filtered_list.push(propertyJson);
 			}
@@ -596,7 +597,7 @@ export default function PropertyListingMarketPage({}) {
 
 			<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 mt-5">
 				{!isLoading &&
-					(search == "" && filter == initial_filter
+					(search == "" && filter == initial_filter && !shortListed
 						? propertyList.length > 0
 							? displayList(propertyList)
 							: displayEmptyList()
