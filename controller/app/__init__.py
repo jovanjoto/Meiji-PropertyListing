@@ -3,16 +3,16 @@ from flask import Flask
 
 # Local dependencies
 from config import Config
-from app.entity import db, User, UserProfile, PropertyListing
-from .controller.user import *
-from .controller.suspension import get_suspension_controller, suspend_user_controller, suspend_profile_controller
-from .controller.profile import view_profile_controller, search_profile_controller, update_profile_controller, create_profile_controller
-from .controller.authentication import jwt, bcrypt, mail, login_controller, reset_password_controller
-from .controller.property_listing import *
-from .controller.shortlist import *
-from .controller.views import *
-from .controller.rating import view_rating_controller, rate_agent_controller
-from .controller.review import view_review_controller, review_agent_controller
+from entity import db, User, UserProfile, PropertyListing
+from .user import *
+from .suspension import get_suspension_controller, suspend_user_controller, suspend_profile_controller
+from .profile import view_profile_controller, search_profile_controller, update_profile_controller, create_profile_controller
+from .authentication import jwt, bcrypt, mail, login_controller, reset_password_controller
+from .property_listing import *
+from .shortlist import *
+from .views import *
+from .rating import view_rating_controller, rate_agent_controller
+from .review import view_review_controller, review_agent_controller
 
 # Initialize Flask App
 flask_app = Flask(__name__)
