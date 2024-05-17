@@ -5,7 +5,7 @@ import datetime # type: ignore
 
 # Local dependencies
 from entity import Suspension, User
-from app.authentication import permissions_required
+from controller.app.authentication import permissions_required
 
 # SuspendUserProfile Controller
 class SuspendProfileController(Blueprint):

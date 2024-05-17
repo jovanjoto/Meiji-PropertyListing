@@ -4,7 +4,7 @@ from flask_jwt_extended import jwt_required, get_jwt
 
 # Local dependencies
 from entity import Review, User
-from app.authentication import permissions_required
+from controller.app.authentication import permissions_required
 
 class ViewReviewController(Blueprint):
 	def __init__(self, *args, **kwargs):

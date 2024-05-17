@@ -5,7 +5,7 @@ import io
 from base64 import encodebytes # type: ignore
 # Local dependencies
 from entity import User, Review, Rating, PropertyListing, Shortlist
-from app.authentication import permissions_required
+from controller.app.authentication import permissions_required
 
 class ViewREAController(Blueprint):
     def __init__(self, *args, **kwargs):

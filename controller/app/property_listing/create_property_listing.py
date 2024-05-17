@@ -8,7 +8,7 @@ import os
 
 # Local dependencies
 from entity import PropertyListing, User, UserProfile
-from app.authentication import permissions_required
+from controller.app.authentication import permissions_required
 from flask import current_app
 
 class CreatePropertyListingController(Blueprint):
@@ -48,7 +48,7 @@ class CreatePropertyListingController(Blueprint):
 		
 		if file and self.allowed_file(file.filename):
 			filename = secure_filename(file.filename)
-			image_url = os.path.join("..", current_app.config['UPLOAD_FOLDER'], filename)
+			image_url = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
 			file.save(image_url)
 			
 			propertyListingJson = {

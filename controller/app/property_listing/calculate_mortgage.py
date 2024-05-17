@@ -1,7 +1,7 @@
 from flask import Blueprint, request
 from flask_jwt_extended import jwt_required
 from entity import PropertyListing 
-from app.authentication.utils import permissions_required
+from controller.app.authentication.utils import permissions_required
 
 class CalculateMortgageController(Blueprint):
 	def __init__(self, *args, **kwargs):

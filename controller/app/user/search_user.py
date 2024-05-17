@@ -4,7 +4,7 @@ from flask_jwt_extended import jwt_required
 
 # Local dependencies
 from entity import User, Suspension, UserProfile
-from app.authentication import permissions_required
+from controller.app.authentication import permissions_required
 
 class SearchUserController(Blueprint):
 	def __init__(self, *args, **kwargs):

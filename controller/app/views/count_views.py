@@ -5,7 +5,7 @@ from flask_jwt_extended import jwt_required
 
 # Local dependencies
 from entity import Views
-from app.authentication import permissions_required
+from controller.app.authentication import permissions_required
 
 class CountViewsController(Blueprint):
 	def __init__(self, *args, **kwargs):

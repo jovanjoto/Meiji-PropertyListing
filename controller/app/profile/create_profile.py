@@ -4,7 +4,7 @@ from flask_jwt_extended import jwt_required
 
 # Local dependencies
 from entity import UserProfile
-from app.authentication import permissions_required
+from controller.app.authentication import permissions_required
 
 class CreateUserProfileController(Blueprint):
 	def __init__(self, *args, **kwargs):

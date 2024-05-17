@@ -5,7 +5,7 @@ from datetime import datetime, date
 
 # Local dependencies
 from entity import PropertyListing
-from app.authentication import permissions_required
+from controller.app.authentication import permissions_required
 
 class MarkropertyListingController(Blueprint):
     def __init__(self, *args, **kwargs):

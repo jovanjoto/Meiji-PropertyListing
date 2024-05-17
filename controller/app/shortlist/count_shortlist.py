@@ -3,8 +3,8 @@ from flask import Blueprint, request
 from flask_jwt_extended import jwt_required
 
 # Local dependencies
-from app.entity import Shortlist
-from app.controller.authentication import permissions_required
+from entity import Shortlist
+from controller.app.authentication import permissions_required
 
 class CountShortlistController(Blueprint):
 	def __init__(self, *args, **kwargs):

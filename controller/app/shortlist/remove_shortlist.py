@@ -4,7 +4,7 @@ from flask_jwt_extended import jwt_required, get_jwt
 
 # Local dependencies
 from entity import Shortlist
-from app.authentication import permissions_required
+from controller.app.authentication import permissions_required
 
 class RemoveShortlistController(Blueprint):
 	def __init__(self, *args, **kwargs):

@@ -4,7 +4,7 @@ from PIL import Image
 import io # type: ignore
 from base64 import encodebytes # type: ignore
 from entity import PropertyListing, Shortlist
-from app.authentication import permissions_required
+from controller.app.authentication import permissions_required
 
 class SearchSoldPropertyListingController(Blueprint):
 	def __init__(self, *args, **kwargs):

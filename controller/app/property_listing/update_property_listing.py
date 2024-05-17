@@ -7,7 +7,7 @@ import os
 
 # Local dependencies
 from entity.propertylisting import PropertyListing
-from app.authentication import permissions_required
+from controller.app.authentication import permissions_required
 from flask import current_app
 
 class UpdatePropertyListingController(Blueprint):
