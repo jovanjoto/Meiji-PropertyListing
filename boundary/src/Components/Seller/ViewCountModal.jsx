@@ -64,7 +64,7 @@ function ViewCountModal({ state, setState, id }) {
 			.then((res) => {
 				if (res.status === 200) {
 					const aggregatedData = {};
-					views.forEach((view) => {
+					res.data.view.forEach((view) => {
 						const monthYear = new Date(view.year, view.month - 1);
 						aggregatedData[monthYear] = view.views;
 					});
@@ -117,7 +117,7 @@ function ViewCountModal({ state, setState, id }) {
 				data.datasets[0].data.push(viewData.data[index]);
 			}
 		}
-
+		console.log(chartData, data);
 		return (
 			<Modal className="" show={state} onClose={onCloseModal} popup>
 				<FaTimes
