@@ -28,17 +28,17 @@ function SuspendAccountModal({ state, setState, email, firstName, lastName }) {
 	const confirm = () => {
 		const final_duration =
 			durationUnit === "Days"
-				? duration
+				? reasonDuration["duration"]
 				: durationUnit === "Weeks"
-				? duration * 7
-				: duration * 30;
+				? reasonDuration["duration"] * 7
+				: reasonDuration["duration"] * 30;
 
 		axios
 			.put(
 				"/api/suspension/suspend_user_account",
 				{
 					email: email,
-					reason: reason,
+					reason: reasonDuration["reason"],
 					duration: final_duration,
 				},
 				{
@@ -80,7 +80,7 @@ function SuspendAccountModal({ state, setState, email, firstName, lastName }) {
 								<Label htmlFor="reason" value="Reason" />
 								<textarea
 									className="resize-none h-28 w-full rounded-lg"
-									value={reason}
+									value={reasonDuration["reason"]}
 									onChange={(event) => enterReasonDuration((prev) => ({...prev, reason:event.target.value}))}
 								/>
 							</section>
@@ -91,7 +91,7 @@ function SuspendAccountModal({ state, setState, email, firstName, lastName }) {
 										type="number"
 										className="border rounded-lg rounded-r-none border-black w-20"
 										min={1}
-										value={duration}
+										value={reasonDuration["duration"]}
 										onChange={(event) => enterReasonDuration((prev) => ({...prev, duration:event.target.valueAsNumber}))}
 									/>
 									<Dropdown
