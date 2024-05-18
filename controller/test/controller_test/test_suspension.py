@@ -56,11 +56,11 @@ def test_invalid_suspend_account():
             "reason": "Suspend user that doesn't exist.",
             "duration": "10"
         },
-        # {
-        #     "email" : "john@uow.edu.au",
-        #     "reason": "Suspend user that is already suspended.",
-        #     "duration": "10"
-        # }
+        {
+            "email" : "john@uow.edu.au",
+            "reason": "Suspend user that is already suspended.",
+            "duration": "10"
+        }
     ]
     with flask_app.app_context():
         for data in valid_suspension:
