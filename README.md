@@ -57,7 +57,6 @@
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
-    <li><a href="#usage">Usage</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
@@ -80,6 +79,7 @@ This is a property listing website created for a school project in University of
 * [![React][React.js]][React-url]
 * [![TailwindCSS][Tailwind-css]][Tailwind-url]
 * [![Flask][Flask-py]][Flask-url]
+* [![SQLLite][SQLlite]][SQLlite-url]
 
 ### Authors
 - [@jovanjoto](https://www.github.com/jovanjoto)
@@ -139,15 +139,6 @@ This is an example of how to list things you need to use the software and how to
 
 
 <!-- USAGE EXAMPLES -->
-## Usage
-
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
-_For more examples, please refer to the [Documentation](https://example.com)_
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
 
 <!-- CONTRIBUTING -->
 ## Contributing
@@ -205,4 +196,6 @@ Project Link: [https://github.com/jovanjoto/Meiji-PropertyListing](https://githu
 [Tailwind-url]: https://tailwindcss.com/
 [Flask-py]: https://img.shields.io/badge/Flask-000000?style=flat&logo=flask&logoColor=white
 [Flask-url]: https://flask.palletsprojects.com/en/3.0.x/
+[SQLlite]: https://img.shields.io/badge/sqlite-%2307405e.svg?style=for-the-badge&logo=sqlite&logoColor=white
+[SQLlite-url]: https://www.sqlite.org/
 
