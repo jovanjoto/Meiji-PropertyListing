@@ -88,6 +88,7 @@ This is a property listing website created for a school project in University of
 - [@edkesuma](https://www.github.com/edkesuma)
 - [@tharvus](https://www.github.com/tharvus)
 - [@stefananeshka](https://www.github.com/stefananeshka)
+- [@shuen01](https://www.github.com/Shuen01)
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
